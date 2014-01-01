@@ -1,0 +1,8 @@
+#exportPattern("^[[:alpha:]]+")
+export(AddRule, DeleteRule, DisplayTree, as.ID, GetDescription,  GetPegE, new.generator,Parse,  plot.PEGResult,  print.pegE,  print.PEGResult, RuleIds, SetAction, SetDescription, Value)
+#,         as.ID,           DeleteRule,             DisplayTree,           GetDescription,  GetPegE,         new.generator,  
+#        Parse,           plot.PEGResult,  print.pegE,      print.PEGResult, RuleIds,         SetAction,       SetDescription,  Value)
+
+S3method(plot, PEGResult)
+S3method(print, pegE)
+S3method(print, PEGResult)

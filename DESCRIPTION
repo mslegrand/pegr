@@ -1,0 +1,9 @@
+Package: pegr
+Type: Package
+Title: PEG PARSER
+Version: 0.0.1
+Date: 2013-12-30
+Author: M. S. Legrand
+Maintainer: <legrand@coanalytics.net>
+Description: Generator for parsing expressions grammers
+License: MIT
