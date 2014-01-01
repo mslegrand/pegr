@@ -98,7 +98,6 @@ test_that("PLOT TREE C<-A B",
   AddRule(gen, "D<-'d'")
   AddRule(gen, "C<-'c'")
   AddRule(gen,"ROOT<-A B C D")
-  #gen$pegE$.DEBUG.NODE<-T
   Parse(gen,"ROOT","abcd", debugTree=TRUE)->res
   plot(res)
 })

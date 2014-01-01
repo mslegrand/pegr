@@ -4,5 +4,6 @@ export(AddRule, DeleteRule, DisplayTree, as.ID, GetDescription,  GetPegE, new.ge
 #        Parse,           plot.PEGResult,  print.pegE,      print.PEGResult, RuleIds,         SetAction,       SetDescription,  Value)
 
 S3method(plot, PEGResult)
-S3method(print, pegE)
+S3method(print, pegE) #do we really want to support this? (or should this be elevated to genE?)
 S3method(print, PEGResult)
+S3method(summary, PEGResult)

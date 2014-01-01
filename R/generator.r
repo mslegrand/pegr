@@ -9,12 +9,13 @@
 # _____________________________________
 
 
-#used in  unittest4 unitTest4 
+#' used in  unittest4 unitTest4 
 as.ID=function(v){
   class(v)<-c("peg.name",class(v))
   v
 }
 
+#' Creates an instance of a new PEG parser.
 new.generator<-function(debugger=FALSE){
   #internally we have two parsers, a genE a peg Generator which takes text and processes it
   #to create rules to construct the user defined parser, pegE. However, since the process
@@ -285,11 +286,13 @@ new.generator<-function(debugger=FALSE){
   genE
 }
 
+#' Prints the parser container
 print.pegE<-function(pegE){
   #list the rules in this peg
   ls(envir=pegE)
 }
 
+#' Adds a rule to the parser
 AddRule<-function(genE, rule){
   if( !( "genE" %in% class(genE) ) ){ stop("first argument not a generator") }  
   res<-genE$DEFINITION(rule) 
@@ -299,9 +302,10 @@ AddRule<-function(genE, rule){
   } else {
     stop(paste("invalid syntax:",rule))
   }
-  return( list(ok=res$ok, parsed=substr(rule,1,res$pos) ) )
+  invisible( list(ok=res$ok, parsed=substr(rule,1,res$pos) ) )
 }
 
+#' Attach an action to the rule specified by rule.id
 SetAction<-function(genE, rule.id, action){
   #TODO:  ( expression?)
   #TODO: refactor using switch?
@@ -322,6 +326,7 @@ SetAction<-function(genE, rule.id, action){
   }
 }
 
+#' Attaches a description to the given rule.
 SetDescription<-function(genE, rule.id, description){
   if(!("genE" %in% class(genE))){ stop("first argument not a peg parser")}  
   if( rule.id %in% RuleIds(genE)){
@@ -332,6 +337,7 @@ SetDescription<-function(genE, rule.id, description){
   }
 }
 
+#' Gets a description of a given rule
 GetDescription<-function(genE, rule.id){
   if(!("genE" %in% class(genE))){ stop("first argument not a peg parser")}  
   if( rule.id %in% RuleIds(genE)){
@@ -342,7 +348,7 @@ GetDescription<-function(genE, rule.id){
   
 }
 
-
+#' Deletes the given rule form the parser.
 DeleteRule<-function(genE, rule.id){
   #delete rule 
   if(!("genE" %in% class(genE))){ stop("first argument not a peg parser")}  
@@ -352,6 +358,7 @@ DeleteRule<-function(genE, rule.id){
   rm(list=rule.id, envir=genE$pegE)    
 }
 
+#' Lists all Rules contained in the parser
 RuleIds<-function(genE){
   if(!("genE" %in% class(genE))){ stop("argument not a peg parser")}
   ls(envir=genE$pegE)->tmp
@@ -361,12 +368,13 @@ RuleIds<-function(genE){
   tmp
 }
 
+#' Gets the inner environment of the parser
 GetPegE<-function(genE){
   if(!("genE" %in% class(genE))){ stop("first argument not a generator")}  
   genE$pegE
 }
 
-#invoke run parse
+#' Invoke the parserto parse using the rule.id as the root.
 Parse<-function(genE, rule.id=rule.id, arg=arg, exe=F, debugTree=F){
   if(!("genE" %in% class(genE))){ stop("first argument not a peg parser")}  
   if( !( rule.id %in% RuleIds(genE) ) ){stop("cannot parse: invalid rule identifier")}
@@ -379,7 +387,8 @@ Parse<-function(genE, rule.id=rule.id, arg=arg, exe=F, debugTree=F){
   res
 }
 
-print.PEGResult<-function(res){
+#' Summarizes a parsing result
+summary.PEGResult<-function(res){
   if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")} 
   cat(paste0("Call:", paste0(res$Call$rule.id, "(",res$Call$arg,")\n")  ))
   cat(paste("Options:", "Apply Actions=",res$options$exe,"Make Tree=",res$options$debugTree,"\n"))
@@ -389,11 +398,17 @@ print.PEGResult<-function(res){
   cat(paste("Evaluates to: list(", val, ")\n"))
 }
 
+print.PEGResult<-function(res){
+  print(res$value)
+}
+
+#' Returs the value of a parsing  result
 Value<-function(res){
   if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")} 
   return(res$value) 
 }
 
+#' Prints the result of the parsing tree. 
 DisplayTree<-function(res){
   if( is.null(res$debugNode) ){
     stop("Tree option not set, rerun parse with option debugTree=True")
@@ -413,11 +428,154 @@ DisplayTree<-function(res){
 }
 
 
-plot.PEGResult<-function(res, bg = ifelse(match(par("bg"), "transparent", 0), "white", par("bg")), border = TRUE, xpad = 1.0, ypad = 2.5, 
+# plot.PEGResult<-function(res, bg = ifelse(match(par("bg"), "transparent", 0), "white", par("bg")), border = TRUE, xpad = 1.0, ypad = 2.5, 
+#                          cex = 1, shadow=TRUE, adj = 0.5, ...){
+#   if( is.null(res$debugNode) ){
+#     stop("Tree option not set, rerun parse with option debugTree=True")
+#   }
+#   rootNode<-res$debugNode
+#   #save old settings
+#   cex=1
+#   oldcex <- par("cex")
+#   par(cex = cex)
+#   adj<-.5
+#   
+#   if(!exists("main")){
+#     main=paste("Parse Tree for node:", rootNode$data$name )
+#   } 
+#   
+#   #set up graph screen
+#   plot(0, main = main, xlim = c(0, 1), ylim = c(0, 1), xlab = "", ylab = "", type = "n", axes = FALSE)
+#   #initialized nodes, arrows, boxWidths
+#   nodes<-data.frame()
+#   arrows<-c()
+#   boxWidths<-c(0) #actually might be better to call level width
+#   boxHeights<-0
+#   xp<-strwidth("m") # a padding
+#   
+#   oval<-function(xl, yb, xr, yt,col = bg, border = border,...){
+#     r<-(yt[1]-yb[1])/2
+#     n<-20
+#     theta<-seq(from=-pi/2,to=pi/2, length.out=n)
+#     xcr<-r*cos(theta)
+#     ycr<-r*sin(theta)
+#     for(i in 1:length(xl)){
+#       x1<-xcr+xr[i]-r
+#       x2<--xcr+xl[i]+r
+#       x<-c(x1,x2)
+#       y1<-ycr+r+yb[i]
+#       y2<--ycr+r+yb[i]
+#       y<-c(y1,y2)
+#       polygon(x,y, col=col, border=border)
+#     }
+#   }
+#   
+#   traverseOrd<-function(nn, level, pos, width){ #width is the full width 
+#     nodes<<-rbind(nodes, data.frame(id=nn$id, pos=pos, level=level, text=nn$data$name))
+#     boxWidths[level+1]<<-max(boxWidths[level+1], strwidth(nn$data$name)+xp) #update box width
+#     boxHeights<<-max(boxHeights, strheight(nn$data$name)) #update box height
+#     i<-0
+#     n<-length(nn$children)
+#     if(n==0){ return(NULL) }
+#     if(n==1){ 
+#       delta<-width/2
+#       childWidth<-width
+#     } else {
+#       delta<-width/(n-1)
+#       childWidth<-width/n #something slightly smaller than delta
+#     }
+#     childLevel<-level+1
+#     boxWidths<<-c(boxWidths,0) #extend the boxWidths to accommadate the kids
+#     i<-0
+#     for(child in nn$children){
+#       childPos<-delta*i - width/2 + pos
+#       arrows<<-rbind(arrows, matrix(c(nn$id, child$id),1,2) ) #maybe we should record level position instead
+#       traverseOrd(child, childLevel, childPos, childWidth)
+#       i<-i+1
+#     }
+#   }
+#   traverseOrd(rootNode, 0, 0, 2) #do the traveral
+#   nodes$dbpos<-nodes$pos
+#   nodes$pos<-sapply(nodes$pos, function(x){which(x==sort(unique(nodes$pos)))})
+#   #now we plot the results
+#   #compute the x for each box (recall level gives the x position)
+#   #we compute the x-center of a node by x[level+1]
+#   x<-boxWidths+3*xp
+#   x<-cumsum(x)
+#   xl<-x-(xp+boxWidths)-2*xp
+#   xc<-xl+boxWidths/2
+#   xr<-xl+boxWidths
+#   nodes$xl<-xl[nodes$level+1]
+#   nodes$xc<-xc[nodes$level+1]
+#   nodes$xr<-xr[nodes$level+1] 
+#   #we compute the y-center of a node by y[pos]
+#   y<-nodes$pos
+#   max(y)->noOfRows
+#   delta<-1.0/noOfRows
+#   nodes$yt<-delta*(nodes$pos) + boxHeights*.7
+#   nodes$yc<-delta*(nodes$pos) 
+#   nodes$yb<-delta*(nodes$pos) -  boxHeights*.7
+#   #   
+#   #rect(nodes$xl, nodes$yb, nodes$xr, nodes$yt,col = bg, border = border)
+#   if(shadow==TRUE){
+#     xpp<-xp/4
+#     oval(nodes$xl+xpp, nodes$yb-xpp, nodes$xr+xpp, nodes$yt-xpp, col = "gray", border = FALSE)    
+#   }
+#   oval(nodes$xl, nodes$yb, nodes$xr, nodes$yt,col = bg, border = border)
+#   
+#   #   #compute the y for each box (recall pos gives the y position)
+#   #plot the boxes
+#   adj<-.5
+#   args <- list(x = nodes$xc, y = nodes$yc, labels = nodes$text,  adj = adj, col = ifelse(colSums(col2rgb(bg) * c(1, 1.4, 0.6)) < 350, "white", "black"))
+#   args <- modifyList(args, list(...))
+#   do.call(text, args)
+#   par(cex = oldcex)
+#   
+#   cubic<-function(p.x, p.y, q.x, q.y, n=20) {
+#     print(paste(p.x,p.y,q.x,q.y))
+#     f<-function(x){
+#       (x^3)/3 -(p.x + q.x) * (x^2)/2 + q.x*p.x*x
+#     }
+#     K<-( q.y-p.y )/( f(q.x)-f(p.x) )
+#     C<-p.y-K*f(p.x)
+#     x<-seq(from=p.x, to=q.x, length=n)
+#     y<-K*f(x)+C
+#     df<-data.frame(x=x,y=y) 
+#     lines(df$x, df$y)
+#   }
+#   
+#   for(i in 1:nrow(arrows)){
+#     id.from<-arrows[i,1]
+#     id.to<-arrows[i,2]
+#     r1<-subset(nodes, nodes$id==id.from)
+#     r2<-subset(nodes, nodes$id==id.to)
+#     p.x<-xr[r1$level+1]
+#     q.x<-xl[r2$level+1]
+#     p.y<-delta*r1$pos
+#     q.y<-delta*r2$pos
+#     cubic(p.x, p.y, q.x, q.y)
+#   }
+#   
+# }
+
+#' Plots the parsing result as a tree.
+plot.PEGResult<-function(res, show="names", bg = ifelse(match(par("bg"), "transparent", 0), "white", par("bg")), border = TRUE, xpad = 1.0, ypad = 2.5, 
                          cex = 1, shadow=TRUE, adj = 0.5, ...){
   if( is.null(res$debugNode) ){
     stop("Tree option not set, rerun parse with option debugTree=True")
   }
+  if("rules" %in% show){
+    show<-c("names", show)
+  }
+  show.opts<-c("all","names","args","vals", "rules")
+  if(!(any(show %in% show.opts))){
+    stop("plot error: value of show must contain one or more of 'rules', 'names', 'args', 'vals', 'all'")
+  }
+  boxHeight.scale.factor<-.7
+  if( any(show.opts[show.opts!="names"] %in% show )){ #anything except names will grow
+    boxHeight.scale.factor<-.9
+  } 
+  
   rootNode<-res$debugNode
   #save old settings
   cex=1
@@ -426,7 +584,12 @@ plot.PEGResult<-function(res, bg = ifelse(match(par("bg"), "transparent", 0), "w
   adj<-.5
   
   if(!exists("main")){
-    main=paste("Parse Tree for node:", rootNode$data$name )
+    tmp<-c()
+    if("all" %in% show| "names" %in% show){tmp<-c(tmp,"Rules")}
+    if("all" %in% show| "args" %in% show){ tmp<-c(tmp,"Args")}
+    if("all" %in% show| "vals" %in% show){ tmp<-c(tmp,"Vals")}
+    tmp<-paste(tmp, collapse=", ")
+    main=paste(tmp,"when Parsing:", rootNode$data$name )
   } 
   
   #set up graph screen
@@ -456,9 +619,22 @@ plot.PEGResult<-function(res, bg = ifelse(match(par("bg"), "transparent", 0), "w
   }
   
   traverseOrd<-function(nn, level, pos, width){ #width is the full width 
-    nodes<<-rbind(nodes, data.frame(id=nn$id, pos=pos, level=level, text=nn$data$name))
-    boxWidths[level+1]<<-max(boxWidths[level+1], strwidth(nn$data$name)+xp) #update box width
-    boxHeights<<-max(boxHeights, strheight(nn$data$name)) #update box height
+    text<-""
+    if("names" %in% show |"all" %in% show){
+      text<-nn$data$name
+    }      
+    if("args" %in% show | "all" %in% show ){
+      arg<-nn$data$consumes$t2 #paste(n$data$consumes, collapse="")
+      text<-paste(text, "(",arg , ")")
+    }
+    if("vals" %in% show | "all" %in% show ){
+      text<-paste(text,"= list(", nn$data$value ," )" )
+      
+    }
+      
+    nodes<<-rbind(nodes, data.frame(id=nn$id, pos=pos, level=level, text=text , kids=length(nn$children)))
+    boxWidths[level+1]<<-max(boxWidths[level+1], strwidth(text)+xp) #update box width
+    boxHeights<<-max(boxHeights, strheight(text)) #update box height
     i<-0
     n<-length(nn$children)
     if(n==0){ return(NULL) }
@@ -480,8 +656,20 @@ plot.PEGResult<-function(res, bg = ifelse(match(par("bg"), "transparent", 0), "w
     }
   }
   traverseOrd(rootNode, 0, 0, 2) #do the traveral
-  nodes$dbpos<-nodes$pos
-  nodes$pos<-sapply(nodes$pos, function(x){which(x==sort(unique(nodes$pos)))})
+  #nodes$dbpos<-nodes$pos
+  leaves<-subset(nodes, nodes$kids==0)
+  leaves$pos<-sapply(leaves$pos, function(x){which(x==sort(unique(leaves$pos)))})
+  traverseOrd2<-function(nn){
+    if(length(nn$children)==0){
+      pos<-leaves$pos[leaves$id==nn$id]
+    } else {
+      pos<-mean(sapply(nn$children, traverseOrd2) )
+    }
+   nodes$pos[nodes$id==nn$id]<<-pos
+   pos   
+  }
+  traverseOrd2(rootNode)
+  
   #now we plot the results
   #compute the x for each box (recall level gives the x position)
   #we compute the x-center of a node by x[level+1]
@@ -497,9 +685,9 @@ plot.PEGResult<-function(res, bg = ifelse(match(par("bg"), "transparent", 0), "w
   y<-nodes$pos
   max(y)->noOfRows
   delta<-1.0/noOfRows
-  nodes$yt<-delta*(nodes$pos) + boxHeights*.7
+  nodes$yt<-delta*(nodes$pos) + boxHeights*boxHeight.scale.factor
   nodes$yc<-delta*(nodes$pos) 
-  nodes$yb<-delta*(nodes$pos) -  boxHeights*.7
+  nodes$yb<-delta*(nodes$pos) -  boxHeights*boxHeight.scale.factor
   #   
   #rect(nodes$xl, nodes$yb, nodes$xr, nodes$yt,col = bg, border = border)
   if(shadow==TRUE){
@@ -517,7 +705,7 @@ plot.PEGResult<-function(res, bg = ifelse(match(par("bg"), "transparent", 0), "w
   par(cex = oldcex)
   
   cubic<-function(p.x, p.y, q.x, q.y, n=20) {
-    print(paste(p.x,p.y,q.x,q.y))
+    #print(paste(p.x,p.y,q.x,q.y))
     f<-function(x){
       (x^3)/3 -(p.x + q.x) * (x^2)/2 + q.x*p.x*x
     }
@@ -532,7 +720,7 @@ plot.PEGResult<-function(res, bg = ifelse(match(par("bg"), "transparent", 0), "w
   for(i in 1:nrow(arrows)){
     id.from<-arrows[i,1]
     id.to<-arrows[i,2]
-    r1<-subset(nodes, nodes$id==id.from)
+    r1<-subset(nodes, nodes$id==id.from) 
     r2<-subset(nodes, nodes$id==id.to)
     p.x<-xr[r1$level+1]
     q.x<-xl[r2$level+1]
