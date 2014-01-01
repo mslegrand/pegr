@@ -7,7 +7,7 @@ library(testthat)
 #def literal true
 test_that("DEFINITION TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("xxx<-'y'", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$val$nodeName, as.ID("xxx"))
@@ -22,7 +22,7 @@ test_that("DEFINITION TRUE",
 #def dot true
 test_that("DOT TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("xxx<-.", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 6 )
@@ -36,7 +36,7 @@ test_that("DOT TRUE",
 #def dot true
 test_that("CLASS 1 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-[a-z]", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 8 )
@@ -48,7 +48,7 @@ test_that("CLASS 1 TRUE",
 
 test_that("CLASS 2 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-[z]", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 6 )
@@ -60,7 +60,7 @@ test_that("CLASS 2 TRUE",
 
 test_that("SEQUENCE TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' 'b'", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 10 )
@@ -72,7 +72,7 @@ test_that("SEQUENCE TRUE",
 
 test_that("SEQUENCE TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' 'b'", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 10 )
@@ -84,7 +84,7 @@ test_that("SEQUENCE TRUE",
 
 test_that("SEQUENCE TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' 'b' 'c'", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 14 )
@@ -97,7 +97,7 @@ test_that("SEQUENCE TRUE",
 #def question true---------------------------------
 test_that("QUESTION 1 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' 'b'?", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 11 )
@@ -109,7 +109,7 @@ test_that("QUESTION 1 TRUE",
 
 test_that("QUESTION 0 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' 'b'?", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 11 )
@@ -123,7 +123,7 @@ test_that("QUESTION 0 TRUE",
 
 test_that("STAR 1 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' 'b'*", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 11 )
@@ -135,7 +135,7 @@ test_that("STAR 1 TRUE",
 
 test_that("STAR 0 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' 'b'*", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 11 )
@@ -149,7 +149,7 @@ test_that("STAR 0 TRUE",
 
 test_that("PLUS 1 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' 'b'+", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 11 )
@@ -161,7 +161,7 @@ test_that("PLUS 1 TRUE",
 
 test_that("PLUS 0 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' 'b'+", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 11 )
@@ -176,7 +176,7 @@ test_that("PLUS 0 TRUE",
 
 test_that("NOT 0 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a'* !'b' .", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 14 )
@@ -187,7 +187,7 @@ test_that("NOT 0 TRUE",
 
 test_that("NOT 1 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a'* !'b' .", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 14 )
@@ -200,7 +200,7 @@ test_that("NOT 1 TRUE",
 
 test_that("EXPRESSION TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' / 'b' / 'c' .", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 20 )
@@ -211,7 +211,7 @@ test_that("EXPRESSION TRUE",
 
 test_that("EXPRESSION TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' / 'b' / 'c'", TRUE)->res
   expect_true(res$ok )
   #expect_equal(res$pos, 20 )
@@ -223,7 +223,7 @@ test_that("EXPRESSION TRUE",
 
 test_that("EXPRESSION TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' / 'b' / 'c' .", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 20 )
@@ -234,7 +234,7 @@ test_that("EXPRESSION TRUE",
 
 test_that("EXPRESSION TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' / 'b' / 'c' .", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 20 )
@@ -245,7 +245,7 @@ test_that("EXPRESSION TRUE",
 
 test_that("EXPRESSION TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' / 'b' / 'c' .", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 20 )
@@ -256,7 +256,7 @@ test_that("EXPRESSION TRUE",
 
 test_that("OPEN CLOSE TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' / 'b' 'd' / 'c' .", TRUE)->res
   expect_true(res$ok)
   expect_equal(res$pos, 24 )
@@ -267,7 +267,7 @@ test_that("OPEN CLOSE TRUE",
 
 test_that("OPEN CLOSE TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a' / ('b' 'd') / 'c' .", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 26 )
@@ -278,7 +278,7 @@ test_that("OPEN CLOSE TRUE",
 
 test_that("OPEN CLOSE TRUE",
 {          
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-('a' / 'b') ('d' / 'c' .)", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 28 )
@@ -292,7 +292,7 @@ test_that("OPEN CLOSE TRUE",
 
 test_that("AND 1 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a'* &'b'", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 12 )
@@ -304,7 +304,7 @@ test_that("AND 1 TRUE",
 
 test_that("AND 0 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a'* &'b'", TRUE)->res
   expect_true(res$ok )
   expect_equal(res$pos, 12 )
@@ -317,7 +317,7 @@ test_that("AND 0 TRUE",
 #def ACTION AND TRUE ----------------------------------------------------
 test_that("ACTION 1 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   ff<<-function(v){  n<-length(v); v<-c(v,n); v }
   gen$DEFINITION("X<-'a'* { ff } ", TRUE)->res
   expect_true(res$ok )
@@ -331,7 +331,7 @@ test_that("ACTION 1 TRUE",
 
 test_that("SUBSTITUTE true",
 { 
-  gen<-new.generator()
+  gen<-new.parser()
   gen$DEFINITION("X<-'a'",TRUE)->res
   gen$DEFINITION("Y<-X",TRUE)->res
   gen$pegE$Y('a',TRUE)->res
@@ -343,7 +343,7 @@ test_that("SUBSTITUTE true",
 
 test_that("ACTION 2 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   ff<<-function(v){ n<-length(v); v<-c(v,n); v }
   gg<<-function(v){ v<-paste(v,collapse="_"); v}
   gen$GRAMMAR("X<-'a'* { ff } \nY<-X 'b'{gg} ", TRUE)->res
@@ -358,7 +358,7 @@ test_that("ACTION 2 TRUE",
 
 test_that("ACTION 3 TRUE",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   ff<<-function(v){ n<-length(v); v<-c(v,n); v }
   gg<<-function(v){ v<-paste(v,collapse="*"); v}
   gen$GRAMMAR("X<-'a'* {ff}  \nY<-X 'b' {gg}", TRUE)->res
@@ -375,7 +375,7 @@ test_that("ACTION 3 TRUE",
 
 test_that("DEBUG NODE X<-'a' ; Y<-X 'b' ",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$GRAMMAR("X<-'a'*  \nY<-X 'b'", TRUE)->res
   #assign(".DEBUG.NODE", TRUE, envir=gen$pegE)
   gen$pegE$.DEBUG.NODE<-T
@@ -395,7 +395,7 @@ test_that("DEBUG NODE X<-'a' ; Y<-X 'b' ",
 
 test_that("DEBUG NODE C<-A B",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$GRAMMAR("A<-'a'\nB<-'b'\n C<-A B", TRUE)->res
   #assign(".DEBUG.NODE", TRUE, envir=gen$pegE)
   gen$pegE$.DEBUG.NODE<-T
@@ -421,7 +421,7 @@ test_that("DEBUG NODE C<-A B",
 
 test_that("DEBUG NODE C<-A / B",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   gen$GRAMMAR("A<-'a'\nB<-'b'\n C<-A / B", TRUE)->res
   #assign(".DEBUG.NODE", TRUE, envir=gen$pegE)
   gen$pegE$.DEBUG.NODE<-T

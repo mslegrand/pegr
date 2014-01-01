@@ -1,5 +1,5 @@
 #exportPattern("^[[:alpha:]]+")
-export(AddRule, DeleteRule, DisplayTree, as.ID, GetDescription,  GetPegE, new.generator,Parse,  plot.PEGResult,  print.pegE,  print.PEGResult, RuleIds, SetAction, SetDescription, Value)
+export(AddRule, DeleteRule, DisplayTree, as.ID, GetDescription,  GetPegE, new.parser, Parse,  plot.PEGResult,  print.pegE,  print.PEGResult, RuleIds, SetAction, SetDescription, Value)
 #,         as.ID,           DeleteRule,             DisplayTree,           GetDescription,  GetPegE,         new.generator,  
 #        Parse,           plot.PEGResult,  print.pegE,      print.PEGResult, RuleIds,         SetAction,       SetDescription,  Value)
 

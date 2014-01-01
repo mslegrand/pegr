@@ -1,7 +1,7 @@
 Package: pegr
 Type: Package
 Title: PEG PARSER
-Version: 0.0.1
+Version: 0.0.2
 Date: 2013-12-30
 Author: M. S. Legrand
 Maintainer: <legrand@coanalytics.net>

@@ -6,7 +6,7 @@ library(testthat)
 #def literal true
 test_that("DEFINITION",
 {
-  genE<-new.generator()
+  genE<-new.parser()
   AddRule(genE,"X<-[a-z]")->res
   expect_equal(res$parsed, "X<-[a-z]" )
   expect_equal(genE$pegE$.SOURCE.RULES[["X"]], "X<-[a-z]" )
@@ -19,7 +19,7 @@ test_that("DEFINITION",
 
 test_that("SET ACTION: TEXT",
 {
-  genE<-new.generator()
+  genE<-new.parser()
   AddRule(genE,"X<-.")->res
   expect_equal(res$parsed, "X<-." )
   SetAction(genE,"X", "n<-length(v); v<-c(v,n); v<-paste(v,collapse='');list(v)")
@@ -32,7 +32,7 @@ test_that("SET ACTION: TEXT",
 
 test_that("SET ACTION: FUNCTION",
 {
-  genE<-new.generator()
+  genE<-new.parser()
   AddRule(genE,"XX<-.")->res
   expect_equal(res$parsed, "XX<-." )
   fn<-function(v){n<-length(v)+1; v<-c(v,n); v<-paste(v,collapse='');list(v)}
@@ -45,7 +45,7 @@ test_that("SET ACTION: FUNCTION",
 
 test_that("SET RULE DESCRIPTION",
 {
-  genE<-new.generator()
+  genE<-new.parser()
   AddRule(genE,"X<-.")->res
   expect_equal(res$parsed, "X<-." )
   rules<-RuleIds(genE)
@@ -58,7 +58,7 @@ test_that("SET RULE DESCRIPTION",
 
 test_that("SET RULE DESCRIPTION",
 {
-  genE<-new.generator()
+  genE<-new.parser()
   AddRule(genE,"X<-.")->res
   expect_equal(res$parsed, "X<-." )
   expect_equal(genE$pegE$.SOURCE.RULES[["X"]], "X<-." )
@@ -81,7 +81,7 @@ test_that("SET RULE DESCRIPTION",
 
 test_that("DISPLAY TREE C<-A B",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   AddRule(gen, "A<-'a'")
   AddRule(gen, "B<-'b'")
   AddRule(gen,"C<-A B")
@@ -92,7 +92,7 @@ test_that("DISPLAY TREE C<-A B",
 
 test_that("PLOT TREE C<-A B",
 {
-  gen<-new.generator()
+  gen<-new.parser()
   AddRule(gen, "A<-'a'")
   AddRule(gen, "B<-'b'") 
   AddRule(gen, "D<-'d'")

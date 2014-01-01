@@ -16,7 +16,7 @@ as.ID=function(v){
 }
 
 #' Creates an instance of a new PEG parser.
-new.generator<-function(debugger=FALSE){
+new.parser<-function(debugger=FALSE){
   #internally we have two parsers, a genE a peg Generator which takes text and processes it
   #to create rules to construct the user defined parser, pegE. However, since the process
   #is to be dynamiclly interpetive (i.e. user can put in one rule at a time), the generator, genE
