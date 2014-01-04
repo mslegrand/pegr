@@ -1,10 +1,10 @@
 \name{print.PEGResult}
 \alias{print.PEGResult}
-\title{Print the result of a parsing}
+\title{prints the value of the parsing result}
 \usage{
 \method{print}{PEGResult}(res)
 }
 \description{
-Print the result of a parsing
+prints the value of the parsing result
 }
 

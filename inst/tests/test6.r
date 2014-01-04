@@ -7,12 +7,12 @@ library(testthat)
 test_that("DEFINITION",
 {
   genE<-new.parser()
-  AddRule(genE,"X<-[a-z]")->res
+  add_rule(genE,"X<-[a-z]")->res
   expect_equal(res$parsed, "X<-[a-z]" )
   expect_equal(genE$pegE$.SOURCE.RULES[["X"]], "X<-[a-z]" )
-  rules<-RuleIds(genE)
+  rules<-rule_ids(genE)
   expect_equal(rules[1],"X")
-  Parse(genE,"X","b")->res2
+  apply_rule(genE,"X","b")->res2
   expect_equal(res2$val$atom,"b")
 })
 
@@ -20,12 +20,12 @@ test_that("DEFINITION",
 test_that("SET ACTION: TEXT",
 {
   genE<-new.parser()
-  AddRule(genE,"X<-.")->res
+  add_rule(genE,"X<-.")->res
   expect_equal(res$parsed, "X<-." )
-  SetAction(genE,"X", "n<-length(v); v<-c(v,n); v<-paste(v,collapse='');list(v)")
-  rules<-RuleIds(genE)
+  set_action(genE,"X", "n<-length(v); v<-c(v,n); v<-paste(v,collapse='');list(v)")
+  rules<-rule_ids(genE)
   expect_equal(rules[1],"X")
-  Parse(genE,"X","b")->res2
+  apply_rule(genE,"X","b")->res2
   expect_equal(res2$val[[1]],"b1")
 })
 
@@ -33,47 +33,47 @@ test_that("SET ACTION: TEXT",
 test_that("SET ACTION: FUNCTION",
 {
   genE<-new.parser()
-  AddRule(genE,"XX<-.")->res
+  add_rule(genE,"XX<-.")->res
   expect_equal(res$parsed, "XX<-." )
   fn<-function(v){n<-length(v)+1; v<-c(v,n); v<-paste(v,collapse='');list(v)}
-  SetAction(genE,"XX", fn)
-  rules<-RuleIds(genE)
+  set_action(genE,"XX", fn)
+  rules<-rule_ids(genE)
   expect_equal(rules[1],"XX")
-  Parse(genE,"XX","b")->res2
+  apply_rule(genE,"XX","b")->res2
   expect_equal(res2$val[[1]],"b2")
 })
 
 test_that("SET RULE DESCRIPTION",
 {
   genE<-new.parser()
-  AddRule(genE,"X<-.")->res
+  add_rule(genE,"X<-.")->res
   expect_equal(res$parsed, "X<-." )
-  rules<-RuleIds(genE)
+  rules<-rule_ids(genE)
   expect_equal(rules[1],"X")
   txt<-"any char"
-  SetDescription(genE,"X",txt)
-  txt2<-GetDescription(genE,"X")
+  set_description(genE,"X",txt)
+  txt2<-get_description(genE,"X")
   expect_equal(txt,txt2)
 })
 
 test_that("SET RULE DESCRIPTION",
 {
   genE<-new.parser()
-  AddRule(genE,"X<-.")->res
+  add_rule(genE,"X<-.")->res
   expect_equal(res$parsed, "X<-." )
   expect_equal(genE$pegE$.SOURCE.RULES[["X"]], "X<-." )
-  rules<-RuleIds(genE)
+  rules<-rule_ids(genE)
   expect_equal(rules[1],"X")
   txt<-"any char"
-  SetDescription(genE,"X",txt)
+  set_description(genE,"X",txt)
   fn<-function(v){ n<-length(v)+1; v<-c(v,n); v<-paste(v,collapse='');list(v)}
-  SetAction(genE,"X", fn) 
-  txt2<-GetDescription(genE,"X")
+  set_action(genE,"X", fn) 
+  txt2<-get_description(genE,"X")
   expect_equal(txt,txt2)
   expect_equal(length(genE$pegE$.SOURCE.RULES),1)
   expect_equal(length(genE$pegE$.ACTION),1)
   expect_equal(length(genE$pegE$.RULE_DESCRIPT),1)
-  DeleteRule(genE,"X")
+  delete_rule(genE,"X")
   expect_equal(length(genE$pegE$.SOURCE.RULES),0)
   expect_equal(length(genE$pegE$.ACTION),0)
   expect_equal(length(genE$pegE$.RULE_DESCRIPT),0)
@@ -82,23 +82,24 @@ test_that("SET RULE DESCRIPTION",
 test_that("DISPLAY TREE C<-A B",
 {
   gen<-new.parser()
-  AddRule(gen, "A<-'a'")
-  AddRule(gen, "B<-'b'")
-  AddRule(gen,"C<-A B")
+  add_rule(gen, "A<-'a'")
+  add_rule(gen, "B<-'b'")
+  add_rule(gen,"C<-A B")
   #gen$pegE$.DEBUG.NODE<-T
-  Parse(gen,"C","ab", debugTree=TRUE)->res
-  DisplayTree(res)
+  apply_rule(gen,"C","ab", debugTree=TRUE)->res
+  print("\n")
+  tree(res)
 })
 
 test_that("PLOT TREE C<-A B",
 {
   gen<-new.parser()
-  AddRule(gen, "A<-'a'")
-  AddRule(gen, "B<-'b'") 
-  AddRule(gen, "D<-'d'")
-  AddRule(gen, "C<-'c'")
-  AddRule(gen,"ROOT<-A B C D")
-  Parse(gen,"ROOT","abcd", debugTree=TRUE)->res
+  add_rule(gen, "A<-'a'")
+  add_rule(gen, "B<-'b'") 
+  add_rule(gen, "D<-'d'")
+  add_rule(gen, "C<-'c'")
+  add_rule(gen,"ROOT<-A B C D")
+  apply_rule(gen,"ROOT","abcd", debugTree=TRUE)->res
   plot(res)
 })
 

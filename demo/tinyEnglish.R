@@ -1,0 +1,10 @@
+tinyEnglish<-new.parser()
+add_rule(tinyEnglish, "N<-'Jack' / 'spam' / 'ship'")
+add_rule(tinyEnglish, "V<-'sank'/'threw'")
+add_rule(tinyEnglish, "ART<-'a'/'an'/'the'")
+add_rule(tinyEnglish, "ADJ<-'blue' / 'red' / 'green'")
+add_rule(tinyEnglish,  "NP<-ART? ' '+ (ADJ ' ')+ N")
+add_rule(tinyEnglish,  "S<-NP ' '+ V ' '+ NP ' '*")
+apply_rule(tinyEnglish, "S", "the green spam  sank a red ship", debugTree=TRUE)->res
+tree(res)
+plot(res)

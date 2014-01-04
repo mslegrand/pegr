@@ -1,6 +1,8 @@
 library(RJSONIO)
 
 new.node<-function(id,name,data=list(), children=list() ){
+#   lapply(children, function(x){length(x)>0})->indx
+#   children<-children[indx==T] #remove all empty lists
   n<-list(id=id,name=name,data=data,children=children)
   class(n)<-c("node",class(n))
   n

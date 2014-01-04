@@ -41,7 +41,7 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   envS$s.atom<-function(x){ # (x) terminal symbol 
     h<-function(input, exe=TRUE,  p=1){
       n<-nchar(x)-1
-      if(DEVEL.DEBUG){
+      if(envS$DEVEL.DEBUG){
         cat("atom.",x," input=",input," p=",p,"\n") ###good for debugging      
       }    
       if( substring(input,p,p+n)==x){
@@ -75,7 +75,7 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   }
   
   envS$s.dot<-function(input, exe=TRUE,  p=1){
-    if(DEVEL.DEBUG){
+    if(envS$DEVEL.DEBUG){
       cat("s.dot"," input=",input," p=",p,"\n") ###good for debugging      
     }    
     if(p>nchar(input)){
@@ -99,12 +99,12 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   envS$s.sequence<-function(...){ 
     lf<-list(...)
     h<-function(input, exe=TRUE,  p=1){  
-      if(DEVEL.DEBUG){
+      if(envS$DEVEL.DEBUG){
         cat("sequence: input=",input," p=",p,"\n") ###good for debugging      
       } 
       mn<-0
       val=list()
-      if(pegE$.DEBUG.NODE==T){ 
+      if(pegE$.DEBUG.NODE==T){ #create a container for a list of debug nodes of the children
         d.node<-list()
       }
       for(f in lf){
@@ -117,11 +117,12 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
         mn<-mn+res$pos
         val<-c(val,res$val)
         if(pegE$.DEBUG.NODE==T & !is.null(res$debugNode)){ 
-          d.node<-c(d.node, list(res$debugNode) ) #c(list(), list(a))=list(a)
+          #d.node<-c(d.node, list(res$debugNode) ) #c(list(), list(a))=list(a)
+          d.node<-c(d.node, res$debugNode ) #c(list(), list(a))=list(a) #!!!
         }     
       }
       if(pegE$.DEBUG.NODE==T){ 
-        return(list(ok=TRUE, pos=mn, val=val, debugNode=d.node))
+        return(list(ok=TRUE, pos=mn, val=val, debugNode=d.node)) #append that container onto debugNode of this
       } else {
         return(list(ok=TRUE, pos=mn, val=val))      
       }    
@@ -140,7 +141,7 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   envS$s.first<-function(...){ #(f > g) or
     lf<-list(...)
     h<-function(input, exe=TRUE,  p=1){  
-      if(DEVEL.DEBUG){
+      if(envS$DEVEL.DEBUG){
         cat("first: input=",input," p=",p,"\n") ###good for debugging      
       } 
       val=list()
@@ -205,7 +206,7 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   
   envS$s.not<-function(f){ #not before
     h<-function(input, exe=TRUE,  p=1){ #not before
-      if(DEVEL.DEBUG){
+      if(envS$DEVEL.DEBUG){
         cat("negate: input=",input," p=",p,"\n") ###good for debugging      
       }    
       exe<-FALSE
@@ -336,7 +337,7 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   }
   
   #this makes the atom, even if it previously existed!!!
-  envS$mk.atom<-function(x, y=NULL, env=.GlobalEnv){ #used in literal, unitTest1.r, unitTest2.r, test1.r, test2.r
+  envS$mk.atom<-function(x, y=NULL, env=envS){ #env=parent.frame() ){ #used in literal, unitTest1.r, unitTest2.r, test1.r, test2.r
     if(is.null(y)){
       y<-x
     }

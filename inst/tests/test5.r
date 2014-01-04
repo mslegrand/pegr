@@ -380,7 +380,7 @@ test_that("DEBUG NODE X<-'a' ; Y<-X 'b' ",
   #assign(".DEBUG.NODE", TRUE, envir=gen$pegE)
   gen$pegE$.DEBUG.NODE<-T
   gen$pegE$Y("aaaab",TRUE)->res
-  dbNode<-res$debugNode
+  dbNode<-res$debugNode[[1]]
   expect_equal(as.character(dbNode$name),"Y")
   dbChildren<-dbNode$children
   expect_equal(length(dbChildren),1)
@@ -401,8 +401,8 @@ test_that("DEBUG NODE C<-A B",
   gen$pegE$.DEBUG.NODE<-T
   gen$pegE$C("ab",TRUE)->res
   #expect_equal(length(res$debugNode),4) #replace with expect is of class node
-  expect_true("node" %in% class(res$debugNode))
-  dbNodeC<-res$debugNode
+  expect_true("node" %in% class( res$debugNode[[1]] ))
+  dbNodeC<-res$debugNode[[1]]
   expect_equal(as.character(dbNodeC$name),"C")
   dbChildrenC<-dbNodeC$children
   expect_equal(length(dbChildrenC),2)
@@ -426,8 +426,8 @@ test_that("DEBUG NODE C<-A / B",
   #assign(".DEBUG.NODE", TRUE, envir=gen$pegE)
   gen$pegE$.DEBUG.NODE<-T
   gen$pegE$C("a",TRUE)->res
-  expect_true("node" %in% class(res$debugNode))
-  dbNodeC<-res$debugNode
+  expect_true("node" %in% class(res$debugNode[[1]]))
+  dbNodeC<-res$debugNode[[1]]
   expect_equal(as.character(dbNodeC$name),"C")
   dbChildrenC<-dbNodeC$children
   expect_equal(length(dbChildrenC),1)
@@ -437,9 +437,9 @@ test_that("DEBUG NODE C<-A / B",
   
   gen$pegE$C("b",TRUE)->res
   #expect_equal(length(res$debugNode),1)
-  expect_true("node" %in% class(res$debugNode))
+  expect_true("node" %in% class(res$debugNode[[1]]))
   
-  dbNodeC<-res$debugNode
+  dbNodeC<-res$debugNode[[1]]
   expect_equal(as.character(dbNodeC$name),"C")
   dbChildrenC<-dbNodeC$children
   expect_equal(length(dbChildrenC),1)
