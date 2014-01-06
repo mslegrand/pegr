@@ -1,6 +1,7 @@
 #PEG LITERAL BUILDER
 include.literal<-function(pegE, envL=parent.frame() ){
   special.characters<-c(
+    empty="",
     space=" ",
     bang="!",
     literal2="\"",

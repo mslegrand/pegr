@@ -84,6 +84,7 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
     val<-substring(input, p, p)
     return( list(ok=TRUE, pos=1, val=list(val) ) )
   }
+  #assign("class(s.dot)", c("pa","pe","function")) #kluge, probably want to change this later
   
   # s.eps<-function(input, exe=TRUE,  p=1){
   #   return( list(ok=TRUE, pos=0, val=""))
@@ -108,7 +109,13 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
         d.node<-list()
       }
       for(f in lf){
-        if("peg.name" %in% class(f)){ if(exists(f,envir=pegE)){ f<-get(f,envir=pegE)}}
+        if("peg.name" %in% class(f)){ 
+          if(exists(f,envir=pegE)){ 
+            f<-get(f,envir=pegE)
+          } else {
+            stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
+          }
+        }
         #f<-get.fn(f)
         res<-f(input,  exe, p+mn)
         if(res$ok==FALSE){
