@@ -249,7 +249,7 @@ tree<-function(res){
     #s<-paste(rep("",indent),collapse=" ")
     si<-paste0(indent,"__")
     arg<-n$data$consumes$t2 #paste(n$data$consumes, collapse="")
-    s<-paste0(si,"__", n$data$name, "(",arg , ") = list(", n$data$value ," ): ", length(n$children),"\n") 
+    s<-paste0(si,"__", n$data$name, "(",arg , ") = list(", n$data$value ," )","\n") 
     cat(s)
     if(lastChild==TRUE){
       substr(indent,nchar(indent),nchar(indent))<-" "
