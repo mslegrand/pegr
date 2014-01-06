@@ -25,7 +25,7 @@ test_that("SET ACTION: TEXT",
   set_action(genE,"X", "n<-length(v); v<-c(v,n); v<-paste(v,collapse='');list(v)")
   rules<-rule_ids(genE)
   expect_equal(rules[1],"X")
-  apply_rule(genE,"X","b")->res2
+  apply_rule(genE,"X","b", exe=TRUE)->res2
   expect_equal(res2$val[[1]],"b1")
 })
 
@@ -39,7 +39,7 @@ test_that("SET ACTION: FUNCTION",
   set_action(genE,"XX", fn)
   rules<-rule_ids(genE)
   expect_equal(rules[1],"XX")
-  apply_rule(genE,"XX","b")->res2
+  apply_rule(genE,"XX","b", exe=TRUE)->res2
   expect_equal(res2$val[[1]],"b2")
 })
 
