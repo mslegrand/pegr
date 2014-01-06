@@ -1,3 +1,4 @@
-tinyEnglish    An a simple english grammar
-powerTest      A classic example on matching strings of 3 consecutive characters of equal length
 calculator     A simple calculator example
+palindrome     Tests to check if word is a palindrome
+powerTest      A classic example on matching strings of 3 consecutive characters of equal length
+tinyEnglish    An a simple english grammar
