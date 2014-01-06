@@ -10,7 +10,7 @@ From Git using R CMD build
 ```
 install.packages("devtools")
 library(devtools)
-install_github("pegr")
+install_github("mslegrand/pegr")
 
 ```
 To delete
