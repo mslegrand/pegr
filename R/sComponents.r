@@ -109,14 +109,15 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
         d.node<-list()
       }
       for(f in lf){
-        if("peg.name" %in% class(f)){ 
+        # grab f
+        if("peg.name" %in% class(f)){
           if(exists(f,envir=pegE)){ 
             f<-get(f,envir=pegE)
           } else {
             stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
           }
         }
-        #f<-get.fn(f)
+        # execute f
         res<-f(input,  exe, p+mn)
         if(res$ok==FALSE){
           return(list(ok=FALSE,pos=0, val=list() )) #this line is the essential difference between sequenceNode and sequence
@@ -153,8 +154,16 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
       } 
       val=list()
       for(f in lf){
-        #if("peg.name" %in% class(f)){ if(exists(f)){ f<-get(f)}}
         if("peg.name" %in% class(f)){ if(exists(f,envir=pegE)){ f<-get(f,envir=pegE)}}
+        # grab f
+        if("peg.name" %in% class(f)){
+          if(exists(f,envir=pegE)){ 
+            f<-get(f,envir=pegE)
+          } else {
+            stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
+          }
+        }
+        # execute f
         res<-f(input, exe,  p)
         if(res$ok==TRUE){
           return(res)
@@ -217,8 +226,15 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
         cat("negate: input=",input," p=",p,"\n") ###good for debugging      
       }    
       exe<-FALSE
-      #if("peg.name" %in% class(f)){ if(exists(f)){ f<-get(f)}}
-      if("peg.name" %in% class(f)){ if(exists(f,envir=pegE)){ f<-get(f,envir=pegE)}}
+     # grab f
+      if("peg.name" %in% class(f)){
+        if(exists(f,envir=pegE)){ 
+          f<-get(f,envir=pegE)
+        } else {
+          stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
+        }
+      }
+      # execute f      
       res<-f(input,  FALSE, p)
       #print(res)
       if(res$ok){
@@ -237,7 +253,15 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
     h<-function(input, exe=TRUE,  p=1){
       #cat("optional")
       #if("peg.name" %in% class(f)){ if(exists(f)){ f<-get(f)}}
-      if("peg.name" %in% class(f)){ if(exists(f,envir=pegE)){ f<-get(f,envir=pegE)}}
+      # grab f
+      if("peg.name" %in% class(f)){
+        if(exists(f,envir=pegE)){ 
+          f<-get(f,envir=pegE)
+        } else {
+          stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
+        }
+      }
+      # execute f      
       res<-f(input, exe,  p)
       if(res$ok){
         #       val=res$val
@@ -261,7 +285,7 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   
   
   
-  envS$opt.0x<-function(f){ # f* :zero more repitions
+  envS$opt.0x<-function(f){ # f* :zero more repititions
     h<-function(input, exe=TRUE,  p=1){
       ok<-TRUE
       m<-0
@@ -270,8 +294,15 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
         d.node<-list()
       }
       while(ok){
-        #if("peg.name" %in% class(f)){ if(exists(f)){ f<-get(f)}}
-        if("peg.name" %in% class(f)){ if(exists(f,envir=pegE)){ f<-get(f,envir=pegE)}}
+        # grab f
+        if("peg.name" %in% class(f)){
+          if(exists(f,envir=pegE)){ 
+            f<-get(f,envir=pegE)
+          } else {
+            stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
+          }
+        }
+        # execute f      
         res<-f(input,  exe,  p+m)
         #cat("m=",m," p+m=",p+m, "\n")
         #printRes(m,res)
@@ -302,7 +333,15 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   envS$opt.1x<-function(f){ # f* :one or  more repitions
     h<-function(input, exe=TRUE,  p=1){
       #if("peg.name" %in% class(f)){ if(exists(f)){ f<-get(f)}}
-      if("peg.name" %in% class(f)){ if(exists(f,envir=pegE)){ f<-get(f,envir=pegE)}}
+      # grab f
+      if("peg.name" %in% class(f)){
+        if(exists(f,envir=pegE)){ 
+          f<-get(f,envir=pegE)
+        } else {
+          stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
+        }
+      }
+      # execute f      
       res1<-f(input, exe,  p)
       if(res1$ok){
         #val1<-res1$val
@@ -328,8 +367,15 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   envS$s.and<-function(f){ # f* :lookahead or "and" or &
     h<-function(input, exe=TRUE,  p=1){
       exe<-FALSE
-      #if("peg.name" %in% class(f)){ if(exists(f)){ f<-get(f)}}
-      if("peg.name" %in% class(f)){ if(exists(f,envir=pegE)){ f<-get(f,envir=pegE)}}
+      # grab f
+      if("peg.name" %in% class(f)){
+        if(exists(f,envir=pegE)){ 
+          f<-get(f,envir=pegE)
+        } else {
+          stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
+        }
+      }
+      # execute f      
       res<-f(input, exe,  p)
       val<-res$val
       if(res$ok){
@@ -355,12 +401,7 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
     assign(name, tmp ,env )#, envir=.GlobalEnv) #, envir = pegE) #.GlobalEnv)
     name
   }
-  
-  envS$forget.all<-function(){
-    ll<-ls()
-    z<-sapply(ll,function(x){ forget(get(x))})
-  }
-  
+    
   envS$delete.all.atoms<-function(){ #used in unitTest2.r
     ll<-ls(pattern="^atom\\.*")
     rm(ll,env=parent.frame())

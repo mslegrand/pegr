@@ -91,11 +91,13 @@ set_description<-function(genE, rule.id, description){
 #' 
 #' @param rule.id, a character string naming the rule
 #' @param parser, a peg parser produced by  new.parser
+#' @return description, a character string describing the parser
 #' @export
 get_description<-function(genE, rule.id){
   if(!("genE" %in% class(genE))){ stop("first argument not a peg parser")}  
   if( rule.id %in% rule_ids(genE)){
-    return(genE$pegE$.RULE_DESCRIPT[[rule.id]])
+    description<-genE$pegE$.RULE_DESCRIPT[[rule.id]]
+    return(description)
   } else {
     stop("cannot add description: invalid rule identifier")
   }
