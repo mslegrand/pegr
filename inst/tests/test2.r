@@ -3,11 +3,11 @@ library(stringr)
 pegE<-new.env()
 pegE$.DEBUG.NODE<-FALSE
 DEVEL.DEBUG<-FALSE
-#source("pegs.r")
-#source("sComponents.r")
+
 include.sComponents()
 include.sComponents(pegE)
-include.gComponents(pegE)
+include.sConnectives(pegE)
+include.gConnectives(pegE)
 
 context("Test quote capabilities")
 

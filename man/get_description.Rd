@@ -9,6 +9,9 @@ get_description(genE, rule.id)
 
   \item{parser,}{a peg parser produced by new.parser}
 }
+\value{
+description, a character string describing the parser
+}
 \description{
 Gets a description of a given rule
 }

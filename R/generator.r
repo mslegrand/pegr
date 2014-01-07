@@ -217,7 +217,8 @@ new.parser<-function(debugTree=FALSE){
     #source("sComponents.r", local=TRUE)
     DEVEL.DEBUG<-FALSE
     include.sComponents(pegE)
-    include.gComponents(pegE)
+    include.sConnectives(pegE)
+    include.gConnectives(pegE)
     #source("literal.r", local=TRUE)
     include.literal(pegE)
     

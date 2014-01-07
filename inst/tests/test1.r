@@ -8,27 +8,18 @@ pegE$DEVEL.DEBUG<-FALSE
 
 #source("sComponents.r")
 include.sComponents(pegE)
-include.gComponents(pegE)
+include.gConnectives(pegE)
+include.sConnectives(pegE)
 include.literal(pegE)
 #set up
 library(testthat)
 library(stringr)
 
 
-# sapply(letters, literal)->tmp
-# sapply(LETTERS, mk.atom)->tmp
-# rm(tmp)
-
 sapply(letters, mk.atom)->tmp
 sapply(LETTERS, mk.atom)->tmp
 rm(tmp)
 
-
-# DEVEL.DEBUG=FALSE),
-# 
-# sapply(letters, mk.atom)->tmp,
-# sapply(LETTERS, mk.atom)->tmp,
-# rm(tmp)
 
 # 
 # 
@@ -41,10 +32,6 @@ rule.B<- (rule.X + atom.b)
 
 rule.S <- (rule.A + atom.c) / (rule.B + atom.d)
 
-
-#regTest<-function(){
-  #regression tests
-  #atom.a("a") #expect ok,1
 
 test_that("atom.a('a')",
 {
@@ -195,6 +182,8 @@ test_that("rule.A('xxxb')",
 #   expect_that(peg.parse("xxxxbd"), equals(TRUE) )
 # })
 # 
+
+include.gConnectives(pegE)
 
 test_that("s.sequence (1)",
 {
