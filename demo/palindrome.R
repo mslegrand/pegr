@@ -1,19 +1,21 @@
 # Palindromes
    
-#print(with just the lettersp 'a,b,c')
-# parser<-new.parser()
-# add_rule(parser,"S<-('a' S 'a') / ('b' S 'b') / ('c' S 'c') / ''")
-# apply_rule(parser, "S", "baccab", debugTree=T)->res
-# res
-# tree(res)            
+print("A simple palidrone parser for just the lettersp 'a,b,c'")
+palSimple<-new.parser()
+add_rule(palSimple,"S<-('a' S 'a') / ('b' S 'b') / ('c' S 'c') / ''")
+apply_rule(palSimple, "S", "baccab", debugTree=T)->res
+res
+tree(res)            
 
-pal<-paste(c(sapply(letters, function(x){paste0("('",x,"' PAL '",x,"')")}),"''"),collapse=" / ")
-rule<-paste0("PAL<-",pal)
-add_rule(parser, rule)
+print("Expanding the simple palindrone for all lowercase letters")
+palLower<-new.parser()
+palRule<-paste(c(sapply(letters, function(x){paste0("('",x,"' PAL '",x,"')")}),"''"),collapse=" / ")
+rule<-paste0("PAL<-",palRule)
+add_rule(palLower, rule)
 
 words<-c("bob", "civic", "deified", "level", "madam", "nun", "peep", "pop", "racecar", "radar", "refer", "rotator", "rotor", "sagas", "sas", "siris", "solos", "sexes","stats", "testset", "wow")
 for(word in words){
-  apply_rule(parser, "P", word)->res
+  apply_rule(palLower, "PAL", word)->res
   print(paste(word, "is a palindrome:", status(res) ))
 }
  
