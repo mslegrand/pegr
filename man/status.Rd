@@ -15,10 +15,15 @@ Returns the Status of a parsing result
 }
 \examples{
 parser<-new.parser()
-#rule to test for string of a's followed by an equal number of b's
+#This rule to tests for string of a's followed by an equal number of b's
 add_rule(parser, "S<-'a' S 'b'")
-res<-apply_rule(parser, 'S', 'aaaabbbb')
+
+#test against 3 a's followed b 3 b's returns TRUE
+apply_rule(parser, 'S', 'aaaabbbb')
 status(res)
+
+#test again with input of 3 a's followed bu 3 b's,
+#this returns False
 res<-apply_rule(parser, 'S', 'aaabbbb')
 status(res)
 }

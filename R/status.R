@@ -1,0 +1,22 @@
+#' Returns the Status of a parsing  result
+#' 
+#' @param A result from parsing
+#' @return TRUE if successful, FALSE otherwise
+#' @export
+#' @examples 
+#' parser<-new.parser()
+#' #This rule to tests for string of a's followed by an equal number of b's
+#' add_rule(parser, "S<-'a' S 'b'") 
+#' 
+#' #test against 3 a's followed b 3 b's returns TRUE
+#' apply_rule(parser, 'S', 'aaaabbbb')
+#' status(res)
+#' 
+#' #test again with input of 3 a's followed bu 3 b's, 
+#' #this returns False
+#' res<-apply_rule(parser, 'S', 'aaabbbb')
+#' status(res)
+status<-function(res){
+  if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")} 
+  res$ok
+}

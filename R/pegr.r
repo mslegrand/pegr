@@ -191,25 +191,6 @@ print.summary.PEGResult<-function(sum){
 }
 
 
-
-#' Returns the Status of a parsing  result
-#' 
-#' @param A result from parsing
-#' @return TRUE if successful, FALSE otherwise
-#' @export
-#' @examples 
-#' parser<-new.parser()
-#' #rule to test for string of a's followed by an equal number of b's
-#' add_rule(parser, "S<-'a' S 'b'") 
-#' res<-apply_rule(parser, 'S', 'aaaabbbb')
-#' status(res)
-#' res<-apply_rule(parser, 'S', 'aaabbbb')
-#' status(res)
-status<-function(res){
-  if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")} 
-  res$ok
-}
-
 #' Returns the value of a parsing  result
 #' 
 #' @return A list containing the values computed
@@ -219,12 +200,6 @@ value<-function(res){
   return(res$val) 
 }
 
-#' Returns the subset of the input text consumed during the parse
-#' @export
-consumed<-function(res){
-  if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")} 
-  return(substring(res$Call$arg,1,res$pos))  
-}
 
 #todo:
 #turn on all memoize
