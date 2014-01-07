@@ -226,41 +226,6 @@ consumed<-function(res){
   return(substring(res$Call$arg,1,res$pos))  
 }
 
-#' Prints the result of the parsing tree. 
-#' @export
-tree<-function(res){
-  if( is.null(res$debugNode) ){
-    stop("Tree option not set, rerun parse with option debugTree=True")
-  }
-  #requires 2 passes, 1 for the links/levels, second actualy prints
-  node.print<-function(n, indent="", lastChild=TRUE){
-    #s<-paste(rep("",indent),collapse=" ")
-    si<-paste0(indent,"__")
-    arg<-n$data$consumes$t2 #paste(n$data$consumes, collapse="")
-    s<-paste0(si,"__", n$data$name, "(",arg , ") = list(", n$data$value ," )","\n") 
-    cat(s)
-    if(lastChild==TRUE){
-      substr(indent,nchar(indent),nchar(indent))<-" "
-    }
-    #indent2<-paste(indent,"    ")
-    indent1<-paste(indent,"   |")
-    indx=1
-    if(length(n$children)>0){
-      for(child in n$children){
-        if(indx<length(n$children)){
-          node.print(child, indent1, FALSE)
-          indx<-indx+1
-        } else {
-          node.print(child, indent1, TRUE)
-          indx<-1
-        }     
-      }
-    }
-  }
-  node.print(res$debugNode[[1]]) #!!!!
-}
-
-
 #todo:
 #turn on all memoize
 #print history of run 
