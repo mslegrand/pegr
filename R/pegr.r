@@ -153,6 +153,8 @@ apply_rule<-function(parser, rule.id, arg, exe=FALSE, debugTree=FALSE){
   parser$pegE$.DEBUG.NODE<-debugTree
   parser$pegE[[rule.id]](arg, exe)->res
   if(!"list" %in% (class(res)) ){ stop("Bad Action Rule: resulting value is not a list")}
+  #parserName<-as.character( substitute(parser) )
+  #res$Call<-list(parserName<-parserName, rule.id=rule.id, arg=arg)
   res$Call<-list(rule.id=rule.id, arg=arg)
   res$options<-list(exe=exe, debugTree=debugTree)
   class(res)<-c("PEGResult")
@@ -188,22 +190,6 @@ print.summary.PEGResult<-function(sum){
   cat(paste(sum,collapse="\n"))
 }
 
-#' prints the value of the parsing result
-#' @export
-print.PEGResult<-function(res){
-  if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")} 
-  cat(paste0("Call:", paste0(res$Call$rule.id, "(",res$Call$arg,")\n")  ))
-  cat(paste("Options:", "Apply Actions=",res$options$exe,"Make Tree=",res$options$debugTree,"\n"))
-  cat(paste("Status:", res$ok, "\n") ) 
-  cat(paste("Consumed: (", res$pos , "/", nchar(res$Call$arg) ,")\n" ))
-  if(res$ok==TRUE){
-    val<-paste(res$val,collapse=",")
-    cat(paste("Evaluates to: list(", val, ")\n"))
-  } else {
-    cat("Status: Failure\n")
-  }
-  invisible(res)
-}
 
 
 #' Returns the Status of a parsing  result
@@ -274,136 +260,6 @@ tree<-function(res){
   node.print(res$debugNode[[1]]) #!!!!
 }
 
-
-# plot.PEGResult<-function(res, bg = ifelse(match(par("bg"), "transparent", 0), "white", par("bg")), border = TRUE, xpad = 1.0, ypad = 2.5, 
-#                          cex = 1, shadow=TRUE, adj = 0.5, ...){
-#   if( is.null(res$debugNode) ){
-#     stop("Tree option not set, rerun parse with option debugTree=True")
-#   }
-#   rootNode<-res$debugNode
-#   #save old settings
-#   cex=1
-#   oldcex <- par("cex")
-#   par(cex = cex)
-#   adj<-.5
-#   
-#   if(!exists("main")){
-#     main=paste("Parse Tree for node:", rootNode$data$name )
-#   } 
-#   
-#   #set up graph screen
-#   plot(0, main = main, xlim = c(0, 1), ylim = c(0, 1), xlab = "", ylab = "", type = "n", axes = FALSE)
-#   #initialized nodes, arrows, boxWidths
-#   nodes<-data.frame()
-#   arrows<-c()
-#   boxWidths<-c(0) #actually might be better to call level width
-#   boxHeights<-0
-#   xp<-strwidth("m") # a padding
-#   
-#   oval<-function(xl, yb, xr, yt,col = bg, border = border,...){
-#     r<-(yt[1]-yb[1])/2
-#     n<-20
-#     theta<-seq(from=-pi/2,to=pi/2, length.out=n)
-#     xcr<-r*cos(theta)
-#     ycr<-r*sin(theta)
-#     for(i in 1:length(xl)){
-#       x1<-xcr+xr[i]-r
-#       x2<--xcr+xl[i]+r
-#       x<-c(x1,x2)
-#       y1<-ycr+r+yb[i]
-#       y2<--ycr+r+yb[i]
-#       y<-c(y1,y2)
-#       polygon(x,y, col=col, border=border)
-#     }
-#   }
-#   
-#   traverseOrd<-function(nn, level, pos, width){ #width is the full width 
-#     nodes<<-rbind(nodes, data.frame(id=nn$id, pos=pos, level=level, text=nn$data$name))
-#     boxWidths[level+1]<<-max(boxWidths[level+1], strwidth(nn$data$name)+xp) #update box width
-#     boxHeights<<-max(boxHeights, strheight(nn$data$name)) #update box height
-#     i<-0
-#     n<-length(nn$children)
-#     if(n==0){ return(NULL) }
-#     if(n==1){ 
-#       delta<-width/2
-#       childWidth<-width
-#     } else {
-#       delta<-width/(n-1)
-#       childWidth<-width/n #something slightly smaller than delta
-#     }
-#     childLevel<-level+1
-#     boxWidths<<-c(boxWidths,0) #extend the boxWidths to accommadate the kids
-#     i<-0
-#     for(child in nn$children){
-#       childPos<-delta*i - width/2 + pos
-#       arrows<<-rbind(arrows, matrix(c(nn$id, child$id),1,2) ) #maybe we should record level position instead
-#       traverseOrd(child, childLevel, childPos, childWidth)
-#       i<-i+1
-#     }
-#   }
-#   traverseOrd(rootNode, 0, 0, 2) #do the traveral
-#   nodes$dbpos<-nodes$pos
-#   nodes$pos<-sapply(nodes$pos, function(x){which(x==sort(unique(nodes$pos)))})
-#   #now we plot the results
-#   #compute the x for each box (recall level gives the x position)
-#   #we compute the x-center of a node by x[level+1]
-#   x<-boxWidths+3*xp
-#   x<-cumsum(x)
-#   xl<-x-(xp+boxWidths)-2*xp
-#   xc<-xl+boxWidths/2
-#   xr<-xl+boxWidths
-#   nodes$xl<-xl[nodes$level+1]
-#   nodes$xc<-xc[nodes$level+1]
-#   nodes$xr<-xr[nodes$level+1] 
-#   #we compute the y-center of a node by y[pos]
-#   y<-nodes$pos
-#   max(y)->noOfRows
-#   delta<-1.0/noOfRows
-#   nodes$yt<-delta*(nodes$pos) + boxHeights*.7
-#   nodes$yc<-delta*(nodes$pos) 
-#   nodes$yb<-delta*(nodes$pos) -  boxHeights*.7
-#   #   
-#   #rect(nodes$xl, nodes$yb, nodes$xr, nodes$yt,col = bg, border = border)
-#   if(shadow==TRUE){
-#     xpp<-xp/4
-#     oval(nodes$xl+xpp, nodes$yb-xpp, nodes$xr+xpp, nodes$yt-xpp, col = "gray", border = FALSE)    
-#   }
-#   oval(nodes$xl, nodes$yb, nodes$xr, nodes$yt,col = bg, border = border)
-#   
-#   #   #compute the y for each box (recall pos gives the y position)
-#   #plot the boxes
-#   adj<-.5
-#   args <- list(x = nodes$xc, y = nodes$yc, labels = nodes$text,  adj = adj, col = ifelse(colSums(col2rgb(bg) * c(1, 1.4, 0.6)) < 350, "white", "black"))
-#   args <- modifyList(args, list(...))
-#   do.call(text, args)
-#   par(cex = oldcex)
-#   
-#   cubic<-function(p.x, p.y, q.x, q.y, n=20) {
-#     print(paste(p.x,p.y,q.x,q.y))
-#     f<-function(x){
-#       (x^3)/3 -(p.x + q.x) * (x^2)/2 + q.x*p.x*x
-#     }
-#     K<-( q.y-p.y )/( f(q.x)-f(p.x) )
-#     C<-p.y-K*f(p.x)
-#     x<-seq(from=p.x, to=q.x, length=n)
-#     y<-K*f(x)+C
-#     df<-data.frame(x=x,y=y) 
-#     lines(df$x, df$y)
-#   }
-#   
-#   for(i in 1:nrow(arrows)){
-#     id.from<-arrows[i,1]
-#     id.to<-arrows[i,2]
-#     r1<-subset(nodes, nodes$id==id.from)
-#     r2<-subset(nodes, nodes$id==id.to)
-#     p.x<-xr[r1$level+1]
-#     q.x<-xl[r2$level+1]
-#     p.y<-delta*r1$pos
-#     q.y<-delta*r2$pos
-#     cubic(p.x, p.y, q.x, q.y)
-#   }
-#   
-# }
 
 #todo:
 #turn on all memoize
