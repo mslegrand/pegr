@@ -584,5 +584,6 @@ plot.PEGResult<-function(res, show="names", bg = ifelse(match(par("bg"), "transp
 #print peg(parse) final state 
 #print rule name/ description describe(pegE)
 #print all rules: rules(pegE)
+#add rule objects for printing, applying etc.
 #summary(pegE)
 
