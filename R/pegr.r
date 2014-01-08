@@ -134,14 +134,8 @@ rule_ids<-function(genE){
   tmp
 }
 
-#' Gets the inner environment of the parser
-#' @export
-get_pegE<-function(genE){
-  if(!("genE" %in% class(genE))){ stop("first argument not a generator")}  
-  genE$pegE
-}
 
-#' Invoke the parserto parse using the rule.id as the root.
+#' Invoke the parser to parse using the rule.id as the root.
 #' 
 #' @param parser, a peg parser produced by  new.parser
 #' @param rule.id, a character string naming the rule
