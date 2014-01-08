@@ -118,6 +118,10 @@ delete_rule<-function(genE, rule.id){
   rm(list=rule.id, envir=genE$pegE)    
 }
 
+rule_source<-function(parser, rule.id){
+  parser$pegE$.SOURCE.RULES[[rule.id]]
+}
+
 #' Lists all Rules contained in the parser
 #' @param parser, a peg parser produced by  new.parser
 #' @export
@@ -161,11 +165,31 @@ apply_rule<-function(parser, rule.id, arg, exe=FALSE, debugTree=FALSE){
   res
 }
 
-#' Prints the parser container
+#' Prints the rules contained in the PEG
+#' 
+#' @param peg parser produced by new.parser()
+#' @examples
+#' peg<-new.parser()
+#' add_rule(peg, "NUM<-[0-9]+ (. [0-9] )?" )
+#' set_description(peg, "NUM", "A Number")
+#' add_rule(peg, "FT<-NUM ' '* ft")
+#' set_description(peg, "FT"," measurement in feet")
+#' peg
 #' @export
-print.pegE<-function(pegE){
+print.genE<-function(parser){
   #list the rules in this peg
-  ls(envir=pegE)
+  for(name in rule_ids(parser)){
+    #rule_id name
+    cat(paste("\n# Rule: \"", name, "\"\n"))
+    #rule form
+    rule_source<-rule_source(parser, name)
+    cat(paste(" ", ifelse(is.null(rule_source), "", rule_source),"\n" ))
+    #rule description
+    description<-get_description(parser, name)
+    cat(paste("# ", ifelse(is.null(description), "", description), "\n" ) )
+    #rule action
+    #todo
+  }
 }
 
 

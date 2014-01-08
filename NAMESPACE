@@ -1,6 +1,6 @@
 S3method(plot,PEGResult)
 S3method(print,PEGResult)
-S3method(print,pegE)
+S3method(print,genE)
 S3method(summary,PEGResult)
 export(add_rule)
 export(apply_rule)
