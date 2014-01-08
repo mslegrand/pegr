@@ -10,6 +10,9 @@
 #' qp("'a' / 'b'", "ab")
 #' # A simple sequence operator
 #' qp("'a' 'b'", "ab")
+#' # A combination of choice and sequence
+#' qp("('a'/'c') ('b' / 'd')", "ab")
+#' qp("('a'/'c') ('b' / 'd')", "cd")
 #' # A lookahead not operator
 #' qp("'a' !'b'", "ab" )
 #' qp("'a' !'b'", "ac" )

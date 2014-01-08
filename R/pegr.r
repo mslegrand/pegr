@@ -191,15 +191,6 @@ print.summary.PEGResult<-function(sum){
 }
 
 
-#' Returns the value of a parsing  result
-#' 
-#' @return A list containing the values computed
-#' @export
-value<-function(res){
-  if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")} 
-  return(res$val) 
-}
-
 
 #todo:
 #turn on all memoize
