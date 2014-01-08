@@ -1,6 +1,6 @@
 \name{apply_rule}
 \alias{apply_rule}
-\title{Invoke the parserto parse using the rule.id as the root.}
+\title{Invoke the parser to parse using the rule.id as the root.}
 \usage{
 apply_rule(parser, rule.id, arg, exe = FALSE, debugTree = FALSE)
 }
@@ -19,6 +19,6 @@ apply_rule(parser, rule.id, arg, exe = FALSE, debugTree = FALSE)
   process}
 }
 \description{
-Invoke the parserto parse using the rule.id as the root.
+Invoke the parser to parse using the rule.id as the root.
 }
 
