@@ -5,7 +5,8 @@
 status(res)
 }
 \arguments{
-  \item{A}{result from parsing}
+  \item{A}{result from parsing, i.e. the result form
+  applying a rule to a text string input.}
 }
 \value{
 TRUE if successful, FALSE otherwise
@@ -26,5 +27,7 @@ status(res)
 #this returns False
 res<-apply_rule(parser, 'S', 'aaabbbb')
 status(res)
+
+See also
 }
 

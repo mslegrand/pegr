@@ -1,8 +1,8 @@
 #' Returns the Status of a parsing  result
 #' 
-#' @param A result from parsing
+#' @param A result from parsing, i.e. the result form applying a rule to a text string input.
 #' @return TRUE if successful, FALSE otherwise
-#' @export
+#
 #' @examples 
 #' parser<-new.parser()
 #' #This rule to tests for string of a's followed by an equal number of b's
@@ -16,6 +16,9 @@
 #' #this returns False
 #' res<-apply_rule(parser, 'S', 'aaabbbb')
 #' status(res)
+#' 
+#' See also 
+#' @export
 status<-function(res){
   if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")} 
   res$ok

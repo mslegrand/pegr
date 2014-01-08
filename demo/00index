@@ -1,4 +1,5 @@
-calculator     A simple calculator example
-palindrome     Tests to check if word is a palindrome
-powerTest      A classic example on matching strings of 3 consecutive characters of equal length
-tinyEnglish    An a simple english grammar
+calculator                   A simple calculator example.
+extractQuotedStrings         Extracts all quoted strings contained in the input.
+palindrome                   Tests to check if word is a palindrome.
+powerTest                    A classic example on matching strings of 3 consecutive characters of equal length.
+tinyEnglish                  An a simple english grammar.
