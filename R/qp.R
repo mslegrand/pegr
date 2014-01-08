@@ -1,7 +1,7 @@
 #' A simple tool to examine a parsing expression in isolation
 #' 
 #' This can be quite useful in getting to know the PEG syntax
-#' @parameter expression, a parsing expression (the right hand side of a rule definiton) 
+#' @param expression, a parsing expression (the right hand side of a rule definiton) 
 #' @param arg, text string to apply expression to.
 #' @param debugTree=TRUE, By default TRUE, so one can immediately graph (plot) or print (tree)
 #' @return PEGResult, an object giving the result

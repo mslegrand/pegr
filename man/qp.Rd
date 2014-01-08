@@ -5,6 +5,9 @@
 qp(expression, arg, debugTree = TRUE)
 }
 \arguments{
+  \item{expression,}{a parsing expression (the right hand
+  side of a rule definiton)}
+
   \item{arg,}{text string to apply expression to.}
 
   \item{debugTree=TRUE,}{By default TRUE, so one can
