@@ -128,11 +128,12 @@ new.parser<-function(debugTree=FALSE){
     #     exit()
     #   }   
     #wrap
-#     if(is.null(action)){
-#       pegE$.ACTION[[defName]]<-NULL  
-#     } else {
-#       pegE$.ACTION[[defName]]<-eval(parse(text=action)) #this parses the user action text for later invokation      
-#     }
+    if(is.null(action)){
+      pegE$.ACTION[[defName]]<-NULL  
+    } else {
+      pegE$.ACTION[[defName]]<-eval(parse(text=action)) #this parses the user action text for later invokation      
+      pegE$.ACTION_NAMES[[defName]]=action
+    }
     
     h<-function(input, exe=TRUE,  p=1){
       mfn.mssg<-defName
