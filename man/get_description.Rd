@@ -13,6 +13,8 @@ get_description(genE, rule.id)
 description, a character string describing the parser
 }
 \description{
-Gets a description of a given rule
+Descriptions are like comments for rules, it is a good
+practice to comment your rules after you add them. See
+\code{\link{set_description}}
 }
 

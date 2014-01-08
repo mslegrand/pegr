@@ -33,9 +33,10 @@ new.parser<-function(debugTree=FALSE){
   pegE<-new.env()
   class(pegE)<-c("pegE",class(pegE))
   pegE$.DEBUG.NODE=debugTree
-  pegE$.ACTION<-list()
-  pegE$.SOURCE.RULES<-list()
-  pegE$.RULE_DESCRIPT<-list()
+  pegE$.ACTION<-list() #executable for the rule
+  pegE$.SOURCE.RULES<-list() #text containing the rule source, i.e A<-'c'
+  pegE$.RULE_DESCRIPT<-list() #text containing the rule description
+  pegE$.ACTION_NAMES<-list() #list containing the names of actions which are functions
   
   #source("node.r", local=TRUE)
   
@@ -127,11 +128,11 @@ new.parser<-function(debugTree=FALSE){
     #     exit()
     #   }   
     #wrap
-    if(is.null(action)){
-      pegE$.ACTION[[defName]]<-NULL  
-    } else {
-      pegE$.ACTION[[defName]]<-eval(parse(text=action)) #this parses the user action text for later invokation      
-    }
+#     if(is.null(action)){
+#       pegE$.ACTION[[defName]]<-NULL  
+#     } else {
+#       pegE$.ACTION[[defName]]<-eval(parse(text=action)) #this parses the user action text for later invokation      
+#     }
     
     h<-function(input, exe=TRUE,  p=1){
       mfn.mssg<-defName

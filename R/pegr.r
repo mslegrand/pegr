@@ -1,4 +1,4 @@
-#MAIN PEG GENERATOR
+
 #' Parsing Made Bearable With Pegr
 #' 
 #' Pegr provides tools to parse using the parsing expression grammar (PEG) as defined
@@ -7,6 +7,7 @@
 #' This implementation contains the following benefits
 #' \enumerate{
 #' \item Easy debugging of rules, since we can set any node to be the root
+#' \item A tool (qp) to quickly parse simple expressions on the fly, great for learning PEG or confirming those constructs.
 #' \item Printing a tree of all nodes visited during a parse, again helpful in debugging the rule set.
 #' \item Plotting a tree of nodes visisted during a parse, again helpful in debugging
 #' \item Providing a mechanism to add comments to nodes, just as we commonly add comments to code
@@ -44,9 +45,31 @@ add_rule<-function(parser, rule){
 #' @param parser, a peg parser produced by  new.parser
 #' @param rule.id, a character string naming the rule
 #' @param action to be attached to the specified rule. The action may be
-#' either a function acceptiong a list as input and a list as output or
-#' a string of text which may be intrepted as a function body that returns 
-#' a list
+#' may take two forms:
+#' \enumerate{
+#'  \item a function accepting a list as input and a list as output
+#'  \item  a string of text to be interpreted as a function body with an input parameter consisting of a
+#'  list named v, and return value which is also a list
+#' }
+#' @examples
+#' #Capitalize all occurances of t using function calls
+#' peg<-new.parser()
+#' add_rule(peg, "T<-'t'")
+#' add_rule(peg, "R<-(T / .)+")
+#' f<-function(v){return(list('T'))}
+#' set_action(peg, "T", f)
+#' g<-function(v){return(list(paste(v,collapse='')))}
+#' set_action(peg, "R", g )
+#' value(apply_rule(peg, "R", "cat in the hat", exe=T))
+#' 
+#' #Capitalize all occurances of A using inline actions
+#' peg<-new.parser()
+#' add_rule(peg, "A<-'a'")
+#' add_rule(peg, "R<-(A / .)+")
+#' set_action(peg, "A", "list('A')")
+#' set_action(peg, "R", "list(paste(v, collapse=''))" )
+#' value(apply_rule(peg, "R", "cat in the hat", exe=T))
+#' 
 #' @export
 set_action<-function(genE, rule.id, action){
   #TODO:  ( expression?)
@@ -54,18 +77,55 @@ set_action<-function(genE, rule.id, action){
   if(!("genE" %in% class(genE))){ stop("first argument not a peg parser")}  
   if( rule.id %in% rule_ids(genE)){
     if(class(action)=="character"){
+      genE$pegE$.ACTION_NAMES[[rule.id]]<-c("Inline:",action)
       action<-paste("function(v){",action,"}")
       genE$pegE$.ACTION[[rule.id]]<-eval(parse(text=action))  
-      return(TRUE)
     } else if (class(action)=="function"){
-      genE$pegE$.ACTION[[rule.id]]<-action       
-      return(TRUE)
-    }
-    stop("cannot set action: invalid action")
-    return(FALSE)
+      genE$pegE$.ACTION[[rule.id]]<-action 
+      genE$pegE$.ACTION_NAMES[[rule.id]]<-c("External Function:", deparse(substitute(action)))
+    } else {
+      stop("cannot set action: invalid action")
+    }   
   } else {
     stop("cannot set action: invalid rule identifier")
   }
+  invisible(TRUE)
+}
+
+#' Retrieve an action to the rule specified by rule.id
+#' 
+#' @param parser, a peg parser produced by  new.parser
+#' @param rule.id, a character string naming the rule
+#' @return action attached to the specified rule. The action may be
+#' may take two forms:
+#' \enumerate{
+#'  \item the name of a function
+#'  \item  a string of text interpreted as a function body with an input parameter consisting of a
+#'  list named v, and return value which is also a list.
+#' }
+#' @examples
+#' # Delete all vowels
+#' peg<-new.parser()
+#' add_rule(peg, "V<-'a' / 'e' / 'i' / 'o' / 'u' ")
+#' add_rule(peg, "R<-(V / .)+")
+#' set_action(peg, "V", "list()" )
+#' g<-function(v){ list(paste(v,collapse='')) }
+#' set_action(peg, "R", g )
+#' #see the result
+#' value(apply_rule(peg, "R", "cat in the hat", exe=T))
+#' # inspect the action for rule "V"
+#' get_action(peg, "V")
+#' # inspect the action for rule "R"
+#' get_action(peg, "R")
+#' @export
+get_action<-function(genE, rule.id){
+  if(!("genE" %in% class(genE))){ stop("first argument not a peg parser")}  
+  if( rule.id %in% rule_ids(genE)){
+    actionTxt<-genE$pegE$.ACTION_NAMES[[rule.id]]   
+  } else {
+    stop("cannot get action: invalid rule identifier")
+  }
+  actionTxt
 }
 
 #' Attaches an (optional) description to the given rule.
@@ -88,6 +148,9 @@ set_description<-function(genE, rule.id, description){
 }
 
 #' Gets a description of a given rule
+#' 
+#' Descriptions are like comments for rules, it is a good practice to comment 
+#' your rules after you add them. See \code{\link{set_description}}
 #' 
 #' @param rule.id, a character string naming the rule
 #' @param parser, a peg parser produced by  new.parser
@@ -115,6 +178,7 @@ delete_rule<-function(genE, rule.id){
   genE$pegE$.SOURCE.RULES[[rule.id]]<-NULL
   genE$pegE$.ACTION[[rule.id]]<-NULL
   genE$pegE$.RULE_DESCRIPT[[rule.id]]<-NULL
+  genE$pegE$.ACTION_NAMES[[rule.id]]<-NULL
   rm(list=rule.id, envir=genE$pegE)    
 }
 
@@ -168,7 +232,8 @@ apply_rule<-function(parser, rule.id, arg, exe=FALSE, debugTree=FALSE){
 #' set_description(peg, "NUM", "A Number")
 #' add_rule(peg, "FT<-NUM ' '* ft")
 #' set_description(peg, "FT"," measurement in feet")
-#' peg
+#' # Now print the print the rules
+#' print(peg)
 #' @export
 print.genE<-function(parser){
   #list the rules in this peg
