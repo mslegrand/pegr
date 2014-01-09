@@ -33,3 +33,14 @@ test_that("SET_RULE",
   expect_equal(v[[1]], list("A")[[1]])
   
 })
+
+test_that("RULE_IDS",
+{
+  peg<-new.parser()
+  add_rule(peg, "I<-'Ice'")
+  add_rule(peg, "A<-'Age'")
+  add_rule(peg, "S<-'Scrat'")
+  rule_ids(peg)->s #c("A", "I", "S")
+  expect_equal(s, c("A", "I", "S") )
+  
+})

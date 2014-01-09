@@ -171,17 +171,6 @@ rule_source<-function(parser, rule.id){
   parser$pegE$.SOURCE.RULES[[rule.id]]
 }
 
-#' Lists all Rules contained in the parser
-#' @param parser, a peg parser produced by  new.parser
-#' @export
-rule_ids<-function(genE){
-  if(!("genE" %in% class(genE))){ stop("argument not a peg parser")}
-  ls(envir=genE$pegE)->tmp
-  if( any(grepl("atom.",tmp) ) ){
-    tmp<-tmp[-grep("atom.",tmp)]    
-  }
-  tmp
-}
 
 
 #' Invoke the parser to parse using the rule.id as the root.
