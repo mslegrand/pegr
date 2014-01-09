@@ -318,6 +318,7 @@ test_that("AND 0 TRUE",
 test_that("ACTION 1 TRUE",
 {
   gen<-new.parser()
+  gen$pegE$.AUTO_ACTION<-TRUE
   ff<<-function(v){  n<-length(v); v<-c(v,n); v }
   gen$DEFINITION("X<-'a'* { ff } ", TRUE)->res
   expect_true(res$ok )
@@ -332,6 +333,7 @@ test_that("ACTION 1 TRUE",
 test_that("SUBSTITUTE true",
 { 
   gen<-new.parser()
+  gen$pegE$.AUTO_ACTION<-TRUE
   gen$DEFINITION("X<-'a'",TRUE)->res
   gen$DEFINITION("Y<-X",TRUE)->res
   gen$pegE$Y('a',TRUE)->res
@@ -344,6 +346,7 @@ test_that("SUBSTITUTE true",
 test_that("ACTION 2 TRUE",
 {
   gen<-new.parser()
+  gen$pegE$.AUTO_ACTION<-TRUE
   ff<<-function(v){ n<-length(v); v<-c(v,n); v }
   gg<<-function(v){ v<-paste(v,collapse="_"); v}
   gen$GRAMMAR("X<-'a'* { ff } \nY<-X 'b'{gg} ", TRUE)->res
@@ -359,6 +362,7 @@ test_that("ACTION 2 TRUE",
 test_that("ACTION 3 TRUE",
 {
   gen<-new.parser()
+  gen$pegE$.AUTO_ACTION<-TRUE
   ff<<-function(v){ n<-length(v); v<-c(v,n); v }
   gg<<-function(v){ v<-paste(v,collapse="*"); v}
   gen$GRAMMAR("X<-'a'* {ff}  \nY<-X 'b' {gg}", TRUE)->res

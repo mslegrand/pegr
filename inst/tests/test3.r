@@ -1,5 +1,6 @@
 library(testthat)
 library(stringr)
+# print("test 3")
 #source("sComponents.r")
 #source("literal.r")
 pegE<-new.env()

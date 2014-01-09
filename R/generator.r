@@ -37,7 +37,7 @@ new.parser<-function(debugTree=FALSE){
   pegE$.SOURCE.RULES<-list() #text containing the rule source, i.e A<-'c'
   pegE$.RULE_DESCRIPT<-list() #text containing the rule description
   pegE$.ACTION_NAMES<-list() #list containing the names of actions which are functions
-  
+  pegE$.AUTO_ACTION<-FALSE
   #source("node.r", local=TRUE)
   
   DEVEL.DEBUG<-FALSE
@@ -129,7 +129,10 @@ new.parser<-function(debugTree=FALSE){
     #   }   
     #wrap
     if(is.null(action)){
-      pegE$.ACTION[[defName]]<-NULL  
+      if(pegE$.AUTO_ACTION){
+        pegE$.ACTION[[defName]]<-NULL
+        pegE$.ACTION_NAMES[[defName]]<-NULL        
+      }
     } else {
       pegE$.ACTION[[defName]]<-eval(parse(text=action)) #this parses the user action text for later invokation      
       pegE$.ACTION_NAMES[[defName]]=action

@@ -1,6 +1,8 @@
 #Unit tests
 library(testthat)
 #source("../../R/pegs.r")
+
+#print("test 1")
 pegE<-new.env()
 pegE$.DEBUG.NODE<-F
 DEVEL.DEBUG<-FALSE

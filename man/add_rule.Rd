@@ -1,7 +1,10 @@
 \name{add_rule}
 \alias{add_rule}
 \title{add_rule
-Adds a rule to the parser}
+Adds a rule to the parser
+
+Adds a rule to the parser, if the rule exists, it is overwritten, getting a new definition,
+a new (possibly empty) description, and a new (possibly empty) action.}
 \usage{
 add_rule(parser, rule, des = NULL, act = NULL)
 }
@@ -11,15 +14,40 @@ add_rule(parser, rule, des = NULL, act = NULL)
   \item{rule,}{a quoted string that defines a rule
   according to the PEG Grammer}
 
-  \item{des,}{a rule description}
+  \item{des,}{(optional: NULL by default) sets a rule
+  description for this rule}
 
-  \item{act,}{an action, to be executed by this rule (see
-  \code{\link{set_action}} and \code{\link{appy_rule}} )}
+  \item{act,}{(optional: NULL by default) sets an action,
+  to be executed by this rule. For a description of actions
+  see \code{\link{set_action}} and \code{\link{appy_rule}}
+  ) This NULL by default.}
 }
 \value{
 Status and the rule processed
 }
 \description{
 add_rule Adds a rule to the parser
+
+Adds a rule to the parser, if the rule exists, it is
+overwritten, getting a new definition, a new (possibly
+empty) description, and a new (possibly empty) action.
+}
+\examples{
+peg<-new.parser()
+add_rule(peg, "X<-x", des="A bad rule (I forgot quotes)")
+
+# Next we inspect the rule
+inspect_rule(peg, "X")
+# Inspect rule returns the following
+# Rule: X
+# Def: X<-x
+# Com: A bad rule (needs quotes)
+# Act:
+
+# Now we replace the rule by overwriting
+add_rule(peg, "X<-'x'", act="list('X')")
+# When again inspect, we see
+# the definition was fixed (x now is quoted), the description was removed, an action was added.
+inspect_rule(peg,"X")
 }
 
