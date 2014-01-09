@@ -21,14 +21,30 @@
 NULL
 
 
-#' @title add_rule
-#' Adds a rule to the parser
+#' @title set_rule
 #' 
+#' Sets a rule in the parser
+#' 
+#' This only sets the rule and definition.
+#' Thus for existing rules, this overwrites the rule definition, but leaves 
+#' rule actions and descriptions unaffected. For non-existing rules this is equivalent
+#' to add_rule(parser, rule, descrip=NULL, action=NULL) See \code{\link{add_rule}}
+#'  
 #' @param parser, a peg parser produced by  new.parser
 #' @param rule, a quoted string that defines a rule according to the PEG Grammer
 #' @return Status and the rule processed
+#' @examples 
+#' peg<-new.parser()
+#' # Add rule A to recognize 'a' and return list('A') as it's value
+#' add_rule(peg, "A<-'a'", act="list('A')")
+#' value(apply_rule(peg, 'A', 'a', exe=TRUE))
+#' set_rule(peg, "A<-'b'")
+#' # Now A will only recognize 'b', so it will now fail on input 'a'
+#' status(apply_rule(peg, 'A', 'a', exe=TRUE))
+#' # However, A not recognizes b, but still returs list('A') as it's value
+#' value(apply_rule(peg, 'A', 'b', exe=TRUE))
 #' @export
-add_rule<-function(parser, rule){
+set_rule<-function(parser, rule){
   if( !( "genE" %in% class(parser) ) ){ stop("first argument not a parser") }  
   res<-parser$DEFINITION(rule) 
   if(res$ok==TRUE){
@@ -40,16 +56,41 @@ add_rule<-function(parser, rule){
   invisible( list(ok=res$ok, parsed=substr(rule,1,res$pos) ) )
 }
 
-#' Attach an action to the rule specified by rule.id
+#' @title add_rule
+#' Adds a rule to the parser
+#' 
+#' @param parser, a peg parser produced by  new.parser
+#' @param rule, a quoted string that defines a rule according to the PEG Grammer
+#' @param des, a rule description
+#' @param act, an action, to be executed by this rule (see \code{\link{set_action}} and \code{\link{appy_rule}} )
+#' @return Status and the rule processed
+#' @export
+add_rule<-function(parser, rule, des=NULL, act=NULL){
+  if( !( "genE" %in% class(parser) ) ){ stop("first argument not a parser") }  
+  res<-parser$DEFINITION(rule) 
+  if(res$ok==TRUE){
+    name<-strsplit(rule,"<-")[[1]][1]
+    parser$pegE$.SOURCE.RULES[[name]]<-rule   
+    set_description(parser, name, des)
+    set_action(parser, name, des)
+  } else {
+    stop(paste("invalid syntax:",rule))
+  }
+  invisible( list(ok=res$ok, parsed=substr(rule,1,res$pos) ) )
+}
+
+
+#' Attach an (optional) action to a specified rule
 #' 
 #' @param parser, a peg parser produced by  new.parser
 #' @param rule.id, a character string naming the rule
 #' @param action to be attached to the specified rule. The action may be
-#' may take two forms:
+#' may take three forms:
 #' \enumerate{
-#'  \item a function accepting a list as input and a list as output
+#'  \item  a function accepting a list as input and a list as output
 #'  \item  a string of text to be interpreted as a function body with an input parameter consisting of a
-#'  list named v, and return value which is also a list
+#'  list named v, and return value which is also a list.
+#'  \item  NULL, in which case the action associated with the given rule is removed.
 #' }
 #' @examples
 #' #Capitalize all occurances of t using function calls
@@ -83,7 +124,10 @@ set_action<-function(genE, rule.id, action){
     } else if (class(action)=="function"){
       genE$pegE$.ACTION[[rule.id]]<-action 
       genE$pegE$.ACTION_NAMES[[rule.id]]<-c("External Function:", deparse(substitute(action)))
-    } else {
+    } else if (is.null(action)){
+      genE$pegE$.ACTION[[rule.id]]<-action
+    }
+    else {
       stop("cannot set action: invalid action")
     }   
   } else {
@@ -128,7 +172,7 @@ get_action<-function(genE, rule.id){
   actionTxt
 }
 
-#' Attaches an (optional) description to the given rule.
+#' Attach an (optional) description to a specified rule
 #' 
 #' A description
 #' should be used to comment a given rule
@@ -162,9 +206,8 @@ get_description<-function(genE, rule.id){
     description<-genE$pegE$.RULE_DESCRIPT[[rule.id]]
     return(description)
   } else {
-    stop("cannot add description: invalid rule identifier")
-  }
-  
+    stop("cannot get description: invalid rule identifier")
+  }  
 }
 
 #' Deletes the given rule form the parser.
@@ -238,18 +281,55 @@ apply_rule<-function(parser, rule.id, arg, exe=FALSE, debugTree=FALSE){
 print.genE<-function(parser){
   #list the rules in this peg
   for(name in rule_ids(parser)){
-    #rule_id name
-    cat(paste("\n# Rule: \"", name, "\"\n"))
-    #rule form
-    rule_source<-rule_source(parser, name)
-    cat(paste(" ", ifelse(is.null(rule_source), "", rule_source),"\n" ))
-    #rule description
-    description<-get_description(parser, name)
-    cat(paste("# ", ifelse(is.null(description), "", description), "\n" ) )
-    #rule action
-    #todo
+    rs<-inspect_rule(parser, name)
+    cat("\n")
+    print(rs)
   }
 }
+
+
+#' A formatted printing for results of inspect_rule
+#' 
+#' See \code{\link{inspect_rule}}
+#' @export
+print.ruleStruct<-function(rs){
+  cat(paste("Rule:",rs$name,"\n") )
+  cat(paste("Def:", rs$def ,"\n") )
+  cat(paste("Com:", ifelse(is.null(rs$com),"",rs$com),"\n") )
+  cat(paste("Act:", ifelse(is.null(rs$act),"",paste(rs$act, collapse=" ") ),"\n") )
+  invisible()
+}
+
+ #' Inspects a given rule contained within a parser
+ #' 
+ #' This is used to see what a comprises a given rule. 
+ #' @param parser, a peg parser
+ #' @param rule_id, a rule idenitifier, a.k.a. rule name
+ #' @return ruleStruct, a container which when printed will produce a
+ #' a summary of that rule
+ #' 
+ #' @examples
+ #' peg<-new.parser()
+ #' add_rule(peg, "DOG<-'fido' / 'spot' / 'rover'/ 'buddy'")
+ #' set_action(peg, "DOG", "list('bark')")
+ #' set_description(peg, "DOG", "sound of dog")
+ #' inspect_rule(peg, "DOG")
+ #' @export
+inspect_rule<-function(parser, rule_id){
+  ruleStruct<-function(name, def, descript=NULL, action=NULL){
+    rs<-list(name=name, def=def, com=descript, act=action )
+    class(rs)<-"ruleStruct"
+    rs
+  }
+  name<-rule_id #name
+  def<-rule_source(parser, rule_id) 
+  com<-get_description(parser, rule_id)
+  act<-get_action(parser, rule_id)
+  ruleStruct(name, def, com, act)
+}
+
+
+
 
 
 #' Summarizes a parsing result

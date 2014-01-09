@@ -1,6 +1,6 @@
 \name{set_description}
 \alias{set_description}
-\title{Attaches an (optional) description to the given rule.}
+\title{Attach an (optional) description to a specified rule}
 \usage{
 set_description(genE, rule.id, description)
 }

@@ -1,6 +1,6 @@
 \name{set_action}
 \alias{set_action}
-\title{Attach an action to the rule specified by rule.id}
+\title{Attach an (optional) action to a specified rule}
 \usage{
 set_action(genE, rule.id, action)
 }
@@ -10,14 +10,16 @@ set_action(genE, rule.id, action)
   \item{rule.id,}{a character string naming the rule}
 
   \item{action}{to be attached to the specified rule. The
-  action may be may take two forms: \enumerate{ \item a
+  action may be may take three forms: \enumerate{ \item a
   function accepting a list as input and a list as output
   \item a string of text to be interpreted as a function
   body with an input parameter consisting of a list named
-  v, and return value which is also a list }}
+  v, and return value which is also a list.  \item NULL, in
+  which case the action associated with the given rule is
+  removed. }}
 }
 \description{
-Attach an action to the rule specified by rule.id
+Attach an (optional) action to a specified rule
 }
 \examples{
 #Capitalize all occurances of t using function calls
