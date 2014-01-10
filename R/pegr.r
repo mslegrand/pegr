@@ -211,12 +211,14 @@ apply_rule<-function(parser, rule.id, arg, exe=FALSE, debugTree=FALSE){
 #' @export
 print.genE<-function(parser){
   #list the rules in this peg
+  if(!("genE" %in% class(parser))){ stop("first argument not a peg parser")}  
   for(name in rule_ids(parser)){
     rs<-inspect_rule(parser, name)
     cat("\n")
     print(rs)
   }
 }
+
 
 
 #' A formatted printing for results of inspect_rule
