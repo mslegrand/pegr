@@ -2,13 +2,13 @@
 \alias{qp}
 \title{A simple tool to examine a parsing expression in isolation}
 \usage{
-qp(expression, arg, debugTree = TRUE)
+qp(p.expression, text.input, debugTree = TRUE)
 }
 \arguments{
   \item{expression,}{a parsing expression (the right hand
   side of a rule definiton)}
 
-  \item{arg,}{text string to apply expression to.}
+  \item{text.input,}{text string to apply expression to.}
 
   \item{debugTree=TRUE,}{By default TRUE, so one can
   immediately graph (plot) or print (tree)}

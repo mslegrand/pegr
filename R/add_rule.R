@@ -1,4 +1,4 @@
-#' @title add_rule
+
 #' Adds a rule to the parser
 #' 
 #' Adds a rule to the parser, if the rule exists, it is overwritten, getting a new definition, 
@@ -7,10 +7,10 @@
 #' @param parser, a peg parser produced by  new.parser
 #' @param rule, a quoted string that defines a rule according to the PEG Grammer
 #' @param des, (optional: NULL by default) sets a rule description for this rule
-#' @param act, (optional: NULL by default) sets an action, to be executed by this rule. For a description of
-#' actions see \code{\link{set_action}} and \code{\link{appy_rule}} ) This NULL by default.
+#' @param act, (optional: NULL by default) sets an action, to be executed by this rule. This NULL by default.
 #' @return Status and the rule processed
-#' 
+#' @seealso  For a description of
+#' actions see \code{\link{set_action}} and \code{\link{appy_rule}} )
 #' @examples
 #' peg<-new.parser()
 #' add_rule(peg, "X<-x", des="A bad rule (I forgot quotes)")
@@ -30,10 +30,19 @@
 #' inspect_rule(peg,"X")
 #' @export
 add_rule<-function(parser, rule, des=NULL, act=NULL){
-  if( !( "genE" %in% class(parser) ) ){ stop("first argument not a parser") }  
+  if( !( "genE" %in% class(parser) ) ){ stop("first argument not a parser") }
+  if(!("character" %in% class(rule))){
+    stop("second argument is not a character string")
+  }
+  pos<-badQuotePos(rule)
+  if(pos>0){
+    msg<-paste("Unbalance quotes at:", substr(rule, 1, pos))
+    stop(msg)
+  }
   res<-parser$DEFINITION(rule) 
   if(res$ok==TRUE){
     name<-strsplit(rule,"<-")[[1]][1]
+    name <- gsub("^\\s+|\\s+$", "", name)
     parser$pegE$.SOURCE.RULES[[name]]<-rule   
     set_description(parser, name, des)
     set_action(parser, name, act)

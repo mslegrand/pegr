@@ -1,13 +1,6 @@
 \name{set_rule}
 \alias{set_rule}
-\title{set_rule
-
-Sets a rule in the parser
-
-This only sets the rule and definition.
-Thus for existing rules, this overwrites the rule definition, but leaves
-rule actions and descriptions unaffected. For non-existing rules this is equivalent
-to add_rule(parser, rule, descrip=NULL, action=NULL) See \code{\link{add_rule}}}
+\title{Sets a rule in the parser}
 \usage{
 set_rule(parser, rule)
 }
@@ -21,10 +14,6 @@ set_rule(parser, rule)
 Status and the rule processed
 }
 \description{
-set_rule
-
-Sets a rule in the parser
-
 This only sets the rule and definition. Thus for existing
 rules, this overwrites the rule definition, but leaves rule
 actions and descriptions unaffected. For non-existing rules

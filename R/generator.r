@@ -277,7 +277,12 @@ new.parser<-function(debugTree=FALSE){
     
     SUFFIX <- PRIMARY + opt.01( QUESTION / STAR / PLUS) < list("SUFFIX", function(v){ fn<-mk.suffix(v); list(suf=fn) } )
     PREFIX <- opt.01(AND / NOT) + SUFFIX < list("PREFIX", function(v){ fn<-mk.prefix(v); list(pre=fn) } )
-    SEQUENCE <- opt.0x(PREFIX) < list("SEQ",function(v){ fn<-do.call(s.sequence, v); list(seq=fn)}) 
+    SEQUENCE <- opt.0x(PREFIX) < list("SEQ",function(v){ 
+      if(!("list" %in% class(v))){
+        print(v)
+        stop("bad rule syntax")
+      }
+      fn<-do.call(s.sequence, v); list(seq=fn)}) 
     EXPRESSION <- SEQUENCE + opt.0x(SLASH + SEQUENCE) < list("EXPRESSION", function(v){fn<-do.call(s.first,v); list(exp=fn)})
     DEFINITION <- definition.Node(IDENTIFIER , LEFTARROW , EXPRESSION , opt.01(EXEC)) < list(
       "DEFINITION", 

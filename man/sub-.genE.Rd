@@ -5,8 +5,12 @@
 \method{[}{genE}(parser, rule.id)
 }
 \description{
-examples peg<-new.parser() add_rule(peg, "R<-'ab')
-peg["R"]('ab') #equivalent to **apply_rule(peg, "R",
-'ab')**
+An alternative to apply_rule
+}
+\examples{
+peg<-new.parser()
+add_rule(peg, "R<-'ab'")
+#next apply the rule
+peg["R"]('ab')
 }
 

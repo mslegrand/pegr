@@ -1,4 +1,5 @@
-
+#' Print Tree
+#' 
 #' Prints a tree representing the result of applying a rule to a text input, when that result was 
 #' obtained with the debugTree parameter set to TRUE
 #' 

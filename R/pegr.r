@@ -129,7 +129,7 @@ set_description<-function(genE, rule.id, description){
     genE$pegE$.RULE_DESCRIPT[[rule.id]]<-description
     invisible(TRUE)
   } else {
-    stop("cannot add description: invalid rule identifier")
+    stop("cannot set description: invalid rule identifier")
   }
 }
 
@@ -171,31 +171,6 @@ rule_source<-function(parser, rule.id){
   parser$pegE$.SOURCE.RULES[[rule.id]]
 }
 
-
-
-#' Invoke the parser to parse using the rule.id as the root.
-#' 
-#' @param parser, a peg parser produced by  new.parser
-#' @param rule.id, a character string naming the rule
-#' @param arg, a character string to be parsed
-#' @param exe, a flag indicate whether actions should be performed. 
-#' when false, no actions will be executed
-#' @param debugTree, a flag which when set produces tree of snapshots of all nodes
-#' visited during the parsing process
-#' @export
-apply_rule<-function(parser, rule.id, arg, exe=FALSE, debugTree=FALSE){
-  if(!("genE" %in% class(parser))){ stop("first argument not a peg parser")}  
-  if( !( rule.id %in% rule_ids(parser) ) ){stop("cannot parse: invalid rule identifier")}
-  parser$pegE$.DEBUG.NODE<-debugTree
-  parser$pegE[[rule.id]](arg, exe)->res
-  if(!"list" %in% (class(res)) ){ stop("Bad Action Rule: resulting value is not a list")}
-  #parserName<-as.character( substitute(parser) )
-  #res$Call<-list(parserName<-parserName, rule.id=rule.id, arg=arg)
-  res$Call<-list(rule.id=rule.id, arg=arg)
-  res$options<-list(exe=exe, debugTree=debugTree)
-  class(res)<-c("PEGResult")
-  res
-}
 
 #' Prints the rules contained in the PEG
 #' 
@@ -289,7 +264,37 @@ print.summary.PEGResult<-function(sum){
   cat(paste(sum,collapse="\n"))
 }
 
+#' A convenient shortcut for pasting lists
+#' 
+#' This is equivalent to list(paste(v,collapse=''). It is analogous to pastes0 for
+#' vectors.
+#' @param v, a list
+#' @references a list of length one, having its sole element
+#' the result of pasting together the contents of v without any
+#' seperator
+#' @export
+paste1<-function(v){ list(paste(v,collapse='')) }
 
+
+#quick kludge for checking for matching quotes
+badQuotePos<-function(s){
+  state<-0
+  pos<-0
+  for(i in 1:nchar(s)){
+    if(substr(s,i,i)=='"' ){
+      if(!(state==-1)){ #not in ' '
+        state<-1-state #flip bits
+        pos<-i
+      }
+    } else if(substr(s,i,i)=="'"){
+      if(!(state==1)){
+        state<--(1+state)
+        pos<-i
+      }
+    }
+  }
+  return(pos*abs(state)) # pos if state=!0
+}
 
 #todo:
 #turn on all memoize

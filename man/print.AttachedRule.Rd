@@ -5,7 +5,11 @@
 \method{print}{AttachedRule}(attached.rule)
 }
 \description{
-examples peg<-new.parser() add_rule(peg, "R<-'ab')
-print(peg["R"](ab))
+Prints an attached rule
+}
+\examples{
+peg<-new.parser()
+add_rule(peg, "R<-'ab'")
+print(peg["R"])
 }
 

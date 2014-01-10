@@ -1,7 +1,6 @@
 \name{tree}
 \alias{tree}
-\title{Prints a tree representing the result of applying a rule to a text input, when that result was
-obtained with the debugTree parameter set to TRUE}
+\title{Print Tree}
 \usage{
 tree(res)
 }

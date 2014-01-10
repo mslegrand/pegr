@@ -1,5 +1,3 @@
-#' @title set_rule
-#' 
 #' Sets a rule in the parser
 #' 
 #' This only sets the rule and definition.
