@@ -28,7 +28,7 @@
 qp<-function(p.expression, text.input, debugTree=TRUE){
   peg<-new.parser()
   add_rule(peg, paste("R<-", p.expression))->res
-  apply_rule(peg, 'R', text.input)->res
+  apply_rule(peg, 'R', text.input, debugTree)->res
   res$Call$rule.id<-"Anonomous"
   return(res)
 }
