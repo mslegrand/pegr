@@ -1,3 +1,4 @@
+S3method("+",genE)
 S3method("[",genE)
 S3method(plot,PEGResult)
 S3method(print,AttachedRule)

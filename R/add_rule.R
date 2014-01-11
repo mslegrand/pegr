@@ -49,5 +49,27 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
   } else {
     stop(paste("invalid syntax:",rule))
   }
-  invisible( list(ok=res$ok, parsed=substr(rule,1,res$pos) ) )
+  invisible( list(ok=res$ok, rule.id=name, parsed=substr(rule,1,res$pos) ) )
 }
+
+#' Alternative to add_rule.
+#' 
+#' @examples
+#' 
+#' @export
+"+.genE"<-function(parser, arg){
+  #
+  #use "{}" for act; use "#" for comment, use  =.. <- for rule
+  if(!("character" %in% class(arg))){
+    stop("not implemented yet")
+  } else {
+    rule<-arg
+    res<-add_rule(parser, rule)
+    if(res$parsed!=rule){
+      delete_rule(parser, res$rule.id )
+      stop(paste("Partial Processed:", rule, ))
+    }
+  }
+  parser
+}
+
