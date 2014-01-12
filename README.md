@@ -21,11 +21,17 @@ remove.packages("pegr")
 Motiation
 ------
 
-The biggest stumbling block in using pegs is debugging.  And the most
-likely source of an error comes from a grammar (i.e. set of rules) that fail
-to do what was intended on some particular text input. 
-Thus the prime motivation for this tool is to provide an easy way
-to analyse where the grammar breaks down for given input.
+The biggest stumbling block to using pegs is writng the rules:
+[ ] Making rules with valid PEG syntax
+[ ] Making rules that don't hang on input
+[ ] Making rules that recognize the input correctly
+[ ] Making rules that respond to the input correctly
+
+The prime motivation for this tool is to help overcome these stumbling blocs, by providing an easy way
+to enter and evaluate rules. Moreover, we should be able to easliy evaluate the leaf independently,
+and then combinations of those leaves, and combination of those, until the final grammar is built. Additionally,
+tools for visualizing the computations involved in the application of each rule in the grammar should be easy and 
+informative.
 
 Usage
 _____
@@ -36,13 +42,14 @@ there are several demos that may provide additional insight.
 What's Needed
 ______
 
-Some obvious  items:
-[ ]  More  and better examples
-[ ]  Reading and writing peg rules to file
-[ ]  Dectection of rules producing infinite recursion
-[ ]  Profiling and replacing R functions with C
-[ ]  A nice user guide (in addition to the vignette
+Some obvious  inprovements to consider:
+[ ]  More  and more examples
+[ ]  A nice user guide (in addition to the vignette)
 [ ]  Cleaner code with a cleaner interface
+[ ]  Reading and writing peg rules to file. 
+[ ]  Detection of rules producing infinite recursion
+[ ]  Profiling and replacing R functions with C code
+
 
 
 
