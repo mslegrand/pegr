@@ -22,10 +22,10 @@ Motiation
 ------
 
 The biggest stumbling block to using pegs is writng the rules:
-[ ] Making rules with valid PEG syntax
-[ ] Making rules that don't hang on input
-[ ] Making rules that recognize the input correctly
-[ ] Making rules that respond to the input correctly
+* Making rules with valid PEG syntax
+* Making rules that don't hang on input
+* Making rules that recognize the input correctly
+* Making rules that respond to the input correctly
 
 The prime motivation for this tool is to help overcome these stumbling blocs, by providing an easy way
 to enter and evaluate rules. Moreover, we should be able to easliy evaluate the leaf independently,
@@ -43,12 +43,12 @@ What's Needed
 ______
 
 Some obvious  inprovements to consider:
-[ ]  More  and more examples
-[ ]  A nice user guide (in addition to the vignette)
-[ ]  Cleaner code with a cleaner interface
-[ ]  Reading and writing peg rules to file. 
-[ ]  Detection of rules producing infinite recursion
-[ ]  Profiling and replacing R functions with C code
+*  More  and more examples
+*  A nice user guide (in addition to the vignette)
+*  Cleaner code with a cleaner interface
+*  Reading and writing peg rules to file. 
+*  Detection of rules producing infinite recursion
+* Profiling and replacing R functions with C code
 
 
 
