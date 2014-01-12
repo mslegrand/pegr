@@ -34,13 +34,13 @@ tools for visualizing the computations involved in the application of each rule 
 informative.
 
 Usage
-_____
+-------
 
 Usage is described in the vignette.   In addition to the examples contained in help,
 there are several demos that may provide additional insight.
 
 What's Needed
-______
+-------
 
 Some obvious  inprovements to consider:
 *  More  and more examples
