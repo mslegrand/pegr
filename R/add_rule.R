@@ -55,21 +55,62 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
 #' Alternative to add_rule.
 #' 
 #' @examples
-#' 
+#' peg<- new.parser()
+#' peg + "A<-'a'" + "B<-'b'" + "C<-'c'"
+#' #to suppress the output use invisible"
+#' invisible(peg + "A<-'a'" + "B<-'b'" + "C<-'c'")
+#' #now add rule D with action and comment
+#' peg + c("D<-'d'", des="capitalize D", act="list(atom='D')")
 #' @export
 "+.genE"<-function(parser, arg){
   #
   #use "{}" for act; use "#" for comment, use  =.. <- for rule
-  if(!("character" %in% class(arg))){
-    stop("not implemented yet")
+  if(is.null(arg)){
+    stop("arg is null")
   } else {
-    rule<-arg
-    res<-add_rule(parser, rule)
-    if(res$parsed!=rule){
+    cmd<-arg2list(arg)
+    res<-add_rule(parser, cmd$rule, des=cmd$des, act=cmd$act)
+    if(res$parsed!=cmd$rule){
       delete_rule(parser, res$rule.id )
       stop(paste("Partial Processed:", rule, ))
     }
   }
-  parser
+  return(parser)
+}
+
+arg2list<-function(arg){
+  if( !("character" %in% class(arg)) & !( "list" %in% class(arg))){
+    stop("NULL encountered")
+  }
+  if( is.null(names(arg))){
+    nm<-"rule"
+  } else {
+    nm<-names(arg)
+    nm[1]<-"rule"
+  }
+  arg<-as.list(arg)
+  names(arg)<-nm
+  arg
+}
+
+
+#quick kludge for checking for matching quotes
+badQuotePos<-function(s){
+  state<-0
+  pos<-0
+  for(i in 1:nchar(s)){
+    if(substr(s,i,i)=='"' ){
+      if(!(state==-1)){ #not in ' '
+        state<-1-state #flip bits
+        pos<-i
+      }
+    } else if(substr(s,i,i)=="'"){
+      if(!(state==1)){
+        state<--(1+state)
+        pos<-i
+      }
+    }
+  }
+  return(pos*abs(state)) # pos if state=!0
 }
 
