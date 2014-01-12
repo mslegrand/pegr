@@ -275,27 +275,6 @@ print.summary.PEGResult<-function(sum){
 #' @export
 paste1<-function(v){ list(paste(v,collapse='')) }
 
-
-#quick kludge for checking for matching quotes
-badQuotePos<-function(s){
-  state<-0
-  pos<-0
-  for(i in 1:nchar(s)){
-    if(substr(s,i,i)=='"' ){
-      if(!(state==-1)){ #not in ' '
-        state<-1-state #flip bits
-        pos<-i
-      }
-    } else if(substr(s,i,i)=="'"){
-      if(!(state==1)){
-        state<--(1+state)
-        pos<-i
-      }
-    }
-  }
-  return(pos*abs(state)) # pos if state=!0
-}
-
 #todo:
 #turn on all memoize
 #print history of run 
