@@ -24,9 +24,78 @@ set_rule<-function(parser, rule){
   res<-parser$DEFINITION(rule) 
   if(res$ok==TRUE){
     name<-strsplit(rule,"<-")[[1]][1]
-    parser$pegE$.SOURCE.RULES[[name]]<-rule    
+    name <- gsub("^\\s+|\\s+$", "", name)
+    parser$pegE$.SOURCE.RULES[[name]]<-rule   
   } else {
     stop(paste("invalid syntax:",rule))
   }
   invisible( list(ok=res$ok, parsed=substr(rule,1,res$pos) ) )
+}
+
+#"[<-.ar"<-function(u,v, value)
+
+#' Modifies the rule definition and or description or values
+#' 
+#' Modifies the specified rule in the given parser.
+#' 
+#' @param parser, the peg parser containing the rule to be modified
+#' @param rule.id, the identifier of the rule to be modified
+#' @param value, the modifications to be applied. Can be either a vector or a
+#' list. 
+#' @return peg parser
+#' @examples
+#' peg<-new.parser()
+#' peg + "A<-'a'"
+#' peg
+#' peg["A"]<-"A<-'ab'"
+#' peg
+#' peg["A"]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
+#' peg
+#' @export
+"[<-.genE"<-function(parser, rule.id, value){
+  # first parse arg (which will be some string or list) 
+   #cat("hello/n")
+   arg<-value
+  if( is.null(rule.id) | !(rule.id %in% rule_ids(parser) )){
+    stop("invalid index")
+  }
+  if( length(rule.id)!=1 ){
+    stop("The index must contain exactly one rule")
+  }
+  if( is.null(arg) ) {
+    stop("NULL assignment not yet implemented") #TODO!!! inplement as delete
+  }
+  if( !("character" %in% class(arg)) & !( "list" %in% class(arg))){
+    stop("Bad Rule assignment")
+  }
+  if( is.null(names(arg) ) ){
+    nR<-"rule"
+  } else {
+    nR<-names(arg)
+    # substite "rule" for the name of the first unnamed arg
+    if(any(nR=="")){
+      nR[min(which(nR==""))]<-"rule"
+    }    
+  }
+  arg.L<-as.list(arg)
+  names(arg.L)<-nR
+  #arg is now a list
+  
+  if('rule' %in% names(arg.L)){
+    #we need to check that rule.id is correct! We extract from arg.rule
+    rule<-arg.L$rule
+    name<-strsplit(rule,"<-")[[1]][1]
+    name <- gsub("^\\s+|\\s+$", "", name)
+    if(name!=rule.id){
+      stop("Rule does not match rule.id!")
+    }
+    set_rule(parser, arg.L$rule)
+  }
+  if('des' %in% names(arg.L)){
+    set_description(parser, rule.id,  arg.L$des)
+  }
+  if('act' %in% names(arg.L)){
+    set_action(parser, rule.id, arg.L$act)
+  }
+  invisible(parser)
 }

@@ -54,8 +54,9 @@ apply_rule<-function(parser, rule.id, input.text, exe=FALSE, debugTree=FALSE){
 #' @examples
 #' peg<-new.parser()
 #' add_rule(peg, "R<-'ab'")
-#' #next apply the rule
-#' peg["R"]('ab')
+#' #next we reset the rule
+#' peg["R"]<-"R<-'r'"
+#'
 #' @export
 "[.genE"<-function(parser, rule.id){
   if(!("genE" %in% class(parser))){ stop("first argument not a peg parser")}  
@@ -76,10 +77,9 @@ apply_rule<-function(parser, rule.id, input.text, exe=FALSE, debugTree=FALSE){
       printRule<-function(){
         return(inspect_rule(parser,rule.id))
       }
-      switch(task,
+   switch(task,
              apply = applyRule(list(...)),
-             prt   = printRule(),
-             set   = resetRule
+             prt   = printRule() #,
       )
     }
     class(ar)<-"AttachedRule"
@@ -105,4 +105,5 @@ print.AttachedRule<-function(attached.rule){
 #   bb[2]<-call(task<-'prt')
   body(attached.rule)[2]<-call(task<-'prt')
   attached.rule()
+  
 }

@@ -10,7 +10,7 @@ An alternative to apply_rule
 \examples{
 peg<-new.parser()
 add_rule(peg, "R<-'ab'")
-#next apply the rule
-peg["R"]('ab')
+#next we reset the rule
+peg["R"]<-"R<-'r'"
 }
 
