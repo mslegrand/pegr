@@ -32,26 +32,6 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   
     
   
-  envS$s.atom<-function(x){ # (x) terminal symbol 
-    h<-function(input, exe=TRUE,  p=1){
-      n<-nchar(x)-1
-      if(envS$DEVEL.DEBUG){
-        cat("atom.",x," input=",input," p=",p,"\n") ###good for debugging      
-      }    
-      if( substring(input,p,p+n)==x){
-        val=list(atom=x)
-        return( list(ok=TRUE,pos=n+1, val=val  ) )
-      }else{
-        return(list(ok=FALSE,pos=0))
-      }
-    }
-    class(h)<-c("pa", "pe",class(h))
-    
-    h
-    #   fn<-memoize(h)
-    #   fn
-  }
-  
   envS$s.range<-function(begChar,endChar){
     h<-function(input, exe=TRUE,  p=1){
       theChar<-substring(input,p,p)
@@ -78,8 +58,30 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
     val<-substring(input, p, p)
     return( list(ok=TRUE, pos=1, val=list(val) ) )
   }
-    
   
+  #this is used by envS$mk.atom (and twice in test2.r ) 
+  envS$s.atom<-function(x){ # (x) terminal symbol 
+    h<-function(input, exe=TRUE,  p=1){
+      n<-nchar(x)-1
+      if(envS$DEVEL.DEBUG){
+        cat("atom.",x," input=",input," p=",p,"\n") ###good for debugging      
+      }    
+      if( substring(input,p,p+n)==x){
+        val=list(atom=x)
+        return( list(ok=TRUE,pos=n+1, val=val  ) )
+      }else{
+        return(list(ok=FALSE,pos=0))
+      }
+    }
+    class(h)<-c("pa", "pe",class(h))
+    
+    h
+    #   fn<-memoize(h)
+    #   fn
+  }
+  
+    
+  #this is used only by literal mk.c.a, and in test1 and test2.
   #this makes the atom, even if it previously existed!!!
   envS$mk.atom<-function(x, y=NULL, env=envS){ #env=parent.frame() ){ #used in literal, unitTest1.r, unitTest2.r, test1.r, test2.r
     if(is.null(y)){
@@ -87,7 +89,6 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
     }
     #cat("x=",x)
     tmp<-envS$s.atom(x)
-    #print(tmp)
     name<-paste("atom",y,sep=".")
     assign(name, tmp ,env )#, envir=.GlobalEnv) #, envir = pegE) #.GlobalEnv)
     name
