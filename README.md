@@ -39,16 +39,27 @@ Usage
 Usage is described in the vignette.   In addition to the examples contained in help,
 there are several demos that may provide additional insight.
 
+We currently supply 2 approaches to usage:
+* traditional form: commands of the form add_rule(peg, rule, ...), apply_rule(peg, rule.id, input.txt, ...)
+* operator form: commands of the form peg + rule , peg[rule](input.txt)
+
+Design Considerations (Open for your input/discussion)
+---------
+Operator Form
+* peg + rule + rule for adding rules may not be the best choice, currently considering using peg <= rule <= rule as a replacement
+* peg[rule.id](input.txt) violates the usual usage of [] in R. ([] returns an attachedRule object, not a Peg, and this [] does not vectors of rule.ids greater than length 1) A more proper version would be to ues peg[[rule.id]](text.input). But this is messier and perhaps less intuitive. Also matrices violate the return type rule, so maybe this isn't so bad.
+* pegs are really environments with wrappers, so the usual copy doesnot work. I will probably change this.
+
 What's Needed
 -------
 
 Some obvious  inprovements to consider:
 *  More  and more examples
-*  A nice user guide (in addition to the vignette)
+*  A better user guide (in addition to the vignette)
 *  Cleaner code with a cleaner interface
 *  Reading and writing peg rules to file. 
 *  Detection of rules producing infinite recursion
-* Profiling and replacing R functions with C code
+*  Profiling and replacing R functions with C code
 
 
 
