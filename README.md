@@ -41,7 +41,7 @@ there are several demos that may provide additional insight.
 
 We currently supply 2 approaches to usage:
 * traditional form: commands of the form **add_rule(peg, rule, ...)**, **apply_rule(peg, rule.id, input.txt, ...)**
-* operator form: commands of the form **peg + rule** , **peg\[rule](input.txt**
+* operator form: commands of the form **peg + rule** , **peg\[rule](input.txt)**
 
 Design Considerations (Open for Your Input/Discussion)
 ---------
