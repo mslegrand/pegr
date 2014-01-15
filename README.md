@@ -43,7 +43,7 @@ We currently supply 2 approaches to usage:
 * traditional form: commands of the form add_rule(peg, rule, ...), apply_rule(peg, rule.id, input.txt, ...)
 * operator form: commands of the form peg + rule , peg[rule](input.txt)
 
-Design Considerations (Open for your input/discussion)
+Design Considerations (Open for Your Input/Discussion)
 ---------
 Operator Form
 * peg + rule + rule for adding rules may not be the best choice, currently considering using peg <= rule <= rule as a replacement
