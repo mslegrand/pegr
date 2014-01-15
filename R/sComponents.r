@@ -2,10 +2,12 @@
 
 # scomponent
   # debuggin.peg: not used?
+
   # s.range: test4(1); literal(1); generator(2)
   # s.dot: test2(12); generator
   # s.atom: used by test2 (2);  sComponents:mk.atom 
   # mk.atom: used by test1 (2), test2(5) and literal <- can we replace this in Test1 and 2?
+
   # delete.all.atoms: used only in test2 <- remove this!!
   # peg.parse: used only in test1(4) <- remove this
 

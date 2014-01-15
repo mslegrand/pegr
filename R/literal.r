@@ -1,3 +1,11 @@
+#
+# mk.atom.name:  (locally only) by mk.c.a
+# mk.c.a: used (locally only) by mk.s.a and mk.atom.name
+#       :uses mk.atom (only user besides test1,2)
+# mk.s.a: used (locally only by) literal
+# mk.l.a : used only by generatro sequence   <<-- move to generator?
+# literal: 
+
 #PEG LITERAL BUILDER
 include.literal<-function(pegE, envL=parent.frame() ){
   special.characters<-c(
