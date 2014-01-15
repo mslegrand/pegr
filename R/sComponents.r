@@ -1,34 +1,25 @@
 
-#PEG COMPONENTS
-#Note the following have explicit reference to pegE
-# s.sequence
-# s.first
-# s.not
-# opt.01
-# opt.0x
-# opt.1x
-# s.and
-#however the above only are invoked via a peg.name, which is valid only for identifiers in pegE
-# debug.Node
+
+# scomponent
+  # debuggin.peg: not used?
+  # s.range: test4(1); literal(1); generator(2)
+  # s.dot: test2(12); generator
+  # s.atom: used by test2 (2);  sComponents:mk.atom 
+  # mk.atom: used by test1 (2), test2(5) and literal <- can we replace this in Test1 and 2?
+  # delete.all.atoms: used only in test2 <- remove this!!
+  # peg.parse: used only in test1(4) <- remove this
 
 
-# if f is a peg.name, look it up and return 
-# ow. return f (which should be either a function or the value of a atom)
-# get.fn<-function(f{
-#   if("peg.name" %in% class(f)){
-#     if(exists(f)){ f<-get(f)}}
-#   f
-# }
 
 include.sComponents<-function(pegE, envS=parent.frame() ){
   
   DEVEL.DEBUG<-envS$DEVEL.DEBUG
   
   
-  envS$debuggin.peg<-function(){
-    #   return(TRUE)
-    return(exists("PEG.DEBUG.L1", envir=env)) 
-  }
+#   envS$debuggin.peg<-function(){
+#     #   return(TRUE)
+#     return(exists("PEG.DEBUG.L1", envir=env)) 
+#   }
   
     
   

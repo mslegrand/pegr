@@ -1,7 +1,30 @@
 
 include.sConnectives<-function(pegE, envS=parent.frame() ){
+ 
+  #Note the following have explicit reference to pegE
+  # s.sequence
+  # s.first
+  # s.not
+  # opt.01
+  # opt.0x
+  # opt.1x
+  # s.and
+  #however the above only are invoked via a peg.name, which is valid only for identifiers in pegE
+  # debug.Node
   
-  #s.sequence, s.first, s.not, 
+  #s.and in literal, test1, 
+  
+  getSafeFn<-function(f){
+    if("peg.name" %in% class(f)){
+      if(exists(f,envir=pegE)){ 
+        f<-get(f,envir=pegE)
+      } else {
+        stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
+      }
+    }
+    f
+  }         
+  
   
   #' Combines a sequence of nodes 
   #' 
@@ -20,23 +43,20 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
            d.node<-list()
          }
          for(f in lf){
+           
            # grab f
-           if("peg.name" %in% class(f)){
-             if(exists(f,envir=pegE)){ 
-               f<-get(f,envir=pegE)
-             } else {
-               stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
-             }
-           }
+           f<-getSafeFn(f)           
+           
            # execute f
            res<-f(input,  exe, p+mn)
+           
+           #process
            if(res$ok==FALSE){
              return(list(ok=FALSE,pos=0, val=list() )) #this line is the essential difference between sequenceNode and sequence
            }
            mn<-mn+res$pos
            val<-c(val,res$val)
            if(pegE$.DEBUG.NODE==T & !is.null(res$debugNode)){ 
-             #d.node<-c(d.node, list(res$debugNode) ) #c(list(), list(a))=list(a)
              d.node<-c(d.node, res$debugNode ) #c(list(), list(a))=list(a) #!!!
            }     
          }
@@ -64,15 +84,12 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
          for(f in lf){
            if("peg.name" %in% class(f)){ if(exists(f,envir=pegE)){ f<-get(f,envir=pegE)}}
            # grab f
-           if("peg.name" %in% class(f)){
-             if(exists(f,envir=pegE)){ 
-               f<-get(f,envir=pegE)
-             } else {
-               stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
-             }
-           }
+           f<-getSafeFn(f)
+
            # execute f
            res<-f(input, exe,  p)
+           
+           #process
            if(res$ok==TRUE){
              return(res)
            }
@@ -91,18 +108,15 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
          if(envS$DEVEL.DEBUG){
            cat("negate: input=",input," p=",p,"\n") ###good for debugging      
          }    
-         exe<-FALSE
-         # grab f
-         if("peg.name" %in% class(f)){
-           if(exists(f,envir=pegE)){ 
-             f<-get(f,envir=pegE)
-           } else {
-             stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
-           }
-         }
+         exe<-FALSE #lookahead does not exe
+         
+         # grab
+         f<-getSafeFn(f)
+         
          # execute f      
          res<-f(input,  FALSE, p)
-         #print(res)
+         
+         #process
          if(res$ok){
            return(list(ok=FALSE,pos=0, val=list() ))
          } else {
@@ -114,21 +128,40 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
        #   fn<-memoize(h)
        #   fn
      }
+  
+    envS$s.and<-function(f){ # f* :lookahead or "and" or &
+      h<-function(input, exe=TRUE,  p=1){
+        
+        exe<-FALSE #lookahead, do not exe
+        
+        # grab f
+        f<-getSafeFn(f)
+        
+        # execute f      
+        res<-f(input, exe,  p)
+        
+        #process
+        val<-res$val
+        if(res$ok){
+          return(list(ok=TRUE,pos=0, val=list() ))
+        }
+        return(list(ok=FALSE,pos=0, val=list() ))
+      }  
+      class(h)<-c("pe",class(h))
+      h
+      #   fn<-memoize(h)
+      #   fn
+    }
      
      envS$opt.01<-function(f){ # [f] (optional: one possible occurance of f)
-       h<-function(input, exe=TRUE,  p=1){
-         #cat("optional")
-         #if("peg.name" %in% class(f)){ if(exists(f)){ f<-get(f)}}
+       h<-function(input, exe=TRUE,  p=1){         
          # grab f
-         if("peg.name" %in% class(f)){
-           if(exists(f,envir=pegE)){ 
-             f<-get(f,envir=pegE)
-           } else {
-             stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
-           }
-         }
+         f<-getSafeFn(f)
+         
          # execute f      
          res<-f(input, exe,  p)
+         
+         #process
          if(res$ok){
            #       val=res$val
            #       return(list(ok=TRUE,pos=res$pos, val=val))
@@ -152,17 +185,12 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
          }
          while(ok){
            # grab f
-           if("peg.name" %in% class(f)){
-             if(exists(f,envir=pegE)){ 
-               f<-get(f,envir=pegE)
-             } else {
-               stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
-             }
-           }
+           f<-getSafeFn(f)
+           
            # execute f      
            res<-f(input,  exe,  p+m)
-           #cat("m=",m," p+m=",p+m, "\n")
-           #printRes(m,res)
+           
+           #processs
            ok<-res$ok
            if(ok){
              m<-m+res$pos
@@ -172,7 +200,6 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
              }     
            }
          }
-         #val<-paste(val,collapse="")
          return(list(ok=TRUE,pos=m, val=val))
          if(pegE$.DEBUG.NODE==T & length(d.node)>0) { 
            return(list(ok=TRUE, pos=m, val=val, debugNode=d.node))
@@ -189,22 +216,16 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
      
      envS$opt.1x<-function(f){ # f* :one or  more repitions
        h<-function(input, exe=TRUE,  p=1){
-         #if("peg.name" %in% class(f)){ if(exists(f)){ f<-get(f)}}
          # grab f
-         if("peg.name" %in% class(f)){
-           if(exists(f,envir=pegE)){ 
-             f<-get(f,envir=pegE)
-           } else {
-             stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
-           }
-         }
+         f<-getSafeFn(f)
+         
          # execute f      
          res1<-f(input, exe,  p)
+         
+         #process
          if(res1$ok){
-           #val1<-res1$val
            res2<-envS$opt.0x(f)( input, exe, p+res1$pos )
-           m<-res1$pos+res2$pos
-           #val<-c(val1,res2$val)  
+           m<-res1$pos+res2$pos 
            val<-c(res1$val,res2$val)     
            if(pegE$.DEBUG.NODE==T ) { 
              d.node=c(res1$debugNode,res2$debugNode)
@@ -221,31 +242,6 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
        #   fn
      }
      
-     envS$s.and<-function(f){ # f* :lookahead or "and" or &
-       h<-function(input, exe=TRUE,  p=1){
-         exe<-FALSE
-         # grab f
-         if("peg.name" %in% class(f)){
-           if(exists(f,envir=pegE)){ 
-             f<-get(f,envir=pegE)
-           } else {
-             stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
-           }
-         }
-         # execute f      
-         res<-f(input, exe,  p)
-         val<-res$val
-         if(res$ok){
-           return(list(ok=TRUE,pos=0, val=list() ))
-         }
-         return(list(ok=FALSE,pos=0, val=list() ))
-       }  
-       class(h)<-c("pe",class(h))
-       h
-       #   fn<-memoize(h)
-       #   fn
-     }
-     
-     
+
 }
 

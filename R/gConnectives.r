@@ -1,6 +1,12 @@
 
 include.gConnectives<-function(pegE, envG=parent.frame() ){
   
+# contains: 
+  # "/.pe"
+  # "+.pe"
+  # '<.pe'
+  
+  
   DEVEL.DEBUG<-envG$DEVEL.DEBUG
   
   envG$"/.pe"<-function(f,g){ #(f / g) prioritized choice
@@ -8,20 +14,14 @@ include.gConnectives<-function(pegE, envG=parent.frame() ){
       if(DEVEL.DEBUG){
         cat("disjuction: input=",input," p=",p,"\n") ###good for debugging      
       }    
-      #if("peg.name" %in% class(f)){ if(exists(f)){ f<-get(f)}}
       if("peg.name" %in% class(f)){ if(exists(f,envir=pegE)){ f<-get(f,envir=pegE)}}
       res1<-f(input, exe,  p)
       if(res1$ok){
-        #val<-res1$val
-        #return(list(ok=TRUE,pos=res1$pos,val=val))
         return(res1)
       } 
-      #if("peg.name" %in% class(g)){ if(exists(g)){ f<-get(g)}}
       if("peg.name" %in% class(g)){ if(exists(g,envir=pegE)){ g<-get(g,envir=pegE)}}
       res2<-g(input, exe,  p)
       if(res2$ok==TRUE){
-        #val<-res2$val
-        #return(list(ok=TRUE,pos=res2$pos,val=val))
         return(res2)
       } else
         return(list(ok=FALSE, pos=0, val=list() ))
