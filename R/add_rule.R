@@ -75,7 +75,7 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
       stop(paste("Partial Processed:", rule, ))
     }
   }
-  return(parser)
+  invisible(parser)
 }
 
 arg2list<-function(arg){

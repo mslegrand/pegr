@@ -69,9 +69,12 @@ apply_rule<-function(parser, rule.id, input.text, exe=FALSE, debugTree=FALSE){
       task<-"apply"
       applyRule<-function(...){
         dots<-list(...)
-        input.text<-dots[[1]]
-        exe= ifelse(is.null(dots$exe), FALSE, dots$exe==TRUE )
-        debugTree=ifelse(is.null(dots$debugTree), FALSE, dots$exe==TRUE)        
+        input<-dots[[1]]
+        #print(input)
+        input.text<-input[1]
+        exe= ifelse(is.null(input$exe), FALSE, input$exe==TRUE )
+        debugTree=ifelse(is.null(input$debugTree), FALSE, input$debugTree==TRUE)  
+        #print(debugTree)
         return(apply_rule(parser, rule.id, input.text, exe=exe, debugTree=debugTree ))
       }
       printRule<-function(){
