@@ -46,8 +46,8 @@ We currently supply 2 approaches to usage:
 Design Considerations (Open for Your Input/Discussion)
 ---------
 Operator Form
-* peg + rule + rule for adding rules may not be the best choice, currently considering using peg <= rule <= rule as a replacement
-* peg\[rule.id](input.txt) violates the usual usage of \[] in R. ([] returns an attachedRule object, not a Peg, and this [] does not vectors of rule.ids greater than length 1) A more proper version would be to ues peg\[\[rule.id]](text.input). But this is messier and perhaps less intuitive. Also matrices violate the return type rule, so maybe this isn't so bad.
+* **peg + rule + rule** for adding rules may not be the best choice, currently considering using **peg <= rule <= rule** as a replacement
+* **peg\[rule.id](input.txt)** violates the usual usage of \[] in R. ([] returns an attachedRule object, not a Peg, and this [] does not vectors of rule.ids greater than length 1) A more proper version would be to ues **peg\[\[rule.id]](text.input)**. But this is messier and perhaps less intuitive. Also matrices violate the return type rule, so maybe this isn't so bad.
 * pegs are really environments with wrappers, so the usual copy doesnot work. I will probably change this.
 
 What's Needed
