@@ -1,8 +1,8 @@
-\name{[.genE}
-\alias{[.genE}
+\name{[.pegR}
+\alias{[.pegR}
 \title{An alternative to apply_rule}
 \usage{
-\method{[}{genE}(parser, rule.id)
+\method{[}{pegR}(parser, rule.id)
 }
 \description{
 An alternative to apply_rule

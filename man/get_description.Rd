@@ -2,7 +2,7 @@
 \alias{get_description}
 \title{Gets a description of a given rule}
 \usage{
-get_description(genE, rule.id)
+get_description(pegR, rule.id)
 }
 \arguments{
   \item{rule.id,}{a character string naming the rule}

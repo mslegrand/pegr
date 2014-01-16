@@ -32,7 +32,7 @@
 #' demo/distConv.R
 #' @export
 apply_rule<-function(parser, rule.id, input.text, exe=FALSE, debugTree=FALSE){
-  if(!("genE" %in% class(parser))){ stop("first argument not a peg parser")}  
+  if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser")}  
   if( !( rule.id %in% rule_ids(parser) ) ){stop("cannot parse: invalid rule identifier")}
   parser$pegE$.DEBUG.NODE<-debugTree
   parser$pegE[[rule.id]](input.text, exe)->res
@@ -58,8 +58,8 @@ apply_rule<-function(parser, rule.id, input.text, exe=FALSE, debugTree=FALSE){
 #' peg["R"]<-"R<-'r'"
 #'
 #' @export
-"[.genE"<-function(parser, rule.id){
-  if(!("genE" %in% class(parser))){ stop("first argument not a peg parser")}  
+"[.pegR"<-function(parser, rule.id){
+  if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser")}  
   #to return a attached rule (i hope)
   if(!("character" %in% class(rule.id))){
     stop("second argument is not a string")

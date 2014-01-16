@@ -1,8 +1,8 @@
-\name{print.genE}
-\alias{print.genE}
+\name{print.pegR}
+\alias{print.pegR}
 \title{Prints the rules contained in the PEG}
 \usage{
-\method{print}{genE}(parser)
+\method{print}{pegR}(parser)
 }
 \arguments{
   \item{peg}{parser produced by new.parser()}

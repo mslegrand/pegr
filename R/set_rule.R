@@ -20,7 +20,7 @@
 #' value(apply_rule(peg, 'A', 'b', exe=TRUE))
 #' @export
 set_rule<-function(parser, rule){
-  if( !( "genE" %in% class(parser) ) ){ stop("first argument not a parser") }  
+  if( !( "pegR" %in% class(parser) ) ){ stop("first argument not a parser") }  
   res<-parser$DEFINITION(rule) 
   if(res$ok==TRUE){
     name<-strsplit(rule,"<-")[[1]][1]
@@ -52,7 +52,7 @@ set_rule<-function(parser, rule){
 #' peg["A"]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
 #' peg
 #' @export
-"[<-.genE"<-function(parser, rule.id, value){
+"[<-.pegR"<-function(parser, rule.id, value){
   # first parse arg (which will be some string or list) 
    #cat("hello/n")
    arg<-value

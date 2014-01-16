@@ -1,8 +1,8 @@
-\name{[<-.genE}
-\alias{[<-.genE}
+\name{[<-.pegR}
+\alias{[<-.pegR}
 \title{Modifies the rule definition and or description or values}
 \usage{
-\method{[}{genE}(parser, rule.id) <- value
+\method{[}{pegR}(parser, rule.id) <- value
 }
 \arguments{
   \item{parser,}{the peg parser containing the rule to be

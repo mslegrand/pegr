@@ -1,8 +1,8 @@
-\name{+.genE}
-\alias{+.genE}
+\name{+.pegR}
+\alias{+.pegR}
 \title{Alternative to add_rule.}
 \usage{
-\method{+}{genE}(parser, arg)
+\method{+}{pegR}(parser, arg)
 }
 \description{
 Alternative to add_rule.

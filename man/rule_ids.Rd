@@ -2,7 +2,7 @@
 \alias{rule_ids}
 \title{Lists all Rules contained in the parser}
 \usage{
-rule_ids(genE)
+rule_ids(pegr)
 }
 \arguments{
   \item{parser,}{a peg parser produced by new.parser}

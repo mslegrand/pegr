@@ -30,7 +30,7 @@
 #' inspect_rule(peg,"X")
 #' @export
 add_rule<-function(parser, rule, des=NULL, act=NULL){
-  if( !( "genE" %in% class(parser) ) ){ stop("first argument not a parser") }
+  if( !( "pegR" %in% class(parser) ) ){ stop("first argument not a parser") }
   if(!("character" %in% class(rule))){
     stop("second argument is not a character string")
   }
@@ -62,7 +62,7 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
 #' #now add rule D with action and comment
 #' peg + c("D<-'d'", des="capitalize D", act="list(atom='D')")
 #' @export
-"+.genE"<-function(parser, arg){
+"+.pegR"<-function(parser, arg){
   #
   #use "{}" for act; use "#" for comment, use  =.. <- for rule
   if(is.null(arg)){

@@ -310,6 +310,6 @@ new.parser<-function(debugTree=FALSE){
   # add_rule<-function(pegE, rule){ genE<- create(pegE); genE$Definiton(rule)->result} 
   # in this case we would return the list(pegE, add_rule(pegE, rule) ), with a pegR class associated 
   # with it.
-  class(genE)<-c("genE",class(genE))
+  class(genE)<-c("pegR",class(genE))
   genE
 }

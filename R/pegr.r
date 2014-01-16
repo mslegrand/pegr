@@ -53,21 +53,21 @@ NULL
 #' value(apply_rule(peg, "R", "cat in the hat", exe=T))
 #' 
 #' @export
-set_action<-function(genE, rule.id, action){
+set_action<-function(pegR, rule.id, action){
   #TODO:  ( expression?)
   #TODO: refactor using switch?
-  if(!("genE" %in% class(genE))){ stop("first argument not a peg parser")}  
-  if( rule.id %in% rule_ids(genE)){
+  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
+  if( rule.id %in% rule_ids(pegR)){
     if(class(action)=="character"){
-      genE$pegE$.ACTION_NAMES[[rule.id]]<-c("Inline:",action)
+      pegR$pegE$.ACTION_NAMES[[rule.id]]<-c("Inline:",action)
       action<-paste("function(v){",action,"}")
-      genE$pegE$.ACTION[[rule.id]]<-eval(parse(text=action))  
+      pegR$pegE$.ACTION[[rule.id]]<-eval(parse(text=action))  
     } else if (class(action)=="function"){
-      genE$pegE$.ACTION[[rule.id]]<-action 
-      genE$pegE$.ACTION_NAMES[[rule.id]]<-c("External Function:", deparse(substitute(action)))
+      pegR$pegE$.ACTION[[rule.id]]<-action 
+      pegR$pegE$.ACTION_NAMES[[rule.id]]<-c("External Function:", deparse(substitute(action)))
     } else if (is.null(action)){
-      genE$pegE$.ACTION[[rule.id]]<-action
-      genE$pegE$.ACTION_NAMES[[rule.id]]<-NULL
+      pegR$pegE$.ACTION[[rule.id]]<-action
+      pegR$pegE$.ACTION_NAMES[[rule.id]]<-NULL
     }
     else {
       stop("cannot set action: invalid action")
@@ -104,10 +104,10 @@ set_action<-function(genE, rule.id, action){
 #' # inspect the action for rule "R"
 #' get_action(peg, "R")
 #' @export
-get_action<-function(genE, rule.id){
-  if(!("genE" %in% class(genE))){ stop("first argument not a peg parser")}  
-  if( rule.id %in% rule_ids(genE)){
-    actionTxt<-genE$pegE$.ACTION_NAMES[[rule.id]]   
+get_action<-function(pegR, rule.id){
+  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
+  if( rule.id %in% rule_ids(pegR)){
+    actionTxt<-pegR$pegE$.ACTION_NAMES[[rule.id]]   
   } else {
     stop("cannot get action: invalid rule identifier")
   }
@@ -123,10 +123,10 @@ get_action<-function(genE, rule.id){
 #' @param rule.id, a character string naming the rule
 #' @param description, a text string describing the rule
 #' @export
-set_description<-function(genE, rule.id, description){
-  if(!("genE" %in% class(genE))){ stop("first argument not a peg parser")}  
-  if( rule.id %in% rule_ids(genE)){
-    genE$pegE$.RULE_DESCRIPT[[rule.id]]<-description
+set_description<-function(pegR, rule.id, description){
+  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
+  if( rule.id %in% rule_ids(pegR)){
+    pegR$pegE$.RULE_DESCRIPT[[rule.id]]<-description
     invisible(TRUE)
   } else {
     stop("cannot set description: invalid rule identifier")
@@ -142,10 +142,10 @@ set_description<-function(genE, rule.id, description){
 #' @param parser, a peg parser produced by  new.parser
 #' @return description, a character string describing the parser
 #' @export
-get_description<-function(genE, rule.id){
-  if(!("genE" %in% class(genE))){ stop("first argument not a peg parser")}  
-  if( rule.id %in% rule_ids(genE)){
-    description<-genE$pegE$.RULE_DESCRIPT[[rule.id]]
+get_description<-function(pegR, rule.id){
+  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
+  if( rule.id %in% rule_ids(pegR)){
+    description<-pegR$pegE$.RULE_DESCRIPT[[rule.id]]
     return(description)
   } else {
     stop("cannot get description: invalid rule identifier")
@@ -157,14 +157,14 @@ get_description<-function(genE, rule.id){
 #' @param parser, a peg parser produced by  new.parser
 #' @param rule.id, a character string naming the rule
 #' @export
-delete_rule<-function(genE, rule.id){
+delete_rule<-function(pegR, rule.id){
   #delete rule 
-  if(!("genE" %in% class(genE))){ stop("first argument not a peg parser")}  
-  genE$pegE$.SOURCE.RULES[[rule.id]]<-NULL
-  genE$pegE$.ACTION[[rule.id]]<-NULL
-  genE$pegE$.RULE_DESCRIPT[[rule.id]]<-NULL
-  genE$pegE$.ACTION_NAMES[[rule.id]]<-NULL
-  rm(list=rule.id, envir=genE$pegE)    
+  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
+  pegR$pegE$.SOURCE.RULES[[rule.id]]<-NULL
+  pegR$pegE$.ACTION[[rule.id]]<-NULL
+  pegR$pegE$.RULE_DESCRIPT[[rule.id]]<-NULL
+  pegR$pegE$.ACTION_NAMES[[rule.id]]<-NULL
+  rm(list=rule.id, envir=pegR$pegE)    
 }
 
 rule_source<-function(parser, rule.id){
@@ -184,9 +184,9 @@ rule_source<-function(parser, rule.id){
 #' # Now print the print the rules
 #' print(peg)
 #' @export
-print.genE<-function(parser){
+print.pegR<-function(parser){
   #list the rules in this peg
-  if(!("genE" %in% class(parser))){ stop("first argument not a peg parser")}  
+  if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser")}  
   for(name in rule_ids(parser)){
     rs<-inspect_rule(parser, name)
     cat("\n")
@@ -224,7 +224,7 @@ print.ruleStruct<-function(rs){
  #' inspect_rule(peg, "DOG")
  #' @export
 inspect_rule<-function(parser, rule_id){
-  if( !( "genE" %in% class(parser) ) ){ stop("first argument not a parser") }    
+  if( !( "pegR" %in% class(parser) ) ){ stop("first argument not a parser") }    
   name<-rule_id #name
   def<-rule_source(parser, rule_id) 
   com<-get_description(parser, rule_id)

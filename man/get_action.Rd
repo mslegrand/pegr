@@ -2,7 +2,7 @@
 \alias{get_action}
 \title{Retrieve an action to the rule specified by rule.id}
 \usage{
-get_action(genE, rule.id)
+get_action(pegR, rule.id)
 }
 \arguments{
   \item{parser,}{a peg parser produced by new.parser}

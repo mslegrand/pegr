@@ -2,7 +2,7 @@
 \alias{set_action}
 \title{Attach an (optional) action to a specified rule}
 \usage{
-set_action(genE, rule.id, action)
+set_action(pegR, rule.id, action)
 }
 \arguments{
   \item{parser,}{a peg parser produced by new.parser}

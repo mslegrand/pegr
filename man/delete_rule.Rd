@@ -2,7 +2,7 @@
 \alias{delete_rule}
 \title{Deletes the given rule form the parser.}
 \usage{
-delete_rule(genE, rule.id)
+delete_rule(pegR, rule.id)
 }
 \arguments{
   \item{parser,}{a peg parser produced by new.parser}

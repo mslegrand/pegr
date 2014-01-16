@@ -2,7 +2,7 @@
 \alias{set_description}
 \title{Attach an (optional) description to a specified rule}
 \usage{
-set_description(genE, rule.id, description)
+set_description(pegR, rule.id, description)
 }
 \arguments{
   \item{parser,}{a peg parser produced by new.parser}
