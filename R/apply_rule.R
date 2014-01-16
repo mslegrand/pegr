@@ -22,6 +22,7 @@
 #' add_rule(peg, "A<-'a'")
 #' res<-apply_rule(peg, 'A', "a")
 #' res # the results
+#' 
 #' # A more complex example: 
 #' # A number parser: Extracts number
 #' peg<-new.parser()
@@ -52,11 +53,17 @@ apply_rule<-function(parser, rule.id, input.text, exe=FALSE, debugTree=FALSE){
 #' 
 #' 
 #' @examples
+#' expect_equal(0,1)
+#' # The simplest example: a parser that only accepts a single character 'a'
+#' # First create a new pegR
 #' peg<-new.parser()
-#' add_rule(peg, "R<-'ab'")
-#' #next we reset the rule
-#' peg["R"]<-"R<-'r'"
-#'
+#' # Next we add the rule to the peg
+#' peg + "A<-'a'"
+#' # Next apply the rule to the string "a"
+#' peg[[a]]("a")->res 
+#' # to see the result  print(res)
+#' res  
+#' 
 #' @export
 "[.pegR"<-function(parser, rule.id){
   if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser")}  
