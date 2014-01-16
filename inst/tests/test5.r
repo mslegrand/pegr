@@ -3,12 +3,17 @@ library(testthat)
 #source("generator.r")
 
 
+as.ID=function(v){
+  class(v)<-c("peg.name",class(v))
+  v
+}
+
 #test  true for
 #def literal true
 test_that("DEFINITION TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("xxx<-'y'", TRUE)->res
+  gen$DEFINITION(gen$pegE, "xxx<-'y'")->res
   expect_true(res$ok )
   expect_equal(res$val$nodeName, as.ID("xxx"))
   expect_equal(res$pos, 8 )
@@ -23,7 +28,7 @@ test_that("DEFINITION TRUE",
 test_that("DOT TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("xxx<-.", TRUE)->res
+  gen$DEFINITION(gen$pegE, "xxx<-.")->res
   expect_true(res$ok )
   expect_equal(res$pos, 6 )
   res2<-gen$pegE$xxx("z")
@@ -37,7 +42,7 @@ test_that("DOT TRUE",
 test_that("CLASS 1 TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-[a-z]", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-[a-z]")->res
   expect_true(res$ok )
   expect_equal(res$pos, 8 )
   res2<-gen$pegE$X("z")
@@ -49,7 +54,7 @@ test_that("CLASS 1 TRUE",
 test_that("CLASS 2 TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-[z]", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-[z]")->res
   expect_true(res$ok )
   expect_equal(res$pos, 6 )
   res2<-gen$pegE$X("z")
@@ -61,7 +66,7 @@ test_that("CLASS 2 TRUE",
 test_that("SEQUENCE TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' 'b'", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' 'b'")->res
   expect_true(res$ok )
   expect_equal(res$pos, 10 )
   res2<-gen$pegE$X("ab")
@@ -73,7 +78,7 @@ test_that("SEQUENCE TRUE",
 test_that("SEQUENCE TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' 'b'", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' 'b'")->res
   expect_true(res$ok )
   expect_equal(res$pos, 10 )
   res2<-gen$pegE$X("ab")
@@ -85,7 +90,7 @@ test_that("SEQUENCE TRUE",
 test_that("SEQUENCE TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' 'b' 'c'", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' 'b' 'c'")->res
   expect_true(res$ok )
   expect_equal(res$pos, 14 )
   res2<-gen$pegE$X("abc")
@@ -98,7 +103,7 @@ test_that("SEQUENCE TRUE",
 test_that("QUESTION 1 TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' 'b'?", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' 'b'?")->res
   expect_true(res$ok )
   expect_equal(res$pos, 11 )
   res2<-gen$pegE$X("ab")
@@ -110,7 +115,7 @@ test_that("QUESTION 1 TRUE",
 test_that("QUESTION 0 TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' 'b'?", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' 'b'?")->res
   expect_true(res$ok )
   expect_equal(res$pos, 11 )
   res2<-gen$pegE$X("a")
@@ -124,7 +129,7 @@ test_that("QUESTION 0 TRUE",
 test_that("STAR 1 TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' 'b'*", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' 'b'*")->res
   expect_true(res$ok )
   expect_equal(res$pos, 11 )
   res2<-gen$pegE$X("abb")
@@ -136,7 +141,7 @@ test_that("STAR 1 TRUE",
 test_that("STAR 0 TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' 'b'*", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' 'b'*")->res
   expect_true(res$ok )
   expect_equal(res$pos, 11 )
   res2<-gen$pegE$X("a")
@@ -150,7 +155,7 @@ test_that("STAR 0 TRUE",
 test_that("PLUS 1 TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' 'b'+", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' 'b'+")->res
   expect_true(res$ok )
   expect_equal(res$pos, 11 )
   res2<-gen$pegE$X("abb")
@@ -162,7 +167,7 @@ test_that("PLUS 1 TRUE",
 test_that("PLUS 0 TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' 'b'+", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' 'b'+")->res
   expect_true(res$ok )
   expect_equal(res$pos, 11 )
   res2<-gen$pegE$X("a")
@@ -177,7 +182,7 @@ test_that("PLUS 0 TRUE",
 test_that("NOT 0 TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a'* !'b' .", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a'* !'b' .")->res
   expect_true(res$ok )
   expect_equal(res$pos, 14 )
   res2<-gen$pegE$X("aac")
@@ -188,7 +193,7 @@ test_that("NOT 0 TRUE",
 test_that("NOT 1 TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a'* !'b' .", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a'* !'b' .")->res
   expect_true(res$ok )
   expect_equal(res$pos, 14 )
   res2<-gen$pegE$X("abc")
@@ -201,7 +206,7 @@ test_that("NOT 1 TRUE",
 test_that("EXPRESSION TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' / 'b' / 'c' .", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' / 'b' / 'c' .")->res
   expect_true(res$ok )
   expect_equal(res$pos, 20 )
   res2<-gen$pegE$X("acd")
@@ -212,7 +217,7 @@ test_that("EXPRESSION TRUE",
 test_that("EXPRESSION TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' / 'b' / 'c'", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' / 'b' / 'c'")->res
   expect_true(res$ok )
   #expect_equal(res$pos, 20 )
   res2<-gen$pegE$X("c")
@@ -224,7 +229,7 @@ test_that("EXPRESSION TRUE",
 test_that("EXPRESSION TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' / 'b' / 'c' .", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' / 'b' / 'c' .")->res
   expect_true(res$ok )
   expect_equal(res$pos, 20 )
   res2<-gen$pegE$X("bd")
@@ -235,7 +240,7 @@ test_that("EXPRESSION TRUE",
 test_that("EXPRESSION TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' / 'b' / 'c' .", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' / 'b' / 'c' .")->res
   expect_true(res$ok )
   expect_equal(res$pos, 20 )
   res2<-gen$pegE$X("bd")
@@ -246,7 +251,7 @@ test_that("EXPRESSION TRUE",
 test_that("EXPRESSION TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' / 'b' / 'c' .", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' / 'b' / 'c' .")->res
   expect_true(res$ok )
   expect_equal(res$pos, 20 )
   res2<-gen$pegE$X("cd")
@@ -257,7 +262,7 @@ test_that("EXPRESSION TRUE",
 test_that("OPEN CLOSE TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' / 'b' 'd' / 'c' .", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' / 'b' 'd' / 'c' .")->res
   expect_true(res$ok)
   expect_equal(res$pos, 24 )
   res2<-gen$pegE$X("bd")
@@ -268,7 +273,7 @@ test_that("OPEN CLOSE TRUE",
 test_that("OPEN CLOSE TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a' / ('b' 'd') / 'c' .", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a' / ('b' 'd') / 'c' .")->res
   expect_true(res$ok )
   expect_equal(res$pos, 26 )
   res2<-gen$pegE$X("bd")
@@ -279,7 +284,7 @@ test_that("OPEN CLOSE TRUE",
 test_that("OPEN CLOSE TRUE",
 {          
   gen<-new.parser()
-  gen$DEFINITION("X<-('a' / 'b') ('d' / 'c' .)", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-('a' / 'b') ('d' / 'c' .)")->res
   expect_true(res$ok )
   expect_equal(res$pos, 28 )
   res2<-gen$pegE$X("bce")
@@ -293,7 +298,7 @@ test_that("OPEN CLOSE TRUE",
 test_that("AND 1 TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a'* &'b'", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a'* &'b'")->res
   expect_true(res$ok )
   expect_equal(res$pos, 12 )
   res2<-gen$pegE$X("aab")
@@ -305,7 +310,7 @@ test_that("AND 1 TRUE",
 test_that("AND 0 TRUE",
 {
   gen<-new.parser()
-  gen$DEFINITION("X<-'a'* &'b'", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a'* &'b'")->res
   expect_true(res$ok )
   expect_equal(res$pos, 12 )
   expect_equal(res$val$nodeName,as.ID("X"))
@@ -320,7 +325,7 @@ test_that("ACTION 1 TRUE",
   gen<-new.parser()
   gen$pegE$.AUTO_ACTION<-TRUE
   ff<<-function(v){  n<-length(v); v<-c(v,n); v }
-  gen$DEFINITION("X<-'a'* { ff } ", TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a'* { ff } ")->res
   expect_true(res$ok )
   expect_equal(res$pos, 14 )
   res2<-gen$pegE$X("aaaa",TRUE)
@@ -334,8 +339,8 @@ test_that("SUBSTITUTE true",
 { 
   gen<-new.parser()
   gen$pegE$.AUTO_ACTION<-TRUE
-  gen$DEFINITION("X<-'a'",TRUE)->res
-  gen$DEFINITION("Y<-X",TRUE)->res
+  gen$DEFINITION(gen$pegE, "X<-'a'")->res
+  gen$DEFINITION(gen$pegE, "Y<-X")->res
   gen$pegE$Y('a',TRUE)->res
   expect_true(res$ok)
   expect_equal(res$pos,1)
@@ -343,15 +348,17 @@ test_that("SUBSTITUTE true",
   rm(X,Y, envir=gen$pegE)
 })
 
+#--------------------------------------------------------------------------------------------
 test_that("ACTION 2 TRUE",
 {
   gen<-new.parser()
   gen$pegE$.AUTO_ACTION<-TRUE
   ff<<-function(v){ n<-length(v); v<-c(v,n); v }
   gg<<-function(v){ v<-paste(v,collapse="_"); v}
-  gen$GRAMMAR("X<-'a'* { ff } \nY<-X 'b'{gg} ", TRUE)->res
-  gen$DEFINITION("Y<-X 'b' { gg}",TRUE)->ress  
-  gen$pegE$Y("aaaab",TRUE)->res2
+  gen$DEFINITION(gen$pegE,"X<-'a'* { ff }" )->res1
+  gen$DEFINITION(gen$pegE,"Y<-X 'b'{gg}")->res2
+  gen$DEFINITION(gen$pegE, "Y<-X 'b' { gg}")->ress  
+  gen$pegE$Y("aaaab")->res2
   expect_true(res2$ok)
   expect_equal(res2$pos,5)
   expect_equal(res2$val, "a_a_a_a_4_b")
@@ -365,8 +372,8 @@ test_that("ACTION 3 TRUE",
   gen$pegE$.AUTO_ACTION<-TRUE
   ff<<-function(v){ n<-length(v); v<-c(v,n); v }
   gg<<-function(v){ v<-paste(v,collapse="*"); v}
-  gen$GRAMMAR("X<-'a'* {ff}  \nY<-X 'b' {gg}", TRUE)->res
-  gen$DEFINITION("Y<-X 'b' {gg} ",TRUE)->ress
+  gen$DEFINITION(gen$pegE,"X<-'a'* {ff}")->res1
+  gen$DEFINITION(gen$pegE, "Y<-X 'b' {gg} ")->ress
   local({
     Y("aaaab",TRUE)->res2
     expect_true(res2$ok)
@@ -380,7 +387,9 @@ test_that("ACTION 3 TRUE",
 test_that("DEBUG NODE X<-'a' ; Y<-X 'b' ",
 {
   gen<-new.parser()
-  gen$GRAMMAR("X<-'a'*  \nY<-X 'b'", TRUE)->res
+  #gen$GRAMMAR("X<-'a'*  \nY<-X 'b'")->res
+  gen$DEFINITION(gen$pegE, "X<-'a'* ")->res1
+  gen$DEFINITION(gen$pegE, "Y<-X 'b'")->res2
   #assign(".DEBUG.NODE", TRUE, envir=gen$pegE)
   gen$pegE$.DEBUG.NODE<-T
   gen$pegE$Y("aaaab",TRUE)->res
@@ -400,8 +409,11 @@ test_that("DEBUG NODE X<-'a' ; Y<-X 'b' ",
 test_that("DEBUG NODE C<-A B",
 {
   gen<-new.parser()
-  gen$GRAMMAR("A<-'a'\nB<-'b'\n C<-A B", TRUE)->res
-  #assign(".DEBUG.NODE", TRUE, envir=gen$pegE)
+ #gen$GRAMMAR("A<-'a'\nB<-'b'\n C<-A B")->res
+ gen$DEFINITION(gen$pegE, "A<-'a'")->res
+ gen$DEFINITION(gen$pegE, "B<-'b'")->res
+ gen$DEFINITION(gen$pegE, "C<-A B")->res
+ #assign(".DEBUG.NODE", TRUE, envir=gen$pegE)
   gen$pegE$.DEBUG.NODE<-T
   gen$pegE$C("ab",TRUE)->res
   #expect_equal(length(res$debugNode),4) #replace with expect is of class node
@@ -426,7 +438,10 @@ test_that("DEBUG NODE C<-A B",
 test_that("DEBUG NODE C<-A / B",
 {
   gen<-new.parser()
-  gen$GRAMMAR("A<-'a'\nB<-'b'\n C<-A / B", TRUE)->res
+  #gen$GRAMMAR("A<-'a'\nB<-'b'\n C<-A / B")->res
+  gen$DEFINITION(gen$pegE, "A<-'a'")->res
+  gen$DEFINITION(gen$pegE, "B<-'b'")->res
+  gen$DEFINITION(gen$pegE, "C<-A / B")->res
   #assign(".DEBUG.NODE", TRUE, envir=gen$pegE)
   gen$pegE$.DEBUG.NODE<-T
   gen$pegE$C("a",TRUE)->res

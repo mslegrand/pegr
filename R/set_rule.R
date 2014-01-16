@@ -21,7 +21,8 @@
 #' @export
 set_rule<-function(parser, rule){
   if( !( "pegR" %in% class(parser) ) ){ stop("first argument not a parser") }  
-  res<-parser$DEFINITION(rule) 
+  #res<-parser$DEFINITION(rule) 
+  res<-parser$DEFINITION(parser$pegE, rule) 
   if(res$ok==TRUE){
     name<-strsplit(rule,"<-")[[1]][1]
     name <- gsub("^\\s+|\\s+$", "", name)

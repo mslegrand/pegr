@@ -84,6 +84,7 @@ include.gConnectives<-function(pegE, envG=parent.frame() ){
     #wrap
     
     h<-function(input, exe=TRUE,  p=1){
+      #browser()
       mfn.mssg<-mfn[[1]] #rule Generator Rule Name
       mfn.fn<-mfn[[2]] #instructions(generator actions) for this rule
       #     print("node")

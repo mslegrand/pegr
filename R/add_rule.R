@@ -39,7 +39,7 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
     msg<-paste("Unbalance quotes at:", substr(rule, 1, pos))
     stop(msg)
   }
-  res<-parser$DEFINITION(rule) 
+  res<-parser$DEFINITION(parser$pegE, rule) 
   if(res$ok==TRUE){
     name<-strsplit(rule,"<-")[[1]][1]
     name <- gsub("^\\s+|\\s+$", "", name)

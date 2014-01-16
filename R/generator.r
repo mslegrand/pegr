@@ -9,11 +9,6 @@
 # _____________________________________
 
 
-# used in  unittest4 unitTest4 
-as.ID=function(v){
-  class(v)<-c("peg.name",class(v))
-  v
-}
 
 #' Creates an instance of a new PEG parser.
 #' 
@@ -301,7 +296,7 @@ new.parser<-function(debugTree=FALSE){
     GRAMMAR <- SPACING + opt.1x(DEFINITION) 
     environment() #return  of the generator, which will contain a peg object   
   }
-  genE<-create(pegE)
+  #genE<-create(pegE)
   #of course we can turn this around and set pegE$.genE<-genE
   #the future calls to add a rule would be pegE$genE$DEFINITION instead of genE$DEFINITION
   # however, what is probably better is to have a list with $genE, $pegE as members.
@@ -310,6 +305,15 @@ new.parser<-function(debugTree=FALSE){
   # add_rule<-function(pegE, rule){ genE<- create(pegE); genE$Definiton(rule)->result} 
   # in this case we would return the list(pegE, add_rule(pegE, rule) ), with a pegR class associated 
   # with it.
-  class(genE)<-c("pegR",class(genE))
-  genE
+#   class(genE)<-c("pegR",class(genE))
+#   genE
+  pegR<-list(pegE=pegE, 
+             DEFINITION=function(pegE, ruleDef){ 
+              genE<-create(pegE); 
+              genE$DEFINITION(ruleDef)
+             },
+             genE=function(pegE){ genE<-create(pegE)} #this is just for unit tests
+             )
+  class(pegR)<-"pegR"
+  pegR
 }

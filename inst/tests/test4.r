@@ -2,7 +2,14 @@ library(testthat)
 
 #source("generator.r")
 
-gen<-new.parser()
+pegR<-new.parser()
+gen<-pegR$genE(pegR$pegE) #slimmly way to keep unit test working
+
+# used in  unittest4 unitTest4 
+as.ID=function(v){
+  class(v)<-c("peg.name",class(v))
+  v
+}
 
 #we need to do some tests on this grammer,maybe first echo the input
 test_that("SPACE",
