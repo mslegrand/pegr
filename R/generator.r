@@ -302,6 +302,14 @@ new.parser<-function(debugTree=FALSE){
     environment() #return  of the generator, which will contain a peg object   
   }
   genE<-create(pegE)
+  #of course we can turn this around and set pegE$.genE<-genE
+  #the future calls to add a rule would be pegE$genE$DEFINITION instead of genE$DEFINITION
+  # however, what is probably better is to have a list with $genE, $pegE as members.
+  # then, since we don't need to keep genE around unless we are adding a rule, we could
+  # have just a structure, list(pegE, add_rule(pegE, rule) ), where 
+  # add_rule<-function(pegE, rule){ genE<- create(pegE); genE$Definiton(rule)->result} 
+  # in this case we would return the list(pegE, add_rule(pegE, rule) ), with a pegR class associated 
+  # with it.
   class(genE)<-c("genE",class(genE))
   genE
 }
