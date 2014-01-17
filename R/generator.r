@@ -398,11 +398,3 @@ pexGetIDs<-function(pegR){
   pegR$GET_IDS()
 }
 
-
-# p.setDes(pegR, des)
-# p.setAct(pegR, act)
-# p.getRuleDef(pegR, id)
-# p.getDes(pegR, id)
-# p.getAct(pegR, id)
-# p.getIDs(pegR)
-# p.get

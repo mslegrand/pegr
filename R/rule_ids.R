@@ -12,10 +12,5 @@
 #' @param parser, a peg parser produced by  new.parser
 #' @export
 rule_ids<-function(pegr){
-  if(!("pegR" %in% class(pegr))){ stop("argument not a peg parser")}
-  ls(envir=pegr$pegE)->tmp
-  if( any(grepl("atom.",tmp) ) ){
-    tmp<-tmp[-grep("atom.",tmp)]    
-  }
-  tmp
+  pexGetIDs(pegr)
 }
