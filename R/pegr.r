@@ -59,15 +59,24 @@ set_action<-function(pegR, rule.id, action){
   if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
   if( rule.id %in% rule_ids(pegR)){
     if(class(action)=="character"){
-      pegR$pegE$.ACTION_NAMES[[rule.id]]<-c("Inline:",action)
-      action<-paste("function(v){",action,"}")
-      pegR$pegE$.ACTION[[rule.id]]<-eval(parse(text=action))  
+      
+      actionFn<-paste("function(v){",action,"}")
+      #pegR$pegE$.ACTION[[rule.id]]<-eval(parse(text=action))  
+      pexSetAction(pegR, rule.id, eval(parse(text=actionFn)))
+      #pegR$pegE$.ACTION_NAMES[[rule.id]]<-c("Inline:",action)
+      actionInfo<-c("Inline:",action)
+      pexSetActionInfo(pegR, rule.id, actionInfo)
     } else if (class(action)=="function"){
-      pegR$pegE$.ACTION[[rule.id]]<-action 
-      pegR$pegE$.ACTION_NAMES[[rule.id]]<-c("External Function:", deparse(substitute(action)))
+      #pegR$pegE$.ACTION[[rule.id]]<-action 
+      pexSetAction(pegR, rule.id, action)
+      #pegR$pegE$.ACTION_NAMES[[rule.id]]<-c("External Function:", deparse(substitute(action)))
+      actionInfo<-c("External Function:", deparse(substitute(action)))
+      pexSetActionInfo(pegR, rule.id, actionInfo)
     } else if (is.null(action)){
-      pegR$pegE$.ACTION[[rule.id]]<-action
-      pegR$pegE$.ACTION_NAMES[[rule.id]]<-NULL
+      #pegR$pegE$.ACTION[[rule.id]]<-NULL
+      #pegR$pegE$.ACTION_NAMES[[rule.id]]<-NULL
+      pexSetAction(pegR, rule.id, action)
+      pexSetActionInfo(pegR, rule.id, NULL)
     }
     else {
       stop("cannot set action: invalid action")
@@ -107,7 +116,8 @@ set_action<-function(pegR, rule.id, action){
 get_action<-function(pegR, rule.id){
   if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
   if( rule.id %in% rule_ids(pegR)){
-    actionTxt<-pegR$pegE$.ACTION_NAMES[[rule.id]]   
+    #actionTxt<-pegR$pegE$.ACTION_NAMES[[rule.id]]  
+    actionTxt<-pexGetActionInfo(pegR, rule.id)
   } else {
     stop("cannot get action: invalid rule identifier")
   }

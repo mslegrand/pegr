@@ -342,10 +342,10 @@ new.parser<-function(debugTree=FALSE){
              GET_ACTION=function(rule.id){ #not used?
                pegE$.ACTION[[rule.id]]
              },
-             SET_ACTION_TXT=function(rule.id, actionName){
+             SET_ACTION_INFO=function(rule.id, actionName){
                pegE$.ACTION_NAMES[[rule.id]]<-actionName 
              },
-             GET_ACTION_TXT=function(rule.id){
+             GET_ACTION_INFO=function(rule.id){
                pegE$.ACTION_NAMES[[rule.id]]
              },            
              GET_IDS=function(){
@@ -383,16 +383,16 @@ pexGetDescription<-function(pegR, rule.id){
   pegR$GET_DESCRIPTION(rule.id)
 }
 pexSetAction<-function(pegR, rule.id, action){
-  pegR$pegE$.ACTION[[rule.id]]<-action 
+  pegR$SET_ACTION(rule.id, action)
 }
 pexGetAction<-function(pegR, rule.id){
-  pegR$pegE$.ACTION[[rule.id]]  
+  pegR$GET_ACTION(rule.id)
 }
-pexSetActionTxt<-function(pegR, rule.id, actionName){
-  pegR$pegE$.ACTION_NAMES[[rule.id]]<-actionName 
+pexSetActionInfo<-function(pegR, rule.id, actionInfo){
+  pegR$SET_ACTION_INFO(rule.id, actionInfo)
 }
-pexGetActionTXT<-function(pegR, rule.id){
-  pegR$pegE$.ACTION_NAMES[[rule.id]]
+pexGetActionInfo<-function(pegR, rule.id){
+  pegR$GET_ACTION_INFO(rule.id)
 }
 pexGetIDs<-function(pegR){
   pegR$GET_IDS()
