@@ -94,7 +94,8 @@ set_rule<-function(parser, rule){
     if(name!=rule.id){
       stop("Rule does not match rule.id!")
     }
-    set_rule(parser, arg.L$rule)
+    #set_rule(parser, arg.L$rule)
+    pexSetRule(parser, rule)
   }
   if('des' %in% names(arg.L)){
     #parser$SET_DESCRIPTION(rule.id, arg.L$des)
