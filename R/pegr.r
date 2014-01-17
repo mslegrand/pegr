@@ -126,7 +126,8 @@ get_action<-function(pegR, rule.id){
 set_description<-function(pegR, rule.id, description){
   if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
   if( rule.id %in% rule_ids(pegR)){
-    pegR$pegE$.RULE_DESCRIPT[[rule.id]]<-description
+    #pegR$SET_DESCRIPTION(rule.id, description)
+    pexSetDescription(pegR, rule.id, description)
     invisible(TRUE)
   } else {
     stop("cannot set description: invalid rule identifier")
@@ -145,7 +146,8 @@ set_description<-function(pegR, rule.id, description){
 get_description<-function(pegR, rule.id){
   if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
   if( rule.id %in% rule_ids(pegR)){
-    description<-pegR$pegE$.RULE_DESCRIPT[[rule.id]]
+    #description<-pegR$pegE$.RULE_DESCRIPT[[rule.id]]
+    description<-pegR$GET_DESCRIPTION( rule.id)
     return(description)
   } else {
     stop("cannot get description: invalid rule identifier")

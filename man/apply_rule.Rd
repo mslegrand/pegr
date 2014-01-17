@@ -36,8 +36,9 @@ the specified rule as the root.
 # The simplest example: a parser that only accepts a single character 'a'
 peg<-new.parser()
 add_rule(peg, "A<-'a'")
-res<-apply_rule(peg, 'A' "a")
+res<-apply_rule(peg, 'A', "a")
 res # the results
+
 # A more complex example:
 # A number parser: Extracts number
 peg<-new.parser()

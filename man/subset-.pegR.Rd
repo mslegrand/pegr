@@ -1,6 +1,6 @@
 \name{[<-.pegR}
 \alias{[<-.pegR}
-\title{Modifies the rule definition and or description or values}
+\title{Reset an existing rule}
 \usage{
 \method{[}{pegR}(parser, rule.id) <- value
 }
@@ -18,7 +18,8 @@
 peg parser
 }
 \description{
-Modifies the specified rule in the given parser.
+Used to Modify the rule definition and or description or
+value of of an exiting rule
 }
 \examples{
 peg<-new.parser()

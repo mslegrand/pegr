@@ -39,20 +39,47 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
     msg<-paste("Unbalance quotes at:", substr(rule, 1, pos))
     stop(msg)
   }
-  res<-parser$DEFINITION(parser$pegE, rule) 
+  #res<-parser$DEFINITION( rule ) 
+  res<-parser$SET_RULE( rule )
   if(res$ok==TRUE){
-    name<-strsplit(rule,"<-")[[1]][1]
-    name <- gsub("^\\s+|\\s+$", "", name)
-    parser$pegE$.SOURCE.RULES[[name]]<-rule   
-    set_description(parser, name, des)
-    set_action(parser, name, act)
-  } else {
-    stop(paste("invalid syntax:",rule))
+    set_description(parser, res$rule.id, des)
+    set_action(parser, res$rule.id, act)
   }
-  invisible( list(ok=res$ok, rule.id=name, parsed=substr(rule,1,res$pos) ) )
+  #res<-pexSetRule(parser,rule)
+#   if(res$ok==TRUE){
+#     name<-strsplit(rule,"<-")[[1]][1]
+#     name <- gsub("^\\s+|\\s+$", "", name)
+#     parser$pegE$.SOURCE.RULES[[name]]<-rule 
+#     
+#     set_description(parser, name, des)
+#     set_action(parser, name, act)
+#   } else {
+#     stop(paste("invalid syntax:",rule))
+#   }
+  invisible( list(ok=res$ok, rule.id=res$rule.id, parsed=substr(rule,1,res$pos) ) )
 }
 
+
 #' Alternative to add_rule.
+#' 
+#' @param parser, a peg parser produced by  new.parser
+#' @param arg, a list or vector specififyin a rule:
+#' 
+#' @details arg is a list or vector having 1-4 named components:
+#' \itemize{
+#' \item{ rule }{
+#' (Mandatory) A string containing the peg rule definition
+#' For example: \code{c(Rule="COLD<-'brrr'")}. The 'Rule' label is optional, but having a rule is mandatory.
+#' }
+#' \item{ des}{ 
+#' (optional) A a textual string describing the rule. 
+#'  For example: \code{c(Rule="COLD<-'brrr'", des="Polar" )} A comment must be named.
+#'  }
+#' \item{ act}{ 
+#' (optional) an action specification. For example
+#'  \code{c(Rule="COLD<-'brrr'", des="Polar", act=function(v){print("brr"); v} )}, An action must be named
+#'  }
+#' }
 #' 
 #' @examples
 #' peg<- new.parser()
@@ -61,6 +88,7 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
 #' invisible(peg + "A<-'a'" + "B<-'b'" + "C<-'c'")
 #' #now add rule D with action and comment
 #' peg + c("D<-'d'", des="capitalize D", act="list(atom='D')")
+#' 
 #' @export
 "+.pegR"<-function(parser, arg){
   #

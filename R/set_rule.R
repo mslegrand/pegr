@@ -21,23 +21,27 @@
 #' @export
 set_rule<-function(parser, rule){
   if( !( "pegR" %in% class(parser) ) ){ stop("first argument not a parser") }  
+  if( !( "character" %in% class(rule))){ stop("Second argument is not a rule")}
+  #add check for existing rule
   #res<-parser$DEFINITION(rule) 
-  res<-parser$DEFINITION(parser$pegE, rule) 
-  if(res$ok==TRUE){
-    name<-strsplit(rule,"<-")[[1]][1]
-    name <- gsub("^\\s+|\\s+$", "", name)
-    parser$pegE$.SOURCE.RULES[[name]]<-rule   
-  } else {
-    stop(paste("invalid syntax:",rule))
-  }
+#   res<-parser$DEFINITION(parser$pegE, rule) 
+#   if(res$ok==TRUE){
+#     name<-strsplit(rule,"<-")[[1]][1]
+#     name <- gsub("^\\s+|\\s+$", "", name)
+#     parser$pegE$.SOURCE.RULES[[name]]<-rule   
+#   } else {
+#     stop(paste("invalid syntax:",rule))
+#   }
+  #res<-parser$SET_RULE(parser$pegE, rule)
+  res<-pexSetRule(parser, rule)
   invisible( list(ok=res$ok, parsed=substr(rule,1,res$pos) ) )
 }
 
 #"[<-.ar"<-function(u,v, value)
 
-#' Modifies the rule definition and or description or values
+#' Reset an existing rule
 #' 
-#' Modifies the specified rule in the given parser.
+#' Used to Modify the rule definition and or description or value of of an exiting rule
 #' 
 #' @param parser, the peg parser containing the rule to be modified
 #' @param rule.id, the identifier of the rule to be modified
@@ -58,7 +62,7 @@ set_rule<-function(parser, rule){
    #cat("hello/n")
    arg<-value
   if( is.null(rule.id) | !(rule.id %in% rule_ids(parser) )){
-    stop("invalid index")
+    stop("invalid rule id")
   }
   if( length(rule.id)!=1 ){
     stop("The index must contain exactly one rule")
@@ -93,7 +97,8 @@ set_rule<-function(parser, rule){
     set_rule(parser, arg.L$rule)
   }
   if('des' %in% names(arg.L)){
-    set_description(parser, rule.id,  arg.L$des)
+    #parser$SET_DESCRIPTION(rule.id, arg.L$des)
+    pexSetDescription(parser, rule.id, arg.L$des)
   }
   if('act' %in% names(arg.L)){
     set_action(parser, rule.id, arg.L$act)

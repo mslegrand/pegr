@@ -296,7 +296,7 @@ new.parser<-function(debugTree=FALSE){
     GRAMMAR <- SPACING + opt.1x(DEFINITION) 
     environment() #return  of the generator, which will contain a peg object   
   }
-  #genE<-create(pegE)
+  genE<-create(pegE)
   #of course we can turn this around and set pegE$.genE<-genE
   #the future calls to add a rule would be pegE$genE$DEFINITION instead of genE$DEFINITION
   # however, what is probably better is to have a list with $genE, $pegE as members.
@@ -308,12 +308,100 @@ new.parser<-function(debugTree=FALSE){
 #   class(genE)<-c("pegR",class(genE))
 #   genE
   pegR<-list(pegE=pegE, 
-             DEFINITION=function(pegE, ruleDef){ 
-              genE<-create(pegE); 
+             getGenE=function(){genE}, #this is just for unit tests
+             DEFINITION=function(ruleDef){ 
+              #genE<-create(pegE); 
               genE$DEFINITION(ruleDef)
              },
-             genE=function(pegE){ genE<-create(pegE)} #this is just for unit tests
+             SET_RULE=function(ruleDef){
+               #res<-parser$DEFINITION(pegE, ruleDef) 
+               #genE<-create(pegE)
+               res<-genE$DEFINITION(ruleDef)
+               if(res$ok==TRUE){
+                 name.id<-strsplit(ruleDef,"<-")[[1]][1]
+                 name.id <- gsub("^\\s+|\\s+$", "", name.id)
+                 pegE$.SOURCE.RULES[[name.id]]<-ruleDef   
+               } else {
+                 stop(paste("invalid syntax:",ruleDef))
+               }
+               res$rule.id=name.id
+               res
+             }, 
+             GET_RULE_TXT=function(rule.id){
+               pegE$.SOURCE.RULES[[rule.id]]
+             },
+             SET_DESCRIPTION=function(rule.id, description){
+               pegE$.RULE_DESCRIPT[[rule.id]]<-description
+             }, 
+             GET_DESCRIPTION=function(rule.id){
+               pegE$.RULE_DESCRIPT[[rule.id]]
+             },
+             SET_ACTION=function(rule.id, action){
+               pegE$.ACTION[[rule.id]]<-action 
+             },
+             GET_ACTION=function(rule.id){ #not used?
+               pegE$.ACTION[[rule.id]]
+             },
+             SET_ACTION_TXT=function(rule.id, actionName){
+               pegE$.ACTION_NAMES[[rule.id]]<-actionName 
+             },
+             GET_ACTION_TXT=function(rule.id){
+               pegE$.ACTION_NAMES[[rule.id]]
+             },            
+             GET_IDS=function(){
+               ls(envir=pegE)->tmp
+               if( any(grepl("atom.",tmp) ) ){
+                 tmp<-tmp[-grep("atom.",tmp)]    
+               }
+               tmp              
+             },
+             GET_RULE_STRUCTURE=function(rule.id){
+               rs<-list(name=rule.id, 
+                    def=GET_RULE_TXT(rule.id), 
+                    com=GET_DESCRIPTION(rule.id),
+                    act=GET_ACTION_TXT(rule.id)
+               )
+               class(rs)<-"ruleStructure"
+             }
              )
   class(pegR)<-"pegR"
   pegR
 }
+
+#wrappers around the pegR to be more R like
+pexSetRule<-function(pegR, rule){
+  pegR$SET_RULE(rule)
+}
+pexGetRuleTxt<-function(pegR, rule.id){
+  pegR$GET_RULE_TXT(rule.id)
+}
+pexSetDescription<-function(pegR, rule.id, description){
+  pegR$SET_DESCRIPTION(rule.id, description)
+}
+pexGetDescription<-function(pegR, rule.id){
+  pegR$GET_DESCRIPTION(rule.id)
+}
+pexSetAction<-function(pegR, rule.id, action){
+  pegR$pegE$.ACTION[[rule.id]]<-action 
+}
+pexGetAction<-function(pegR, rule.id){
+  pegR$pegE$.ACTION[[rule.id]]  
+}
+pexSetActionTxt<-function(pegR, rule.id, actionName){
+  pegR$pegE$.ACTION_NAMES[[rule.id]]<-actionName 
+}
+pexGetActionTXT<-function(pegR, rule.id){
+  pegR$pegE$.ACTION_NAMES[[rule.id]]
+}
+pexGetIDs<-function(pegR){
+  pegR$GET_IDS()
+}
+
+
+# p.setDes(pegR, des)
+# p.setAct(pegR, act)
+# p.getRuleDef(pegR, id)
+# p.getDes(pegR, id)
+# p.getAct(pegR, id)
+# p.getIDs(pegR)
+# p.get
