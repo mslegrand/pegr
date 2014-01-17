@@ -42,20 +42,9 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
   #res<-parser$DEFINITION( rule ) 
   res<-parser$SET_RULE( rule )
   if(res$ok==TRUE){
-    set_description(parser, res$rule.id, des)
+    pexSetDescription(parser, res$rule.id, des) # direct call, no id checking
     set_action(parser, res$rule.id, act)
   }
-  #res<-pexSetRule(parser,rule)
-#   if(res$ok==TRUE){
-#     name<-strsplit(rule,"<-")[[1]][1]
-#     name <- gsub("^\\s+|\\s+$", "", name)
-#     parser$pegE$.SOURCE.RULES[[name]]<-rule 
-#     
-#     set_description(parser, name, des)
-#     set_action(parser, name, act)
-#   } else {
-#     stop(paste("invalid syntax:",rule))
-#   }
   invisible( list(ok=res$ok, rule.id=res$rule.id, parsed=substr(rule,1,res$pos) ) )
 }
 

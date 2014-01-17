@@ -146,8 +146,8 @@ set_description<-function(pegR, rule.id, description){
 get_description<-function(pegR, rule.id){
   if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
   if( rule.id %in% rule_ids(pegR)){
-    #description<-pegR$pegE$.RULE_DESCRIPT[[rule.id]]
-    description<-pegR$GET_DESCRIPTION( rule.id)
+    #description<-pegR$GET_DESCRIPTION( rule.id)
+    description<-pexGetDescription(pegR, rule.id)
     return(description)
   } else {
     stop("cannot get description: invalid rule identifier")

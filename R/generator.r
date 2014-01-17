@@ -356,7 +356,8 @@ new.parser<-function(debugTree=FALSE){
                tmp              
              },
              GET_RULE_STRUCTURE=function(rule.id){
-               rs<-list(name=rule.id, 
+               rs<-list(
+                    name=rule.id, 
                     def=GET_RULE_TXT(rule.id), 
                     com=GET_DESCRIPTION(rule.id),
                     act=GET_ACTION_TXT(rule.id)
@@ -368,7 +369,7 @@ new.parser<-function(debugTree=FALSE){
   pegR
 }
 
-#wrappers around the pegR to be more R like
+#pex are wrappers around the pegR to be more S like
 pexSetRule<-function(pegR, rule){
   pegR$SET_RULE(rule)
 }
