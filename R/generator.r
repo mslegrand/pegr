@@ -8,7 +8,11 @@
 #____________________________________________________
 # _____________________________________
 
-
+#TODO!!!
+# change .DEBUG.NODE to .DEBUG.TREE, change apply_rule to use a default (what ever that is)
+# add methond to change .DEBUG.TREE default value
+# create pex for apply_rule
+# 
 
 #' Creates an instance of a new PEG parser.
 #' 
@@ -116,43 +120,52 @@ new.parser<-function(debugTree=FALSE){
   #defAction is the user action to be applied to the results of the definition
   #in terms of create
   #devName<-def {action}
-  mk.Rule<-function(defName, def, action){
-    #check on that mfn is  alist with message and function
-    #   if(!("function" %in% class(mfn))){
-    #     cat"Bad function"
-    #     exit()
-    #   }   
-    #wrap
-    if(is.null(action)){
-      if(pegE$.AUTO_ACTION){
-        pegE$.ACTION[[defName]]<-NULL
+  mk.Rule<-function(defName, def, action){ 
+    #  action is inline action 
+    
+    #ADJUST THE ACTION WHEN AUTO_ACTION IS ON AND WE HAVE AN INLINE ACTIN
+    if(is.null(action)){ #if no inline action
+      if(pegE$.AUTO_ACTION){ # and inline action flag is on
+        pegE$.ACTION[[defName]]<-NULL   #null the actions
         pegE$.ACTION_NAMES[[defName]]<-NULL        
       }
+      # no inline action and auto is off so we do nothing (ie. keep status)
     } else {
+      #if there is inline action we overwrite the action no matter what the flag is (probably not what we wanted!!!!)
       pegE$.ACTION[[defName]]<-eval(parse(text=action)) #this parses the user action text for later invokation      
       pegE$.ACTION_NAMES[[defName]]=action
     }
     
+    #h IS A WRAPPER WHICH CALLS def, def comes from definition.node (the sequence on the rhs of <- before {})
     h<-function(input, exe=TRUE,  p=1){
-      mfn.mssg<-defName
+      mfn.mssg<-defName #record the rule.id for latter (say for when debugTree=T)
       #       if(is.null(action)){
       #         mfn.fn<-NULL  
       #       } else {
       #         mfn.fn<-eval(parse(text=action)) #this parses the user action text for later invokation      
       #       }
       # parse input
+      
+      #this is before the node fn is executed (the node fn is def)
+      #THIS MAY BE A GOOD PLACE TO RECORD ENTERING RULE
       res<-def(input, exe,  p)
-      if(length(res$val)>0 & "character" %in% class(res$val)){
+      #this is after the node fn is executed
+      #THIS WOULD BE WHERE WE RECORD EXITING RULE (OR SHALL WE DO IT AFTER USER EXE IS DONE?)
+      
+      #the node should never return any thing other than a list so
+      #this if statement is pointless
+      if(length(res$val)>0 & "character" %in% class(res$val)){ #this should never happen, if val is a list!!!!
         mfn.mssg<-res$val[[1]]
         print(mfn.mssg) #!!!Why am I printing this????
       }
       
+      # if node fails and debugging print something
       if(res$ok==FALSE){   
         if(debugging2.peg()){ print(paste(mfn.mssg,"def Rejected: Exiting def: ",sep="=> ")) }
         return(res)
       } 
-      else { #res$ok=TRUE
-        if(debugging2.peg()){
+      else { #res$ok=TRUE #node succeeds
+        if(debugging2.peg()){ #if node succeeds and debuggin print something else
           pp<-p+res$pos
           cat("      pp=",pp,"  :\n")
           #       print(paste(substr(input,1,pp-1)), substr(input,pp,nchar(input)), sep="|")      
@@ -161,6 +174,7 @@ new.parser<-function(debugTree=FALSE){
           cat("      ")
           print(paste(tmp,collapse=", "))
         }    
+        #if  res$ok=TRUE #node succeeds
         #execute rule action
         if(exe==TRUE  ){ #this is where we execute the user action
           # make this refer to a memmber of action array in pegE
@@ -168,7 +182,7 @@ new.parser<-function(debugTree=FALSE){
             res$val<-pegE$.ACTION[[defName]](res$val)          
           }
           #
-          if( debugging2.peg() ){
+          if( debugging2.peg() ){ #if debugging, print some gargage
             print(paste(mfn.mssg, "action value:", sep="=>"))
             tmp<-unlist(res$val)
             cat("      ")
@@ -176,7 +190,7 @@ new.parser<-function(debugTree=FALSE){
           }
         }
         #add the debug node here
-        if(pegE$.DEBUG.NODE==T){           
+        if(pegE$.DEBUG.NODE==T){  # debugTree is set to true         
           #get res$debug list.
           children<-res$debugNode
           #add new node with this list
@@ -194,7 +208,7 @@ new.parser<-function(debugTree=FALSE){
           node<-new.node(id,msg.name,data=data, children=children)
           res$debugNode<-list(node=node) #!!!
         }       
-        if( debugging2.peg() ){
+        if( debugging2.peg() ){ #if debugging print some garbage
           print(paste(mfn.mssg, "def Succeeded: Exiting def:", sep="=>"))
         }   
       } #end of else: res$ok=TRUE
@@ -285,7 +299,7 @@ new.parser<-function(debugTree=FALSE){
         name<-v[[1]]; fn<-v[[3]]; 
         #if EXEC exists, take that function (call it g) and apply 
         if("EXEC" %in% names(v)){ # g to the output of fn and wrap as a node (with nodeName embedded)
-          userAction<-v$EXEC  
+          userAction<-v$EXEC  # this is for inline action 
         }else{
           userAction<-NULL
         }
