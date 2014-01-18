@@ -2,7 +2,7 @@
 \alias{inspect_rule}
 \title{Inspects a given rule contained within a parser}
 \usage{
-inspect_rule(parser, rule_id)
+inspect_rule(peg, rule.id)
 }
 \arguments{
   \item{parser,}{a peg parser}

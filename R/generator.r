@@ -356,14 +356,7 @@ new.parser<-function(debugTree=FALSE){
                tmp              
              },
              GET_RULE_STRUCTURE=function(rule.id){
-               rs<-list(
-                    name=rule.id, 
-                    def=GET_RULE_TXT(rule.id), 
-                    com=GET_DESCRIPTION(rule.id),
-                    act=GET_ACTION_TXT(rule.id)
-               )
-               class(rs)<-"ruleStructure"
-             }
+            }
              )
   class(pegR)<-"pegR"
   pegR
@@ -396,5 +389,28 @@ pexGetActionInfo<-function(pegR, rule.id){
 }
 pexGetIDs<-function(pegR){
   pegR$GET_IDS()
+}
+
+ruleStruct<-function(name, def, descript=NULL, action=NULL){
+  rs<-list(name=name, def=def, com=descript, act=action )
+  class(rs)<-"ruleStructure"
+  rs
+}
+
+pexGetRuleStructure<-function(pegR, rule.id){
+#   rs<-list(
+#     name=rule.id, 
+#     def=pegR$GET_RULE_TXT(rule.id), 
+#     com=pegR$GET_DESCRIPTION(rule.id),
+#     act=pegR$GET_ACTION_TXT(rule.id)
+#   )
+#   class(rs)<-"ruleStructure"
+  rs<-ruleStruct(
+    rule.id, 
+    pegR$GET_RULE_TXT(rule.id), 
+    pegR$GET_DESCRIPTION(rule.id), 
+    pegR$GET_ACTION_INFO(rule.id)
+    )
+  rs
 }
 

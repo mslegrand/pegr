@@ -109,11 +109,6 @@ apply_rule<-function(parser, rule.id, input.text, exe=FALSE, debugTree=FALSE){
 #' @export 
 print.AttachedRule<-function(attached.rule){
   prt<-function(){}
-#   bb<-body(attached.rule)
-#   bb[2]<-call(task<-'prt')
-#   body(attached.rule)<-bb
-#   bb[2]<-call(task<-'prt')
   body(attached.rule)[2]<-call(task<-'prt')
   attached.rule()
-  
 }

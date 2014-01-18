@@ -212,7 +212,7 @@ print.pegR<-function(parser){
 #' 
 #' See \code{\link{inspect_rule}}
 #' @export
-print.ruleStruct<-function(rs){
+print.ruleStructure<-function(rs){
   cat(paste("Rule:",rs$name,"\n") )
   cat(paste("Def:", rs$def ,"\n") )
   cat(paste("Com:", ifelse(is.null(rs$com),"",rs$com),"\n") )
@@ -220,36 +220,8 @@ print.ruleStruct<-function(rs){
   invisible()
 }
 
- #' Inspects a given rule contained within a parser
- #' 
- #' This is used to see what a comprises a given rule. 
- #' @param parser, a peg parser
- #' @param rule_id, a rule idenitifier, a.k.a. rule name
- #' @return ruleStruct, a container which when printed will produce a
- #' a summary of that rule
- #' 
- #' @examples
- #' peg<-new.parser()
- #' add_rule(peg, "DOG<-'fido' / 'spot' / 'rover'/ 'buddy'")
- #' set_action(peg, "DOG", "list('bark')")
- #' set_description(peg, "DOG", "sound of dog")
- #' inspect_rule(peg, "DOG")
- #' @export
-inspect_rule<-function(parser, rule_id){
-  if( !( "pegR" %in% class(parser) ) ){ stop("first argument not a parser") }    
-  name<-rule_id #name
-  def<-rule_source(parser, rule_id) 
-  com<-get_description(parser, rule_id)
-  act<-get_action(parser, rule_id)
-  ruleStruct(name, def, com, act)
-}
 
 
-ruleStruct<-function(name, def, descript=NULL, action=NULL){
-  rs<-list(name=name, def=def, com=descript, act=action )
-  class(rs)<-"ruleStruct"
-  rs
-}
 
 
 
