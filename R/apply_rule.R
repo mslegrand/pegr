@@ -41,8 +41,8 @@ apply_rule<-function(parser, rule.id, input.text, exe=NULL, debugTree=FALSE){
   if(!"list" %in% (class(res)) ){ stop("Bad Action Rule: resulting value is not a list")}
   #parserName<-as.character( substitute(parser) )
   #res$Call<-list(parserName<-parserName, rule.id=rule.id, arg=input.text)
-  res$Call<-list(rule.id=rule.id, arg=input.text)
-  res$options<-list(exe=exe, debugTree=debugTree)
+#   res$Call<-list(rule.id=rule.id, arg=input.text)
+#   res$options<-list(exe=exe, debugTree=debugTree)
   class(res)<-c("PEGResult")
   res
 }

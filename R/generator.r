@@ -384,7 +384,10 @@ new.parser<-function(debugTree=FALSE){
              APPLY_RULE=function(rule.id,input.text, exe.Action=NULL){
                exe.Action<-ifelse(is.null(exe.Action), pegE$.ACTION_DEFAULT, exe.Action)
                #pegE[[rule.id]](input.text)->res
-               pegE[[rule.id]](input.text, exe.Action)
+               pegE[[rule.id]](input.text, exe.Action)->res
+               res$Call<-list(rule.id=rule.id, arg=input.text)
+               res$options<-list(exe=exe.Action, debugTree=pegE$.DEBUG.NODE )
+               res
              },
              GET_RULE_STRUCTURE=function(rule.id){
             }
