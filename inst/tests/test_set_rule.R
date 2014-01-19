@@ -28,14 +28,14 @@ test_that("[<-.PEGR",
   expect_equal(rs$com,NULL)
   expect_equal(rs$act, NULL )
 
-   peg["A"]<-"A<-'ab'"
+   peg[["A"]]<-"A<-'ab'"
 inspect_rule(peg,'A')->rs
 expect_equal(rs$name,"A")
 expect_equal(rs$def,"A<-'ab'")
 expect_equal(rs$com,NULL)
 expect_equal(rs$act, NULL )
 
-   peg["A"]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
+   peg[["A"]]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
 inspect_rule(peg,'A')->rs
 expect_equal(rs$name,"A")
 expect_equal(rs$def,"A<-'xx'")

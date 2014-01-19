@@ -2,7 +2,7 @@
 \alias{apply_rule}
 \title{Applies the rule to the specified text}
 \usage{
-apply_rule(parser, rule.id, input.text, exe = FALSE, debugTree = FALSE)
+apply_rule(parser, rule.id, input.text, exe = NULL, debugTree = FALSE)
 }
 \arguments{
   \item{parser,}{a peg parser produced by new.parser}

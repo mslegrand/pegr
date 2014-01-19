@@ -66,7 +66,7 @@ apply_rule<-function(parser, rule.id, input.text, exe=NULL, debugTree=FALSE){
 #' res  
 #' 
 #' @export
-"[.pegR"<-function(parser, rule.id){
+"[[.pegR"<-function(parser, rule.id){
   if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser")}  
   #to return a attached rule (i hope)
   if(!("character" %in% class(rule.id))){
@@ -111,7 +111,7 @@ apply_rule<-function(parser, rule.id, input.text, exe=NULL, debugTree=FALSE){
 #' @examples
 #' peg<-new.parser()
 #' add_rule(peg, "R<-'ab'")
-#' print(peg["R"])
+#' print(peg[["R"]])
 #' @export 
 print.AttachedRule<-function(attached.rule){
   prt<-function(){}

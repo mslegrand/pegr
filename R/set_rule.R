@@ -52,12 +52,12 @@ set_rule<-function(parser, rule){
 #' peg<-new.parser()
 #' peg + "A<-'a'"
 #' peg
-#' peg["A"]<-"A<-'ab'"
+#' peg[["A"]]<-"A<-'ab'"
 #' peg
-#' peg["A"]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
+#' peg[["A"]]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
 #' peg
 #' @export
-"[<-.pegR"<-function(parser, rule.id, value){
+"[[<-.pegR"<-function(parser, rule.id, value){
   # first parse arg (which will be some string or list) 
    #cat("hello/n")
    arg<-value

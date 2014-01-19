@@ -13,12 +13,14 @@
 #add intro to PEG grammer in latex doc.
 
 # change .DEBUG.NODE to .DEBUG.TREE, change apply_rule to use a default (what ever that is)
-# maybe we need a better name than debugTree, such as recordTree
+# maybe we need a better name than debugTree, such as recordTree or record.parse or recorderOn
 
 # add method to change .DEBUG.TREE default value
-# create pex for apply_rule
+# add default for changing applyAction status
+# correct the way we do debugTree
+# 
 # change peg[id] to peg[[id]]]
-# add a stacktrace, and level limit
+# add a stacktrace, and level limit (say stop.level)
 # add a debug.Mode=on (will step through the evalution of nodes)
 # add a break.at option
 
@@ -46,6 +48,7 @@ new.parser<-function(debugTree=FALSE){
   pegE$.ACTION_NAMES<-list() #list containing the names of actions which are functions
   pegE$.AUTO_ACTION<-FALSE
   pegE$.ACTION_DEFAULT<-FALSE
+  pegE$.STOP_LEVEL<-Inf #use Inf to indicate that there is no stop level (allow infinite deep recursion)
   #source("node.r", local=TRUE)
   
   DEVEL.DEBUG<-FALSE

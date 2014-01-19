@@ -1,6 +1,6 @@
 S3method("+",pegR)
-S3method("[",pegR)
-S3method("[<-",pegR)
+S3method("[[",pegR)
+S3method("[[<-",pegR)
 S3method(plot,PEGResult)
 S3method(print,AttachedRule)
 S3method(print,PEGResult)

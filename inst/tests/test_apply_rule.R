@@ -34,7 +34,7 @@ test_that('[.PEGR"',
   # Next we add the rule to the peg
   peg + "A<-'a'"
   # Next apply the rule to the string "a"
-  peg['A']("a")->res 
+  peg[['A']]("a")->res 
   # to see the result  print(res)
   expect_equal(res$ok, TRUE)
   expect_equal(res$pos, 1)

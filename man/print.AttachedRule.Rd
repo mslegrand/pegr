@@ -10,6 +10,6 @@ Prints an attached rule
 \examples{
 peg<-new.parser()
 add_rule(peg, "R<-'ab'")
-print(peg["R"])
+print(peg[["R"]])
 }
 

@@ -1,8 +1,8 @@
-\name{[<-.pegR}
-\alias{[<-.pegR}
+\name{[[<-.pegR}
+\alias{[[<-.pegR}
 \title{Reset an existing rule}
 \usage{
-\method{[}{pegR}(parser, rule.id) <- value
+\method{[[}{pegR}(parser, rule.id) <- value
 }
 \arguments{
   \item{parser,}{the peg parser containing the rule to be
@@ -25,9 +25,9 @@ value of of an exiting rule
 peg<-new.parser()
 peg + "A<-'a'"
 peg
-peg["A"]<-"A<-'ab'"
+peg[["A"]]<-"A<-'ab'"
 peg
-peg["A"]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
+peg[["A"]]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
 peg
 }
 
