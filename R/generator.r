@@ -9,10 +9,18 @@
 # _____________________________________
 
 #TODO!!!
+
+#add intro to PEG grammer in latex doc.
+
 # change .DEBUG.NODE to .DEBUG.TREE, change apply_rule to use a default (what ever that is)
-# add methond to change .DEBUG.TREE default value
+# maybe we need a better name than debugTree, such as recordTree
+
+# add method to change .DEBUG.TREE default value
 # create pex for apply_rule
-# 
+# change peg[id] to peg[[id]]]
+# add a stacktrace, and level limit
+# add a debug.Mode=on (will step through the evalution of nodes)
+# add a break.at option
 
 #' Creates an instance of a new PEG parser.
 #' 
@@ -37,6 +45,7 @@ new.parser<-function(debugTree=FALSE){
   pegE$.RULE_DESCRIPT<-list() #text containing the rule description
   pegE$.ACTION_NAMES<-list() #list containing the names of actions which are functions
   pegE$.AUTO_ACTION<-FALSE
+  pegE$.ACTION_DEFAULT<-FALSE
   #source("node.r", local=TRUE)
   
   DEVEL.DEBUG<-FALSE
@@ -369,6 +378,11 @@ new.parser<-function(debugTree=FALSE){
                }
                tmp              
              },
+             APPLY_RULE=function(rule.id,input.text, exe.Action=NULL){
+               exe.Action<-ifelse(is.null(exe.Action), pegE$.ACTION_DEFAULT, exe.Action)
+               #pegE[[rule.id]](input.text)->res
+               pegE[[rule.id]](input.text, exe.Action)
+             },
              GET_RULE_STRUCTURE=function(rule.id){
             }
              )
@@ -404,6 +418,10 @@ pexGetActionInfo<-function(pegR, rule.id){
 pexGetIDs<-function(pegR){
   pegR$GET_IDS()
 }
+pexApplyRule<-function(pegR, rule.id, input.text, exe=NULL){
+  #parser$pegE[[rule.id]](input.text, exe)->res
+  pegR$APPLY_RULE(rule.id, input.text, exe)
+}
 
 ruleStruct<-function(name, def, descript=NULL, action=NULL){
   rs<-list(name=name, def=def, com=descript, act=action )
@@ -412,13 +430,6 @@ ruleStruct<-function(name, def, descript=NULL, action=NULL){
 }
 
 pexGetRuleStructure<-function(pegR, rule.id){
-#   rs<-list(
-#     name=rule.id, 
-#     def=pegR$GET_RULE_TXT(rule.id), 
-#     com=pegR$GET_DESCRIPTION(rule.id),
-#     act=pegR$GET_ACTION_TXT(rule.id)
-#   )
-#   class(rs)<-"ruleStructure"
   rs<-ruleStruct(
     rule.id, 
     pegR$GET_RULE_TXT(rule.id), 

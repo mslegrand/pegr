@@ -32,11 +32,12 @@
 #' @example
 #' demo/distConv.R
 #' @export
-apply_rule<-function(parser, rule.id, input.text, exe=FALSE, debugTree=FALSE){
+apply_rule<-function(parser, rule.id, input.text, exe=NULL, debugTree=FALSE){
   if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser")}  
   if( !( rule.id %in% rule_ids(parser) ) ){stop("cannot parse: invalid rule identifier")}
   parser$pegE$.DEBUG.NODE<-debugTree
-  parser$pegE[[rule.id]](input.text, exe)->res
+  #parser$pegE[[rule.id]](input.text, exe)->res
+  pexApplyRule(parser, rule.id, input.text, exe)->res
   if(!"list" %in% (class(res)) ){ stop("Bad Action Rule: resulting value is not a list")}
   #parserName<-as.character( substitute(parser) )
   #res$Call<-list(parserName<-parserName, rule.id=rule.id, arg=input.text)
@@ -79,10 +80,15 @@ apply_rule<-function(parser, rule.id, input.text, exe=FALSE, debugTree=FALSE){
         input<-dots[[1]]
         #print(input)
         input.text<-input[1]
-        exe= ifelse(is.null(input$exe), FALSE, input$exe==TRUE )
+#         if(is.null(input$exe)){
+#           input$exe=NULL
+#         }
+#         if(is.null(input$exe)){
+#           input$exe=NULL
+#         }
         debugTree=ifelse(is.null(input$debugTree), FALSE, input$debugTree==TRUE)  
         #print(debugTree)
-        return(apply_rule(parser, rule.id, input.text, exe=exe, debugTree=debugTree ))
+        return(apply_rule(parser, rule.id, input.text, exe=input$exe, debugTree=debugTree ))
       }
       printRule<-function(){
         return(inspect_rule(parser,rule.id))
