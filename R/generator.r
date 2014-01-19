@@ -158,7 +158,7 @@ new.parser<-function(debugTree=FALSE){
       #THIS MAY BE A GOOD PLACE TO RECORD ENTERING RULE
       if( is.finite( pegE$.STOP_LEVEL ) ) {
         if( nrow(pegE$.STACK)>=pegE$.STOP_LEVEL)  { #bail
-          stop("Level exceede the Stack Stop Level", call. = FALSE)
+          stop("Stop Level Exceeded! To see calling sequence use get_stack", call. = FALSE)
         } 
         #else add to stack
         pegE$.STACK<-rbind(pegE$.STACK, data.frame(node.id=defName, pos=p ))
