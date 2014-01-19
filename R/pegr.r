@@ -20,6 +20,15 @@
 #' @name pegr
 NULL
 
+#' @export
+set_stop_level<-function(pegR, stop.level.limit){
+  pexSetStopLevel(pegR, stop.level.limit)
+}
+
+#' @export
+get_stack<-function(pegR){
+  pexGetStack(pegR)
+}
 
 #' Attach an (optional) action to a specified rule
 #' 

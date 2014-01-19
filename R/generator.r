@@ -19,10 +19,9 @@
 # add default for changing applyAction status
 # correct the way we do debugTree
 # 
-# change peg[id] to peg[[id]]]
 # add a stacktrace, and level limit (say stop.level)
 # add a debug.Mode=on (will step through the evalution of nodes)
-# add a break.at option
+# add a break.at option (when debug.Mode=on)
 
 #' Creates an instance of a new PEG parser.
 #' 
@@ -49,6 +48,9 @@ new.parser<-function(debugTree=FALSE){
   pegE$.AUTO_ACTION<-FALSE
   pegE$.ACTION_DEFAULT<-FALSE
   pegE$.STOP_LEVEL<-Inf #use Inf to indicate that there is no stop level (allow infinite deep recursion)
+  pegE$.STACK<-data.frame()
+           
+  
   #source("node.r", local=TRUE)
   
   DEVEL.DEBUG<-FALSE
@@ -151,25 +153,31 @@ new.parser<-function(debugTree=FALSE){
     #h IS A WRAPPER WHICH CALLS def, def comes from definition.node (the sequence on the rhs of <- before {})
     h<-function(input, exe=TRUE,  p=1){
       mfn.mssg<-defName #record the rule.id for latter (say for when debugTree=T)
-      #       if(is.null(action)){
-      #         mfn.fn<-NULL  
-      #       } else {
-      #         mfn.fn<-eval(parse(text=action)) #this parses the user action text for later invokation      
-      #       }
-      # parse input
       
       #this is before the node fn is executed (the node fn is def)
       #THIS MAY BE A GOOD PLACE TO RECORD ENTERING RULE
+      if( is.finite( pegE$.STOP_LEVEL ) ) {
+        if( nrow(pegE$.STACK)>=pegE$.STOP_LEVEL)  { #bail
+          stop("Level exceede the Stack Stop Level", call. = FALSE)
+        } 
+        #else add to stack
+        pegE$.STACK<-rbind(pegE$.STACK, data.frame(node.id=defName, pos=p ))
+      }
       res<-def(input, exe,  p)
       #this is after the node fn is executed
       #THIS WOULD BE WHERE WE RECORD EXITING RULE (OR SHALL WE DO IT AFTER USER EXE IS DONE?)
-      
-      #the node should never return any thing other than a list so
-      #this if statement is pointless
-      if(length(res$val)>0 & "character" %in% class(res$val)){ #this should never happen, if val is a list!!!!
-        mfn.mssg<-res$val[[1]]
-        print(mfn.mssg) #!!!Why am I printing this????
+      if(is.finite(pegE$.STOP_LEVEL)){
+        pegE$.STACK<-pegE$.STACK[-nrow, ]
       }
+      #the node should never return any thing other than a list so
+#       if(res$ok==TRUE & !list %in$ class(res$val)){
+#         stop("Value did not return a list! (Bad Action?)")
+#       }
+#       #this if statement is pointless
+#       if(length(res$val)>0 & "character" %in% class(res$val)){ #this should never happen, if val is a list!!!!
+#         mfn.mssg<-res$val[[1]]
+#         print(mfn.mssg) #!!!Why am I printing this????
+#       }
       
       # if node fails and debugging print something
       if(res$ok==FALSE){   
@@ -383,17 +391,36 @@ new.parser<-function(debugTree=FALSE){
              },
              APPLY_RULE=function(rule.id,input.text, exe.Action=NULL){
                exe.Action<-ifelse(is.null(exe.Action), pegE$.ACTION_DEFAULT, exe.Action)
+               if(is.finite(pegE$.STOP_LEVEL)){
+                 pegE$STACK<-data.frame()
+               }              
                #pegE[[rule.id]](input.text)->res
                pegE[[rule.id]](input.text, exe.Action)->res
                res$Call<-list(rule.id=rule.id, arg=input.text)
                res$options<-list(exe=exe.Action, debugTree=pegE$.DEBUG.NODE )
                res
              },
+             SET_STOP_LEVEL=function(limit){
+               pegE$.STOP_LEVEL<-limit
+               pegE$STACK<-data.frame()
+             },
+             UNSET_STOP_LEVEL=function(){
+               pegE$.STOPLEVEL<-Inf
+               pegE$STACK<-data.frame()
+             },
+             GET_STACK=function(){
+               pegE$.STACK
+             },
              GET_RULE_STRUCTURE=function(rule.id){
             }
              )
-  class(pegR)<-"pegR"
+  #class(pegR)<-c("pegR",class(pegR))
+  class(pegR)<-c("pegR")
   pegR
+}
+
+pexGetStack<-function(pegR){
+  pegR$GET_STACK()
 }
 
 #pex are wrappers around the pegR to be more S like
@@ -423,6 +450,12 @@ pexGetActionInfo<-function(pegR, rule.id){
 }
 pexGetIDs<-function(pegR){
   pegR$GET_IDS()
+}
+pexSetStopLevel<-function(pegR, stop.level.limit){
+  pegR$SET_STOP_LEVEL(stop.level.limit)
+}
+pexUnSetStopLevel<-function(pegR){
+  pegR$UNSET_STOP_LEVEL()
 }
 pexApplyRule<-function(pegR, rule.id, input.text, exe=NULL){
   #parser$pegE[[rule.id]](input.text, exe)->res
