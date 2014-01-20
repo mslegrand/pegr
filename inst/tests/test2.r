@@ -2,7 +2,7 @@ library(testthat)
 library(stringr)
 #print("test 2")
 pegE<-new.env()
-pegE$.DEBUG.NODE<-FALSE
+pegE$.RECORD.NODE<-FALSE
 DEVEL.DEBUG<-FALSE
 
 include.sComponents()

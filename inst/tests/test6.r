@@ -85,7 +85,7 @@ test_that("DISPLAY TREE C<-A B",
   add_rule(gen, "A<-'a'")
   add_rule(gen, "B<-'b'")
   add_rule(gen,"C<-A B")
-  #gen$pegE$.DEBUG.NODE<-T
+  #gen$pegE$.RECORD.NODE<-T
   apply_rule(gen,"C","ab", record=TRUE)->res
   s<-c("____C(ab) = list(a, b )",  "    |____A(a) = list(a )", "    |____B(b) = list(b )" )
   capture.output(tree(res))->out.s

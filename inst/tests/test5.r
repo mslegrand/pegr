@@ -390,8 +390,8 @@ test_that("DEBUG NODE X<-'a' ; Y<-X 'b' ",
   #gen$GRAMMAR("X<-'a'*  \nY<-X 'b'")->res
   gen$DEFINITION(  "X<-'a'* ")->res1
   gen$DEFINITION(  "Y<-X 'b'")->res2
-  #assign(".DEBUG.NODE", TRUE, envir=gen$pegE)
-  gen$pegE$.DEBUG.NODE<-T
+  #assign(".RECORD.NODE", TRUE, envir=gen$pegE)
+  gen$pegE$.RECORD.NODE<-T
   gen$pegE$Y("aaaab",TRUE)->res
   dbNode<-res$debugNode[[1]]
   expect_equal(as.character(dbNode$name),"Y")
@@ -402,8 +402,8 @@ test_that("DEBUG NODE X<-'a' ; Y<-X 'b' ",
   expect_equal(length(dbChild$children),0)
   rm("Y",envir=gen$pegE)
   rm("X",envir=gen$pegE)
-  #rm(".DEBUG.NODE",envir=gen$pegE)
-  gen$pegE$.DEBUG.NODE<-F
+  #rm(".RECORD.NODE",envir=gen$pegE)
+  gen$pegE$.RECORD.NODE<-F
 })
 
 test_that("DEBUG NODE C<-A B",
@@ -413,8 +413,8 @@ test_that("DEBUG NODE C<-A B",
  gen$DEFINITION(  "A<-'a'")->res
  gen$DEFINITION(  "B<-'b'")->res
  gen$DEFINITION(  "C<-A B")->res
- #assign(".DEBUG.NODE", TRUE, envir=gen$pegE)
-  gen$pegE$.DEBUG.NODE<-T
+ #assign(".RECORD.NODE", TRUE, envir=gen$pegE)
+  gen$pegE$.RECORD.NODE<-T
   gen$pegE$C("ab",TRUE)->res
   #expect_equal(length(res$debugNode),4) #replace with expect is of class node
   expect_true("node" %in% class( res$debugNode[[1]] ))
@@ -431,8 +431,8 @@ test_that("DEBUG NODE C<-A B",
   rm("A",envir=gen$pegE)
   rm("B",envir=gen$pegE) 
   rm("C",envir=gen$pegE)
-  #rm(".DEBUG.NODE",envir=gen$pegE) 
-  gen$pegE$.DEBUG.NODE<-F
+  #rm(".RECORD.NODE",envir=gen$pegE) 
+  gen$pegE$.RECORD.NODE<-F
 })
 
 test_that("DEBUG NODE C<-A / B",
@@ -442,8 +442,8 @@ test_that("DEBUG NODE C<-A / B",
   gen$DEFINITION(  "A<-'a'")->res
   gen$DEFINITION(  "B<-'b'")->res
   gen$DEFINITION(  "C<-A / B")->res
-  #assign(".DEBUG.NODE", TRUE, envir=gen$pegE)
-  gen$pegE$.DEBUG.NODE<-T
+  #assign(".RECORD.NODE", TRUE, envir=gen$pegE)
+  gen$pegE$.RECORD.NODE<-T
   gen$pegE$C("a",TRUE)->res
   expect_true("node" %in% class(res$debugNode[[1]]))
   dbNodeC<-res$debugNode[[1]]
@@ -468,7 +468,7 @@ test_that("DEBUG NODE C<-A / B",
   rm("A",envir=gen$pegE)
   rm("B",envir=gen$pegE) 
   rm("C",envir=gen$pegE)
-  #rm(".DEBUG.NODE",envir=gen$pegE) 
-  gen$pegE$.DEBUG.NODE<-F
+  #rm(".RECORD.NODE",envir=gen$pegE) 
+  gen$pegE$.RECORD.NODE<-F
 })
 

@@ -39,7 +39,7 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
          } 
          mn<-0
          val=list()
-         if(pegE$.DEBUG.NODE==T){ #create a container for a list of debug nodes of the children
+         if(pegE$.RECORD.NODE==T){ #create a container for a list of debug nodes of the children
            d.node<-list()
          }
          for(f in lf){
@@ -56,11 +56,11 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
            }
            mn<-mn+res$pos
            val<-c(val,res$val)
-           if(pegE$.DEBUG.NODE==T & !is.null(res$debugNode)){ 
+           if(pegE$.RECORD.NODE==T & !is.null(res$debugNode)){ 
              d.node<-c(d.node, res$debugNode ) #c(list(), list(a))=list(a) #!!!
            }     
          }
-         if(pegE$.DEBUG.NODE==T){ 
+         if(pegE$.RECORD.NODE==T){ 
            return(list(ok=TRUE, pos=mn, val=val, debugNode=d.node)) #append that container onto debugNode of this
          } else {
            return(list(ok=TRUE, pos=mn, val=val))      
@@ -180,7 +180,7 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
          ok<-TRUE
          m<-0
          val<-c()
-         if(pegE$.DEBUG.NODE==T){ 
+         if(pegE$.RECORD.NODE==T){ 
            d.node<-list()
          }
          while(ok){
@@ -195,13 +195,13 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
            if(ok){
              m<-m+res$pos
              val<-c(val,res$val)        
-             if(pegE$.DEBUG.NODE==T){ 
+             if(pegE$.RECORD.NODE==T){ 
                d.node<-c(d.node, res$debugNode)
              }     
            }
          }
          return(list(ok=TRUE,pos=m, val=val))
-         if(pegE$.DEBUG.NODE==T & length(d.node)>0) { 
+         if(pegE$.RECORD.NODE==T & length(d.node)>0) { 
            return(list(ok=TRUE, pos=m, val=val, debugNode=d.node))
          } else {
            return(list(ok=TRUE, pos=m, val=val))      
@@ -227,7 +227,7 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
            res2<-envS$opt.0x(f)( input, exe, p+res1$pos )
            m<-res1$pos+res2$pos 
            val<-c(res1$val,res2$val)     
-           if(pegE$.DEBUG.NODE==T ) { 
+           if(pegE$.RECORD.NODE==T ) { 
              d.node=c(res1$debugNode,res2$debugNode)
              return(list(ok=TRUE, pos=m, val=val, debugNode=d.node))
            } else {

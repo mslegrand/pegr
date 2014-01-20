@@ -4,7 +4,7 @@ library(testthat)
 
 #print("test 1")
 pegE<-new.env()
-pegE$.DEBUG.NODE<-F
+pegE$.RECORD.NODE<-F
 DEVEL.DEBUG<-FALSE
 pegE$DEVEL.DEBUG<-FALSE
 

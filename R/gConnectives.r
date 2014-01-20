@@ -48,7 +48,7 @@ include.gConnectives<-function(pegE, envG=parent.frame() ){
         if(res2$ok){
           val=c(res1$val,res2$val) 
           pos=res1$pos+res2$pos
-          if(pegE$.DEBUG.NODE==T){ 
+          if(pegE$.RECORD.NODE==T){ 
             #           print("debug.Node")
             debugNode<-c(res1$debugNode, res2$debugNode)
             return(list(ok=TRUE, pos=pos, val=val, debugNode=debugNode ))

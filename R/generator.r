@@ -11,11 +11,9 @@
 #TODO!!!
 
 
-# change .DEBUG.NODE to .DEBUG.TREE, change apply_rule to use a default (what ever that is)
-# maybe we need a better name than record, such as recordTree or record.parse or recorderOn
-# record to record
+#  change apply_rule to use a default (what ever that is)
 
-# add method to change .DEBUG.TREE default value
+# add method to change .RECORD.NODE default value
 # add default for changing applyAction status
 # correct the way we do record
 # 
@@ -43,7 +41,7 @@ new.parser<-function(record=FALSE){
   #must be able to modify the pegE and hence needs to contain the pegE.
   pegE<-new.env()
   class(pegE)<-c("pegE",class(pegE))
-  pegE$.DEBUG.NODE=record
+  pegE$.RECORD.NODE=record
   pegE$.ACTION<-list() #executable for the rule
   pegE$.SOURCE.RULES<-list() #text containing the rule source, i.e A<-'c'
   pegE$.RULE_DESCRIPT<-list() #text containing the rule description
@@ -71,7 +69,7 @@ new.parser<-function(record=FALSE){
       } 
       mn<-0
       val=list()
-      if(pegE$.DEBUG.NODE==TRUE){ 
+      if(pegE$.RECORD.NODE==TRUE){ 
         d.node<-list()
       }
       for(f in lf){
@@ -82,7 +80,7 @@ new.parser<-function(record=FALSE){
         }
         mn<-mn+res$pos
         val<-c(val,res$val)
-        if(pegE$.DEBUG.NODE==TRUE){ 
+        if(pegE$.RECORD.NODE==TRUE){ 
           d.node<-c(d.node, res$debugNode) #!!!
         }     
       }
@@ -90,7 +88,7 @@ new.parser<-function(record=FALSE){
         cat("sequenceN: captured input=\n",substr(input,p,p+mn),"\n p=",p,"\n") ###good for debugging      
       } 
       res<-list(ok=TRUE, pos=mn, val=val)
-      if(pegE$.DEBUG.NODE==TRUE){
+      if(pegE$.RECORD.NODE==TRUE){
 #         defDiscription<-substr(input,p, p+mn) #!!!!we add the rule description here so that the debugger can use it later: this includes rule and action text   
 #         #add def to enviroment
 #         rule.id<-lf[[1]]
@@ -213,7 +211,7 @@ new.parser<-function(record=FALSE){
           }
         }
         #add the debug node here
-        if(pegE$.DEBUG.NODE==T){  # record is set to true         
+        if(pegE$.RECORD.NODE==T){  # record is set to true         
           #get res$debug list.
           children<-res$debugNode
           #add new node with this list
@@ -400,7 +398,7 @@ new.parser<-function(record=FALSE){
                #pegE[[rule.id]](input.text)->res
                pegE[[rule.id]](input.text, exe.Action)->res
                res$Call<-list(rule.id=rule.id, arg=input.text)
-               res$options<-list(exe=exe.Action, record=pegE$.DEBUG.NODE )
+               res$options<-list(exe=exe.Action, record=pegE$.RECORD.NODE )
                res
              },
              SET_STOP_LEVEL=function(limit){

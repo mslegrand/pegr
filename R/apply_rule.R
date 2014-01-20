@@ -35,7 +35,7 @@
 apply_rule<-function(parser, rule.id, input.text, exe=NULL, record=FALSE){
   if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser")}  
   if( !( rule.id %in% rule_ids(parser) ) ){stop("cannot parse: invalid rule identifier")}
-  parser$pegE$.DEBUG.NODE<-record
+  parser$pegE$.RECORD.NODE<-record
   #parser$pegE[[rule.id]](input.text, exe)->res
   pexApplyRule(parser, rule.id, input.text, exe)->res
   if(!"list" %in% (class(res)) ){ stop("Bad Action Rule: resulting value is not a list")}
