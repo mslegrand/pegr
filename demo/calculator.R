@@ -17,7 +17,7 @@ set_action(peg, "SUB", "list( v[[1]] - v[[3]] )")
 set_action(peg, "MULT","list( v[[1]] * v[[3]] )")
 set_action(peg, "DIV","list( v[[1]] / v[[3]] )")
 
-apply_rule(peg, "SUM", "3*4+6/2", debugTree=T)->res
+apply_rule(peg, "SUM", "3*4+6/2", record=T)->res
 res
 tree(res)
 plot(res,cex=.6)

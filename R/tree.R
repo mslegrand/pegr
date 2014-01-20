@@ -1,9 +1,9 @@
 #' Print Tree
 #' 
 #' Prints a tree representing the result of applying a rule to a text input, when that result was 
-#' obtained with the debugTree parameter set to TRUE
+#' obtained with the record parameter set to TRUE
 #' 
-#' @param res, a result obtained from parsing with debugTree=TRUE
+#' @param res, a result obtained from parsing with record=TRUE
 #' @examples
 #'   peg<-new.parser()
 #'   add_rule(peg, "A<-'a'")
@@ -11,12 +11,12 @@
 #'   add_rule(peg, "D<-'d'")
 #'   add_rule(peg, "C<-'c'")
 #'   add_rule(peg,"ROOT<-A B C D")
-#'   apply_rule(peg,"ROOT","abcd", debugTree=TRUE)->res
+#'   apply_rule(peg,"ROOT","abcd", record=TRUE)->res
 #'   tree(res)
 #' @export
 tree<-function(res){
   if( is.null(res$debugNode) ){
-    stop("Tree option not set, rerun parse with option debugTree=True")
+    stop("Tree option not set, rerun parse with option record=True")
   }
   #requires 2 passes, 1 for the links/levels, second actualy prints
   node.print<-function(n, indent="", lastChild=TRUE){

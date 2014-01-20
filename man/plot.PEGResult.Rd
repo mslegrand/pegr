@@ -8,7 +8,7 @@
 }
 \arguments{
   \item{res,}{a result obtained from parsing with
-  debugTree=TRUE}
+  record=TRUE}
 
   \item{shadow,}{when set to TRUE, renders a shadow for all
   nodes. The default is TRUE}
@@ -23,8 +23,8 @@
 }
 \description{
 Plots a tree representing the result of applying a rule to
-a text input, when that result was obtained with the
-debugTree parameter set to TRUE
+a text input, when that result was obtained with the record
+parameter set to TRUE
 }
 \note{
 The default value for \emph{show} is "names".
@@ -36,7 +36,7 @@ peg<-new.parser()
   add_rule(peg, "D<-'d'")
   add_rule(peg, "C<-'c'")
   add_rule(peg,"ROOT<-A B C D")
-  apply_rule(peg,"ROOT","abcd", debugTree=TRUE)->res
+  apply_rule(peg,"ROOT","abcd", record=TRUE)->res
   plot(res)
   plot(res, show="args")
   plot(res, show="vals")

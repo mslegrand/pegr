@@ -3,7 +3,7 @@
 print("A simple palidrone parser for just the lettersp 'a,b,c'")
 palSimple<-new.parser()
 add_rule(palSimple,"S<-('a' S 'a') / ('b' S 'b') / ('c' S 'c') / ''")
-apply_rule(palSimple, "S", "baccab", debugTree=T)->res
+apply_rule(palSimple, "S", "baccab", record=T)->res
 res
 tree(res)            
 

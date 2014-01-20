@@ -2,7 +2,7 @@
 \alias{apply_rule}
 \title{Applies the rule to the specified text}
 \usage{
-apply_rule(parser, rule.id, input.text, exe = NULL, debugTree = FALSE)
+apply_rule(parser, rule.id, input.text, exe = NULL, record = FALSE)
 }
 \arguments{
   \item{parser,}{a peg parser produced by new.parser}
@@ -15,7 +15,7 @@ apply_rule(parser, rule.id, input.text, exe = NULL, debugTree = FALSE)
   whether actions should be performed. when FALSE, no
   actions will be executed}
 
-  \item{debugTree,}{(optional, default=FALSE) a flag which
+  \item{record,}{(optional, default=FALSE) a flag which
   when set produces tree of snapshots of all nodes visited
   during a successful parse.}
 }

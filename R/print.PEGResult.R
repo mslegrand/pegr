@@ -13,14 +13,14 @@
 #' @export
 print.PEGResult<-function(res){
   if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")} 
-  odt<-res$options$debugTree
+  odt<-res$options$record
   oex<-res$options$exe
-  tmp<-c("; Options: ",": debugTree=", res$options$debugTree, ": exe=", res$options$exe)
+  tmp<-c("; Options: ",": record=", res$options$record, ": exe=", res$options$exe)
   tmq<-c(oex| odt, odt, odt, oex, oex)
   opts=ifelse( oex | odt, tmp[tmq], "")
   cat(paste0("Call: Rule=", paste0(  res$Call$rule.id, "; Input Arg=\"",res$Call$arg,"\" ",opts, "\n")  ))
-  #cat(paste0("Call: (", paste0( res$Call$parserName,",", res$Call$rule.id, ",",res$Call$arg,",debugTree=",res$options$debugTree,",exe=",res$options$exe,")\n")  ))
-  #cat(paste("Options:", "Apply Actions=",res$options$exe,"Make Tree=",res$options$debugTree,"\n"))
+  #cat(paste0("Call: (", paste0( res$Call$parserName,",", res$Call$rule.id, ",",res$Call$arg,",record=",res$options$record,",exe=",res$options$exe,")\n")  ))
+  #cat(paste("Options:", "Apply Actions=",res$options$exe,"Make Tree=",res$options$record,"\n"))
   cat(paste("Status:", res$ok, "\n") ) 
   cat(paste("Consumed: (", res$pos , "/", nchar(res$Call$arg) ,")\n" ))
   if(res$ok==TRUE){

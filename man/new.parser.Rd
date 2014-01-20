@@ -2,7 +2,7 @@
 \alias{new.parser}
 \title{Creates an instance of a new PEG parser.}
 \usage{
-new.parser(debugTree = FALSE)
+new.parser(record = FALSE)
 }
 \value{
 Returns a new instance of a PEG parser

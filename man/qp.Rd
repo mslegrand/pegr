@@ -2,7 +2,7 @@
 \alias{qp}
 \title{A simple tool to examine a parsing expression in isolation}
 \usage{
-qp(p.expression, text.input, debugTree = TRUE)
+qp(p.expression, text.input, record = TRUE)
 }
 \arguments{
   \item{expression,}{a parsing expression (the right hand
@@ -10,7 +10,7 @@ qp(p.expression, text.input, debugTree = TRUE)
 
   \item{text.input,}{text string to apply expression to.}
 
-  \item{debugTree=TRUE,}{By default TRUE, so one can
+  \item{record=TRUE,}{By default TRUE, so one can
   immediately graph (plot) or print (tree)}
 }
 \value{

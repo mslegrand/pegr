@@ -5,6 +5,6 @@ add_rule(tinyEnglish, "ART<-'a'/'an'/'the'")
 add_rule(tinyEnglish, "ADJ<-'blue' / 'red' / 'green'")
 add_rule(tinyEnglish,  "NP<-ART? ' '+ (ADJ ' ')+ N")
 add_rule(tinyEnglish,  "S<-NP ' '+ V ' '+ NP ' '*")
-apply_rule(tinyEnglish, "S", "the green spam  sank a red ship", debugTree=TRUE)->res
+apply_rule(tinyEnglish, "S", "the green spam  sank a red ship", record=TRUE)->res
 tree(res)
 plot(res)

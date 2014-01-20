@@ -120,7 +120,7 @@ Parsing is the act of applying a rule to a string to be parsed and returning a r
 The rule is specified its ruleid, a character string giving the rules name. That rule becomes the
 root of the ensuing parse.
 * Parsing is accomplished by
-** apply_rule(parser, ruleid, exe=FALSE,, debugTree=FALSE)**. 
+** apply_rule(parser, ruleid, exe=FALSE,, record=FALSE)**. 
 ```{r apply_rule}
 apply_rule(parser, "A", "a" )->res.A  
 apply_rule(parser, "C", "aab")->res.AAB
@@ -165,10 +165,10 @@ Thesse  visualizaton tools are discussed in the next section
 
 ### Visualization
 Visualization consists of showing the nodes visited (and their values) during a parse of an input. This requires that the
-**debugTree** flag be set to **TRUE** in the invocation of **apply_rule**. 
+**record** flag be set to **TRUE** in the invocation of **apply_rule**. 
 ```{r debugRuleT}
-# Here debugTree is set to True
-apply_rule(parser, "C", "aab", exe=TRUE, debugTree=TRUE)->res.AAB 
+# Here record is set to True
+apply_rule(parser, "C", "aab", exe=TRUE, record=TRUE)->res.AAB 
 # also, since exe isTrue, so action is taken
 # action A capitalizes, action C pastes together
 value(res.AAB) 

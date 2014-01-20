@@ -232,7 +232,7 @@ summary.PEGResult<-function(res){
   if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")}
   s<-list(
   Call=paste0(res$Call$rule.id, "(" ,res$Call$arg, ")" ),
-  Options=paste("Options:", "Apply Actions=",res$options$exe,"Make Tree=",res$options$debugTree,""),
+  Options=paste("Options:", "Apply Actions=",res$options$exe,"Make Tree=",res$options$record,""),
   Status<-paste("Status:", ifelse(res$ok,"Success","Failure"),"")
   )
   if(res$ok){

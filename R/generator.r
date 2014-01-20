@@ -10,18 +10,21 @@
 
 #TODO!!!
 
-#add intro to PEG grammer in latex doc.
 
 # change .DEBUG.NODE to .DEBUG.TREE, change apply_rule to use a default (what ever that is)
-# maybe we need a better name than debugTree, such as recordTree or record.parse or recorderOn
+# maybe we need a better name than record, such as recordTree or record.parse or recorderOn
+# record to record
 
 # add method to change .DEBUG.TREE default value
 # add default for changing applyAction status
-# correct the way we do debugTree
+# correct the way we do record
 # 
-# add a stacktrace, and level limit (say stop.level)
 # add a debug.Mode=on (will step through the evalution of nodes)
-# add a break.at option (when debug.Mode=on)
+# When debug.Mode.on==TRUE we want
+#         break.at option (when debug.Mode=on)
+#         next
+#         continue
+#         quit (#use try catch to exit?)
 
 #' Creates an instance of a new PEG parser.
 #' 
@@ -33,14 +36,14 @@
 #' parser<-new.parser() 
 #' add_rule(parser, "Any<-.")  
 #' rule_ids(parser)  # returns "Any"
-new.parser<-function(debugTree=FALSE){
+new.parser<-function(record=FALSE){
   #internally we have two parsers, a genE a peg Generator which takes text and processes it
   #to create rules to construct the user defined parser, pegE. However, since the process
   #is to be dynamiclly interpetive (i.e. user can put in one rule at a time), the generator, genE
   #must be able to modify the pegE and hence needs to contain the pegE.
   pegE<-new.env()
   class(pegE)<-c("pegE",class(pegE))
-  pegE$.DEBUG.NODE=debugTree
+  pegE$.DEBUG.NODE=record
   pegE$.ACTION<-list() #executable for the rule
   pegE$.SOURCE.RULES<-list() #text containing the rule source, i.e A<-'c'
   pegE$.RULE_DESCRIPT<-list() #text containing the rule description
@@ -152,7 +155,7 @@ new.parser<-function(debugTree=FALSE){
     
     #h IS A WRAPPER WHICH CALLS def, def comes from definition.node (the sequence on the rhs of <- before {})
     h<-function(input, exe=TRUE,  p=1){
-      mfn.mssg<-defName #record the rule.id for latter (say for when debugTree=T)
+      mfn.mssg<-defName #record the rule.id for latter (say for when record=T)
       
       #this is before the node fn is executed (the node fn is def)
       #THIS MAY BE A GOOD PLACE TO RECORD ENTERING RULE
@@ -210,7 +213,7 @@ new.parser<-function(debugTree=FALSE){
           }
         }
         #add the debug node here
-        if(pegE$.DEBUG.NODE==T){  # debugTree is set to true         
+        if(pegE$.DEBUG.NODE==T){  # record is set to true         
           #get res$debug list.
           children<-res$debugNode
           #add new node with this list
@@ -397,7 +400,7 @@ new.parser<-function(debugTree=FALSE){
                #pegE[[rule.id]](input.text)->res
                pegE[[rule.id]](input.text, exe.Action)->res
                res$Call<-list(rule.id=rule.id, arg=input.text)
-               res$options<-list(exe=exe.Action, debugTree=pegE$.DEBUG.NODE )
+               res$options<-list(exe=exe.Action, record=pegE$.DEBUG.NODE )
                res
              },
              SET_STOP_LEVEL=function(limit){

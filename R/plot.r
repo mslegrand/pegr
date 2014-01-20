@@ -2,9 +2,9 @@
 #' Plots the parsing result as a tree.
 #' 
 #' Plots a tree representing the result of applying a rule to a text input, when that result was 
-#' obtained with the debugTree parameter set to TRUE
+#' obtained with the record parameter set to TRUE
 #' 
-#' @param res, a result obtained from parsing with debugTree=TRUE
+#' @param res, a result obtained from parsing with record=TRUE
 #' @param shadow, when set to TRUE, renders a shadow for all nodes. The default is TRUE
 #' @param show, a vector consisting of any combination of the following:
 #' \itemize{
@@ -21,7 +21,7 @@
 #'   add_rule(peg, "D<-'d'")
 #'   add_rule(peg, "C<-'c'")
 #'   add_rule(peg,"ROOT<-A B C D")
-#'   apply_rule(peg,"ROOT","abcd", debugTree=TRUE)->res
+#'   apply_rule(peg,"ROOT","abcd", record=TRUE)->res
 #'   plot(res)
 #'   plot(res, show="args")
 #'   plot(res, show="vals")
@@ -31,7 +31,7 @@
 plot.PEGResult<-function(res, shadow=TRUE, show="names", bg = ifelse(match(par("bg"), "transparent", 0), "white", par("bg")), border = TRUE, xpad = 1.0, ypad = 2.5, 
                          cex = 1,  adj = 0.5, ...){
   if( is.null(res$debugNode) ){
-    stop("Tree option not set, rerun parse with option debugTree=True")
+    stop("Tree option not set, rerun parse with option record=True")
   }
   if("rules" %in% show){
     show<-c("names", show)

@@ -10,7 +10,7 @@
 #' @param arg, a character string to be parsed
 #' @param exe, (optional, default=FALSE) a flag indicate whether actions should be performed. 
 #' when FALSE, no actions will be executed
-#' @param debugTree, (optional, default=FALSE) a flag which when set produces tree of snapshots of all nodes
+#' @param record, (optional, default=FALSE) a flag which when set produces tree of snapshots of all nodes
 #' visited during a successful parse.
 #' @return A PEGResult, a container containing the status of the parsing attempt, a record of the characters parsed, 
 #' and a list of one or more values computed during the parse. If exe not set (FALSE) or no actions have been attached
@@ -32,17 +32,17 @@
 #' @example
 #' demo/distConv.R
 #' @export
-apply_rule<-function(parser, rule.id, input.text, exe=NULL, debugTree=FALSE){
+apply_rule<-function(parser, rule.id, input.text, exe=NULL, record=FALSE){
   if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser")}  
   if( !( rule.id %in% rule_ids(parser) ) ){stop("cannot parse: invalid rule identifier")}
-  parser$pegE$.DEBUG.NODE<-debugTree
+  parser$pegE$.DEBUG.NODE<-record
   #parser$pegE[[rule.id]](input.text, exe)->res
   pexApplyRule(parser, rule.id, input.text, exe)->res
   if(!"list" %in% (class(res)) ){ stop("Bad Action Rule: resulting value is not a list")}
   #parserName<-as.character( substitute(parser) )
   #res$Call<-list(parserName<-parserName, rule.id=rule.id, arg=input.text)
 #   res$Call<-list(rule.id=rule.id, arg=input.text)
-#   res$options<-list(exe=exe, debugTree=debugTree)
+#   res$options<-list(exe=exe, record=record)
   class(res)<-c("PEGResult")
   res
 }
@@ -86,9 +86,9 @@ apply_rule<-function(parser, rule.id, input.text, exe=NULL, debugTree=FALSE){
 #         if(is.null(input$exe)){
 #           input$exe=NULL
 #         }
-        debugTree=ifelse(is.null(input$debugTree), FALSE, input$debugTree==TRUE)  
-        #print(debugTree)
-        return(apply_rule(parser, rule.id, input.text, exe=input$exe, debugTree=debugTree ))
+        record=ifelse(is.null(input$record), FALSE, input$record==TRUE)  
+        #print(record)
+        return(apply_rule(parser, rule.id, input.text, exe=input$exe, record=record ))
       }
       printRule<-function(){
         return(inspect_rule(parser,rule.id))

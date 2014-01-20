@@ -72,8 +72,8 @@ value(res.AAB)
 
 
 ## ----debugRuleT----------------------------------------------------------
-# Here debugTree is set to True
-apply_rule(parser, "C", "aab", exe=TRUE, debugTree=TRUE)->res.AAB 
+# Here record is set to True
+apply_rule(parser, "C", "aab", exe=TRUE, record=TRUE)->res.AAB 
 # also, since exe isTrue, so action is taken
 # action A capitalizes, action C pastes together
 value(res.AAB) 
