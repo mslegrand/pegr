@@ -34,14 +34,15 @@
 #' parser<-new.parser() 
 #' add_rule(parser, "Any<-.")  
 #' rule_ids(parser)  # returns "Any"
-new.parser<-function(record=FALSE){
+new.parser<-function(record.mode=FALSE){
   #internally we have two parsers, a genE a peg Generator which takes text and processes it
   #to create rules to construct the user defined parser, pegE. However, since the process
   #is to be dynamiclly interpetive (i.e. user can put in one rule at a time), the generator, genE
   #must be able to modify the pegE and hence needs to contain the pegE.
   pegE<-new.env()
   class(pegE)<-c("pegE",class(pegE))
-  pegE$.RECORD.NODE=record
+  pegE$.RECORD.NODE.DEFAULT<-record.mode
+  pegE$.RECORD.NODE<-record.mode
   pegE$.ACTION<-list() #executable for the rule
   pegE$.SOURCE.RULES<-list() #text containing the rule source, i.e A<-'c'
   pegE$.RULE_DESCRIPT<-list() #text containing the rule description
@@ -390,12 +391,15 @@ new.parser<-function(record=FALSE){
                }
                tmp              
              },
-             APPLY_RULE=function(rule.id,input.text, exe.Action=NULL){
+             APPLY_RULE=function(rule.id,input.text, exe.Action=NULL, record=NULL){
                exe.Action<-ifelse(is.null(exe.Action), pegE$.ACTION_DEFAULT, exe.Action)
+               
                if(is.finite(pegE$.STOP_LEVEL)){
                  pegE$STACK<-data.frame()
                }              
                #pegE[[rule.id]](input.text)->res
+               record<-ifelse(is.null(record), pegE$.RECORD.NODE.DEFAULT, record)
+               pegE$.RECORD.NODE<-record
                pegE[[rule.id]](input.text, exe.Action)->res
                res$Call<-list(rule.id=rule.id, arg=input.text)
                res$options<-list(exe=exe.Action, record=pegE$.RECORD.NODE )
@@ -411,6 +415,9 @@ new.parser<-function(record=FALSE){
              },
              GET_STACK=function(){
                pegE$.STACK
+             },
+             SET_RECORD_DEFAULT=function(){
+               pegE$.RECORD.NODE.DEFAULT=on
              },
              GET_RULE_STRUCTURE=function(rule.id){
             }
@@ -458,9 +465,9 @@ pexSetStopLevel<-function(pegR, stop.level.limit){
 pexUnSetStopLevel<-function(pegR){
   pegR$UNSET_STOP_LEVEL()
 }
-pexApplyRule<-function(pegR, rule.id, input.text, exe=NULL){
-  #parser$pegE[[rule.id]](input.text, exe)->res
-  pegR$APPLY_RULE(rule.id, input.text, exe)
+pexApplyRule<-function(pegR, rule.id, input.text, exe=NULL, record=NULL){
+  #parser$pegE[[rule.id]](input.text, exe)->res 
+  pegR$APPLY_RULE(rule.id, input.text, exe, record)
 }
 
 ruleStruct<-function(name, def, descript=NULL, action=NULL){
@@ -477,5 +484,9 @@ pexGetRuleStructure<-function(pegR, rule.id){
     pegR$GET_ACTION_INFO(rule.id)
     )
   rs
+}
+
+pexSetRecordDefault<-function(pegR, on){
+  pegR$SET_RECORD_DEFAULT(on)
 }
 

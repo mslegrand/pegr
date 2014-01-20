@@ -2,7 +2,8 @@
 #' Plots the parsing result as a tree.
 #' 
 #' Plots a tree representing the result of applying a rule to a text input, when that result was 
-#' obtained with the record parameter set to TRUE
+#' obtained with the record parameter set to TRUE (Either by \code{\link{set_record_status}} or by 
+#' as a parameter option in \code{\link{apply_rule}})
 #' 
 #' @param res, a result obtained from parsing with record=TRUE
 #' @param shadow, when set to TRUE, renders a shadow for all nodes. The default is TRUE

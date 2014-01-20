@@ -268,3 +268,5 @@ paste1<-function(v){ list(paste(v,collapse='')) }
 #add rule objects for printing, applying etc.
 #summary(pegE)
 
+
+

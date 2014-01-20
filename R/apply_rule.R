@@ -32,12 +32,12 @@
 #' @example
 #' demo/distConv.R
 #' @export
-apply_rule<-function(parser, rule.id, input.text, exe=NULL, record=FALSE){
+apply_rule<-function(parser, rule.id, input.text, exe=NULL, record=NULL){
   if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser")}  
   if( !( rule.id %in% rule_ids(parser) ) ){stop("cannot parse: invalid rule identifier")}
-  parser$pegE$.RECORD.NODE<-record
+  #parser$pegE$.RECORD.NODE<-record
   #parser$pegE[[rule.id]](input.text, exe)->res
-  pexApplyRule(parser, rule.id, input.text, exe)->res
+  pexApplyRule(parser, rule.id, input.text, exe, record)->res
   if(!"list" %in% (class(res)) ){ stop("Bad Action Rule: resulting value is not a list")}
   #parserName<-as.character( substitute(parser) )
   #res$Call<-list(parserName<-parserName, rule.id=rule.id, arg=input.text)

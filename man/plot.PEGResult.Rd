@@ -24,7 +24,9 @@
 \description{
 Plots a tree representing the result of applying a rule to
 a text input, when that result was obtained with the record
-parameter set to TRUE
+parameter set to TRUE (Either by
+\code{\link{set_record_status}} or by as a parameter option
+in \code{\link{apply_rule}})
 }
 \note{
 The default value for \emph{show} is "names".
