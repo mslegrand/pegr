@@ -152,11 +152,17 @@ new.parser<-function(record.mode=FALSE){
              },
              l=,
              list={
-               ll<-pegE$.DEBUG$BRKPTS[with(pegE$.DEBUG$BRKPTS, order(id,at)),]
                #ll<-subset(ll, ll$id!=NA)
                cat("PEG Breakpoint Listing:\n")
-               #str(ll)
-               apply(ll, 1, function(x){cat("brk@ ",x[2]," ",x[1], "\n" )})
+               if(nrow(pegE$.DEBUG$BRKPTS)>0){
+                 ll<-pegE$.DEBUG$BRKPTS[with(pegE$.DEBUG$BRKPTS, order(id,at)),]
+                 apply(ll, 1, function(x){cat("brk@ ",x[2]," ",x[1], "\n" )})                 
+               } else {
+                 cat("No PEG break points set!\n")
+               }
+             },
+             clr={ #clear all break points
+               pegE$DEBUG$BRKPTS=data.frame(id=NA, at=NA)[numeric(0), ]
              }
         ) #end of switch 
       } #end of other commands
