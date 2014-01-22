@@ -275,7 +275,7 @@ paste1<-function(v){ list(paste(v,collapse='')) }
 #'  step through that calling sequence, examining the state
 #'  of the parsing both upon entering a rule and 
 #'  and exiting a rule. 
-#'  @example
+#'  @examples
 #'  \dontrun{
 #'  pegR<-new.parser()
 #'  debug.pegR(pegR)
