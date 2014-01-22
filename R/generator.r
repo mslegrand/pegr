@@ -265,12 +265,7 @@ new.parser<-function(record.mode=FALSE){
     #   fn
   }
   #___________________________________
-  
-  #Used exclusively by mk.Rule (below) to report bad rules
-  debugging2.peg<-function(){
-    return(exists("PEG.DEBUG.L2")) 
-  }
-  
+    
   #' Generates new unique ID values for debug nodes #for new.ID only!!!!
   new.ID.generator<-function(){
     IDCount<-1
@@ -354,20 +349,10 @@ new.parser<-function(record.mode=FALSE){
       
       # if node fails and debugging print something
       if(res$ok==FALSE){   
-        if(debugging2.peg()){ print(paste(mfn.mssg,"def Rejected: Exiting def: ",sep="=> ")) }
         # ALTERNATIVE PART 1
         return(res)
       } 
       else { #res$ok=TRUE #node succeeds
-        if(debugging2.peg()){ #if node succeeds and debuggin print something else
-          pp<-p+res$pos
-          cat("      pp=",pp,"  :\n")
-          #       print(paste(substr(input,1,pp-1)), substr(input,pp,nchar(input)), sep="|")      
-          print(paste(mfn.mssg, "def value:", sep="=>"))
-          tmp<-unlist(res$val)
-          cat("      ")
-          print(paste(tmp,collapse=", "))
-        }    
         #if  res$ok=TRUE #node succeeds
         #execute rule action
         if(exe==TRUE  ){ #this is where we execute the user action
@@ -376,12 +361,6 @@ new.parser<-function(record.mode=FALSE){
             res$val<-pegE$.ACTION[[defName]](res$val)          
           }
           #
-          if( debugging2.peg() ){ #if debugging, print some gargage
-            print(paste(mfn.mssg, "action value:", sep="=>"))
-            tmp<-unlist(res$val)
-            cat("      ")
-            print(paste(tmp,collapse=", "))
-          }
         }
         # ALTERNATIVE PART 2
         #add the debug node here
@@ -403,9 +382,6 @@ new.parser<-function(record.mode=FALSE){
           node<-new.node(id,msg.name,data=data, children=children)
           res$debugNode<-list(node=node) #!!!
         }       
-        if( debugging2.peg() ){ #if debugging print some garbage
-          print(paste(mfn.mssg, "def Succeeded: Exiting def:", sep="=>"))
-        }   
       } #end of else: res$ok=TRUE
       res
     }
