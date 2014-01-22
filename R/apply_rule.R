@@ -38,11 +38,10 @@ apply_rule<-function(parser, rule.id, input.text, exe=NULL, record=NULL){
   #parser$pegE$.RECORD.NODE<-record
   #parser$pegE[[rule.id]](input.text, exe)->res
   pexApplyRule(parser, rule.id, input.text, exe, record)->res
+  if(pexIsDebugging(parser)){
+    return(invisible(NULL)) 
+  }
   if(!"list" %in% (class(res)) ){ stop("Bad Action Rule: resulting value is not a list")}
-  #parserName<-as.character( substitute(parser) )
-  #res$Call<-list(parserName<-parserName, rule.id=rule.id, arg=input.text)
-#   res$Call<-list(rule.id=rule.id, arg=input.text)
-#   res$options<-list(exe=exe, record=record)
   class(res)<-c("PEGResult")
   res
 }

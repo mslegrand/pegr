@@ -11,18 +11,31 @@
 #TODO!!!
 
 
-#  change apply_rule to use a default (what ever that is)
 
-# add method to change .RECORD.NODE default value
 # add default for changing applyAction status
-# correct the way we do record
 # 
 # add a debug.Mode=on (will step through the evalution of nodes)
 # When debug.Mode.on==TRUE we want
-#         break.at option (when debug.Mode=on)
-#         next
-#         continue
+#         break.xxx command where xxx=(+) entering, xxx=(-) exiting, xxx=(@) (both))
+#         show all breaks points 
+#         remove break point at
+#         clear all break points
+#         run (starts back at the beginning)
+#         next (go to next)
+#         continue (go till break or an end)
 #         quit (#use try catch to exit?)
+#         help
+#         
+# When entering debug.Mode we want a menu
+# When quit (or existing) add exit message
+#
+# implementation requires
+# help fn to display help
+# break locations: two types, entering and exiting 
+# goto flag: with values: next, continue
+# a small interpreter that gets commands and executes them
+
+
 
 #' Creates an instance of a new PEG parser.
 #' 
@@ -51,6 +64,138 @@ new.parser<-function(record.mode=FALSE){
   pegE$.ACTION_DEFAULT<-FALSE
   pegE$.STOP_LEVEL<-Inf #use Inf to indicate that there is no stop level (allow infinite deep recursion)
   pegE$.STACK<-data.frame()
+  pegE$.DEBUG_ON<-FALSE
+  pegE$.DEBUG<-list(
+    NEXT=TRUE,           #TRUE is next, FALSE is continue
+    BRKPTS=data.frame(id=NA, at=NA)[numeric(0), ],
+    command.summary=function(){cat("Rdbg> Commands: h, n, c, clr, +brk@, -brk@, Q, r, l\n")},
+    command.detail=function(){
+      cat(
+        "Command Summary",
+        "h, help: shows this help",
+        "n: step to the next rule",
+        "c: continue to the next breakpoint",
+        "clr: clear all breakpoints",
+        "+brk@: add break point at both enter and exit points of a rule",
+        "     : example +brk@ RULE.ID",
+        "+brk@>: add break point at the enter point of a rule",
+        "     : example +brk@> RULE.ID",
+        "+brk@<: add break point at the exit point of a rule",
+        "     : example +brk@< RULE.ID",
+        "-brk@: delete break points of a rule",
+        "-brk@>: delete break point at the enter point of a rule",
+        "     : example -brk@> RULE.ID",
+        "-brk@<: delete break point at the exit point of a rule",
+        "     : example -brk@< RULE.ID" ,       
+        "q: quit the debugger",
+        "r: restart debugger",
+        "l: list all rule breakpoints",
+        sep="\n"
+      )
+    }
+  ) #end of pegE$.DEBUG list
+  
+  #main debug loow
+  pegE$.debug.loop<-function(){  
+    repeat{ #forever
+      line<-str_trim(readline("Rdb>"))
+      if(line==""){
+        #repeat the  last command (n or c)
+        return()
+      }
+      #browser()
+      tolower(line)->cmd
+      #convert cmd to lower
+      if(grepl("^[+-]brk@", cmd)){ #break
+        #we have a break point
+        str_match(line, "^([+-])brk@\\s*([<>]?)\\s*(.*)")->mat
+        type.ad<-mat[2]
+        type.ee<-mat[3]     
+        rule.id<-mat[4]
+        #check for valid rule id (if not err msg and continue)
+        if( type.ee %in% c('<', '>')){ #either exit or enter
+          if(type.ad=='+'){ #we add
+            pegE$.DEBUG$BRKPTS<-rbind(pegE$.DEBUG$BRKPTS, data.frame(id=rule.id, at=type.ee))
+          } else { #we delete
+            pegE$.DEBUG$BRKPTS<-with(pegE$.DEBUG$BRKPTS,
+                                     subset(pegE$.DEBUG$BRKPTS, !( id==rule.id & at==type.ee) ) ) 
+          }
+        } else { # both exit and enter
+          if(type.ad=='+'){ #we add
+            pegE$.DEBUG$BRKPTS<-rbind(pegE$.DEBUG$BRKPTS, data.frame(id=rule.id, at=c('<','>')))            
+          } else { #we delete
+            pegE$.DEBUG$BRKPTS<-with(pegE$.DEBUG$BRKPTS,
+                                     subset(pegE$.DEBUG$BRKPTS, !( id==rule.id) ) )
+          }        
+        } #end of both exit and enter
+      } #end of break
+      else{ #not a breakpoint insertion/deletion so process the other commands
+        switch(EXPR=cmd,
+             c={
+               pegE$.DEBUG$NEXT<-FALSE
+               break #exit from loop
+             },
+             n={
+               pegE$.DEBUG$NEXT<-TRUE
+               break #exit from loop
+             },
+             q=,
+             quit={ 
+               invokeRestart("quitDebug")
+             },
+             r={
+               invokeRestart("restartDebug")
+             },
+             h=,
+             help={ 
+               pegE$.DEBUG$command.detail() 
+             },
+             l=,
+             list={
+               ll<-pegE$.DEBUG$BRKPTS[with(pegE$.DEBUG$BRKPTS, order(id,at)),]
+               #ll<-subset(ll, ll$id!=NA)
+               cat("PEG Breakpoint Listing:\n")
+               #str(ll)
+               apply(ll, 1, function(x){cat("brk@ ",x[2]," ",x[1], "\n" )})
+             }
+        ) #end of switch 
+      } #end of other commands
+  } #end of repeat
+} #end of loop
+
+#       if(cmd %in% c('c','n')){
+#         pegE$.DEBUG$NC<-ifelse(cmd=='n', TRUE, FALSE)
+#         return()
+#       }
+#       if(cmd == 'q'){
+#         invokeRestart("quitDebug")
+#       }
+#       if(cmd == 'r'){
+#         invokeRestart("restartDebug")
+#       }
+#       if(cmd %in% c('h', '?')){
+#         pegE$.DEBUG$command.detail()
+#       }
+#       if(grep("^\+brk@<")){
+#         
+#       } else  if(grep("^\+brk@>")){
+#         
+#       } else if(f(grep("^\+brk@"){
+#         
+#       }
+
+
+      # if cmd is Q, throw an exception to exit : NEED EXCEPTION HANDLE WITH TYPE
+      # if cmd is r, throw an exception to exit
+      # if cmd is ? or h, display help : NEED HELP DIPLAY FUNC
+      # if cmd is l , list all break points : NEED DATAFRAME FOR BRKPTS WITH RULEID, IN, OUT
+      # if cmd is +brk@ [> < .]? ruleName , set breakpt :need set, add fn
+      # if cmd is -brk@ [> < .]? ruleName ,  remove breakpt: need rm, fn
+      # if cmd is anything else, put help commamd     
+  #  }
+    #
+  #}
+  
            
   
   #source("node.r", local=TRUE)
@@ -138,8 +283,8 @@ new.parser<-function(record.mode=FALSE){
   #devName<-def {action}
   mk.Rule<-function(defName, def, action){ 
     #  action is inline action 
-    
-    #ADJUST THE ACTION WHEN AUTO_ACTION IS ON AND WE HAVE AN INLINE ACTIN
+
+    #ADJUST THE ACTION WHEN AUTO_ACTION IS ON AND WE HAVE AN INLINE ACTION
     if(is.null(action)){ #if no inline action
       if(pegE$.AUTO_ACTION){ # and inline action flag is on
         pegE$.ACTION[[defName]]<-NULL   #null the actions
@@ -155,8 +300,18 @@ new.parser<-function(record.mode=FALSE){
     #h IS A WRAPPER WHICH CALLS def, def comes from definition.node (the sequence on the rhs of <- before {})
     h<-function(input, exe=TRUE,  p=1){
       mfn.mssg<-defName #record the rule.id for latter (say for when record=T)
-      
+      #browser()
       #this is before the node fn is executed (the node fn is def)
+      #THIS IS A GOOD PLACE FOR DEBUGGER TO RECORD ENTERING A RULE
+      if(pegE$.DEBUG_ON==TRUE){
+        if(pegE$.DEBUG$NEXT | ( any(with(pegE$.DEBUG$BRKPTS, (id==defName & at=='>')  ) )    )    ){
+          cat("==>Entering Rule:", defName, "\n")
+          cat("   Rule Definiton:", pegE$.SOURCE.RULES[[defName]], "\n")
+          cat("   Input text: \'", substr(input,p, nchar(input)),"\'\n", sep="")      
+          pegE$.debug.loop()          
+        } 
+        #cat("made it out of the loop\n")
+      }
       #THIS MAY BE A GOOD PLACE TO RECORD ENTERING RULE
       if( is.finite( pegE$.STOP_LEVEL ) ) {
         if( nrow(pegE$.STACK)>=pegE$.STOP_LEVEL)  { #bail
@@ -171,19 +326,30 @@ new.parser<-function(record.mode=FALSE){
       if(is.finite(pegE$.STOP_LEVEL)){
         pegE$.STACK<-pegE$.STACK[-nrow, ]
       }
+      #THIS MAY A GOOD PLACE FOR DEBUGGER TO RECORD EXITING A RULE
+      if(pegE$.DEBUG_ON==TRUE){ ##THIS IS TEMPORARY
+        if(pegE$.DEBUG$NEXT | ( any(with(pegE$.DEBUG$BRKPTS, (id==defName & at=='<')  ) )    )    ){
+          cat("<==Exiting Rule:", defName, "\n")
+          cat("   Rule Definiton:", pegE$.SOURCE.RULES[[defName]], "\n")
+          cat("   Status:",res$ok,"\n")
+          cat("   Consumed: '", substr(input, p, res$pos), "'\n", sep="")
+          pegE$.debug.loop()          
+        } 
+      }
+      
+      # BUT THE ACTION HAS NOT BEEN APPLIES
+      # ALTERNATIVE TO THIS WOULD BE TO PUT AT 2 PLACES, 
+      #  1. AFTER RES$OK==FALSE
+      #  2. AFTER RES$OK==TRUE AND ACTION HAS BEEN EXECUTED
       #the node should never return any thing other than a list so
 #       if(res$ok==TRUE & !list %in$ class(res$val)){
 #         stop("Value did not return a list! (Bad Action?)")
-#       }
-#       #this if statement is pointless
-#       if(length(res$val)>0 & "character" %in% class(res$val)){ #this should never happen, if val is a list!!!!
-#         mfn.mssg<-res$val[[1]]
-#         print(mfn.mssg) #!!!Why am I printing this????
 #       }
       
       # if node fails and debugging print something
       if(res$ok==FALSE){   
         if(debugging2.peg()){ print(paste(mfn.mssg,"def Rejected: Exiting def: ",sep="=> ")) }
+        # ALTERNATIVE PART 1
         return(res)
       } 
       else { #res$ok=TRUE #node succeeds
@@ -211,6 +377,7 @@ new.parser<-function(record.mode=FALSE){
             print(paste(tmp,collapse=", "))
           }
         }
+        # ALTERNATIVE PART 2
         #add the debug node here
         if(pegE$.RECORD.NODE==T){  # record is set to true         
           #get res$debug list.
@@ -362,7 +529,7 @@ new.parser<-function(record.mode=FALSE){
                }
                res$rule.id=name.id
                res
-             }, 
+             }, #end SET_RULE
              GET_RULE_TXT=function(rule.id){
                pegE$.SOURCE.RULES[[rule.id]]
              },
@@ -390,21 +557,28 @@ new.parser<-function(record.mode=FALSE){
                  tmp<-tmp[-grep("atom.",tmp)]    
                }
                tmp              
-             },
+             }, # end GET_IDS
              APPLY_RULE=function(rule.id,input.text, exe.Action=NULL, record=NULL){
+               # prep
+               #action
+               #browser()
                exe.Action<-ifelse(is.null(exe.Action), pegE$.ACTION_DEFAULT, exe.Action)
-               
+               #clear stack
                if(is.finite(pegE$.STOP_LEVEL)){
                  pegE$STACK<-data.frame()
-               }              
-               #pegE[[rule.id]](input.text)->res
+               } 
+               #recording mode
                record<-ifelse(is.null(record), pegE$.RECORD.NODE.DEFAULT, record)
                pegE$.RECORD.NODE<-record
+               #if debugging set show help menu
+               # exec
                pegE[[rule.id]](input.text, exe.Action)->res
+               # clean up
+               #if debugging show exit status
                res$Call<-list(rule.id=rule.id, arg=input.text)
                res$options<-list(exe=exe.Action, record=pegE$.RECORD.NODE )
                res
-             },
+             }, #end APPLY_RULR
              SET_STOP_LEVEL=function(limit){
                pegE$.STOP_LEVEL<-limit
                pegE$STACK<-data.frame()
@@ -419,9 +593,21 @@ new.parser<-function(record.mode=FALSE){
              SET_RECORD_DEFAULT=function(){
                pegE$.RECORD.NODE.DEFAULT=on
              },
-             GET_RULE_STRUCTURE=function(rule.id){
-            }
-             )
+             SET_DEBUG_ON=function(mode){
+               pegE$.DEBUG_ON=mode
+               if(pegE$.DEBUG_ON) {
+                 pegE$.DEBUG$BRKPTS<-data.frame(id=NA, at=NA)[numeric(0), ]
+                 pegE$.DEBUG$NEXT<-TRUE
+               }
+             },
+             GET_DEBUG_ON=function(){
+               pegE$.DEBUG_ON
+             } 
+#             ,
+#              GET_RULE_STRUCTURE=function(rule.id){
+#                #wtf?
+#             }
+    )
   #class(pegR)<-c("pegR",class(pegR))
   class(pegR)<-c("pegR")
   pegR
@@ -465,15 +651,43 @@ pexSetStopLevel<-function(pegR, stop.level.limit){
 pexUnSetStopLevel<-function(pegR){
   pegR$UNSET_STOP_LEVEL()
 }
+
+pexIsDebugging<-function(pegR){
+  pegR$GET_DEBUG_ON()
+}
+
 pexApplyRule<-function(pegR, rule.id, input.text, exe=NULL, record=NULL){
   #parser$pegE[[rule.id]](input.text, exe)->res 
-  pegR$APPLY_RULE(rule.id, input.text, exe, record)
+  #get the debug status
+  #if debugging
+  res<-NULL
+  if(pegR$pegE$.DEBUG_ON==TRUE){
+    pegR$pegE$.DEBUG$command.summary()
+    more<-TRUE
+    while(more){
+      more <-FALSE
+      withRestarts(
+       pegR$APPLY_RULE(rule.id, input.text, exe, record)->res,
+       quitDebug=function(){cat("rdb>  Rule debugger quiting!\n")},
+       restartDebug=function(){cat("Restarting:\n"); more<<-TRUE}
+      ) 
+    } 
+    cat("Debugging is terminated\n")
+  } else {
+    #else not debugging
+    pegR$APPLY_RULE(rule.id, input.text, exe, record)->res    
+  }
+  res
 }
 
 ruleStruct<-function(name, def, descript=NULL, action=NULL){
   rs<-list(name=name, def=def, com=descript, act=action )
   class(rs)<-"ruleStructure"
   rs
+}
+
+pexSetDebugOn<-function(pegR, mode){
+  pegR$SET_DEBUG_ON(mode)
 }
 
 pexGetRuleStructure<-function(pegR, rule.id){

@@ -16,6 +16,7 @@
 #' @references ParsingExpressionGrammars: A Recognition-Based Syntactic Foundation -slides
 #' \url{http://www.brynosaurus.com/pub/lang/peg-slides.pdf}
 #' @import memoise
+#' @import stringr
 #' @docType package
 #' @name pegr
 NULL
@@ -268,5 +269,13 @@ paste1<-function(v){ list(paste(v,collapse='')) }
 #add rule objects for printing, applying etc.
 #summary(pegE)
 
+#' @export
+start_rule_debugger<-function(peg){
+  pexSetDebugOn(peg, TRUE)
+}
 
-
+#' @export
+stop_rule_debugger<-function(peg){
+  pexSetDebugOn(peg, FALSE)  
+}
+  
