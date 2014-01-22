@@ -9,31 +9,8 @@
 # _____________________________________
 
 #TODO!!!
+ 
 
-
-
-# add default for changing applyAction status
-# 
-# add a debug.Mode=on (will step through the evalution of nodes)
-# When debug.Mode.on==TRUE we want
-#         break.xxx command where xxx=(+) entering, xxx=(-) exiting, xxx=(@) (both))
-#         show all breaks points 
-#         remove break point at
-#         clear all break points
-#         run (starts back at the beginning)
-#         next (go to next)
-#         continue (go till break or an end)
-#         quit (#use try catch to exit?)
-#         help
-#         
-# When entering debug.Mode we want a menu
-# When quit (or existing) add exit message
-#
-# implementation requires
-# help fn to display help
-# break locations: two types, entering and exiting 
-# goto flag: with values: next, continue
-# a small interpreter that gets commands and executes them
 
 
 
@@ -86,7 +63,8 @@ new.parser<-function(record.mode=FALSE){
         "-brk@>: delete break point at the enter point of a rule",
         "     : example -brk@> RULE.ID",
         "-brk@<: delete break point at the exit point of a rule",
-        "     : example -brk@< RULE.ID" ,       
+        "     : example -brk@< RULE.ID" , 
+        "value: display the return value (upon exiting with statusa list)",
         "q: quit the debugger",
         "r: restart debugger",
         "l: list all rule breakpoints",
@@ -96,7 +74,7 @@ new.parser<-function(record.mode=FALSE){
   ) #end of pegE$.DEBUG list
   
   #main debug loow
-  pegE$.debug.loop<-function(){  
+  pegE$.debug.loop<-function(res=NULL){  
     repeat{ #forever
       line<-str_trim(readline("Rdb>"))
       if(line==""){
@@ -163,7 +141,12 @@ new.parser<-function(record.mode=FALSE){
              },
              clr={ #clear all break points
                pegE$DEBUG$BRKPTS=data.frame(id=NA, at=NA)[numeric(0), ]
+             },
+             v=,
+             value={
+               print(res$val)
              }
+            
         ) #end of switch 
       } #end of other commands
   } #end of repeat
@@ -350,6 +333,15 @@ new.parser<-function(record.mode=FALSE){
       # if node fails and debugging print something
       if(res$ok==FALSE){   
         # ALTERNATIVE PART 1
+        if(pegE$.DEBUG_ON==TRUE){ ##THIS IS TEMPORARY
+          if(pegE$.DEBUG$NEXT | ( any(with(pegE$.DEBUG$BRKPTS, (id==defName & at=='<')  ) )    )    ){
+            cat("<==Exiting Rule:", defName, "\n")
+            cat("   Rule Definiton:", pegE$.SOURCE.RULES[[defName]], "\n")
+            cat("   Status:",res$ok," ; Rule", defName," rejected the input\n")
+            cat("   Consumed: '", substr(input, p, res$pos), "'\n", sep="")
+            pegE$.debug.loop()          
+          } 
+        }
         return(res)
       } 
       else { #res$ok=TRUE #node succeeds
@@ -363,8 +355,18 @@ new.parser<-function(record.mode=FALSE){
           #
         }
         # ALTERNATIVE PART 2
+        if(pegE$.DEBUG_ON==TRUE){ ##THIS IS TEMPORARY
+          if(pegE$.DEBUG$NEXT | ( any(with(pegE$.DEBUG$BRKPTS, (id==defName & at=='<')  ) )    )    ){
+            cat("<==Exiting Rule:", defName, "\n")
+            cat("   Rule Definiton:", pegE$.SOURCE.RULES[[defName]], "\n")
+            cat("   Status:",res$ok," ; Rule", defName," accepted the input\n")
+            #cat("   Status:",res$ok,"\n")
+            cat("   Consumed: '", substr(input, p, res$pos), "'\n", sep="")
+            pegE$.debug.loop(res)          
+          } 
+        }
         #add the debug node here
-        if(pegE$.RECORD.NODE==T){  # record is set to true         
+        if(pegE$.RECORD.NODE==TRUE){  # record is TRUE, (for tree and plot)        
           #get res$debug list.
           children<-res$debugNode
           #add new node with this list
@@ -685,4 +687,5 @@ pexGetRuleStructure<-function(pegR, rule.id){
 pexSetRecordDefault<-function(pegR, on){
   pegR$SET_RECORD_DEFAULT(on)
 }
+
 
