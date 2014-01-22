@@ -1,7 +1,10 @@
 pegr package
 ====
 
-This a ***Development Version*** of an R package for generating  a parsing expression grammars  
+This a ***Development Version*** of an R package for generating a peg parser. Peg is short for
+**parsing expression grammer**, whose specification can be found in \link{http://bford.info/pub/lang/peg}. 
+This software generates parsers based on that specification. By stay as close as possible to the 
+original specification, we hope to provide an implementation agnostic solution to parsing. 
 
 Installation
 -----
@@ -21,17 +24,27 @@ remove.packages("pegr")
 Motiation
 ------
 
-The biggest stumbling block to using pegs is writng the rules:
-* Making rules with valid PEG syntax
-* Making rules that don't hang on input
-* Making rules that recognize the input correctly
-* Making rules that respond to the input correctly
+One of the biggest issues in using a peg generator to produce a parser is getting the rules "right"."
+In particular:
+* Ensuring the rules have a valid PEG syntax
+* Ensuring the rules don't hang on a given input.
+* Ensuring the rules accept the correct input
+* Ensuring the rules perform the right actions.
 
-The prime motivation for this tool is to help overcome these stumbling blocs, by providing an easy way
-to enter and evaluate rules. Moreover, we should be able to easliy evaluate the leaf independently,
-and then combinations of those leaves, and combination of those, until the final grammar is built. Additionally,
-tools for visualizing the computations involved in the application of each rule in the grammar should be easy and 
-informative.
+The prime motivation for this tool is concentrate on the rules themselves and getting them "right" with as
+few of distractions as possible. This means that when debugging, it is the rules and not R code which should be of 
+concern. For this reason, it was decided rules should be textual, and not R code.  
+Thus the parser is built from rules entered as text.
+
+
+Features of this Tool
+-------
+*  an easy way to enter and evaluate rules. 
+*  an easy way to break down and test component rules
+*  the ability to inspect how the final evalution was obtained.
+*  the abiltiy to plot the parsing tree of an evaluation.
+*  a way to limit the depth of rule calls, and to inspect that stack when exceeded (to help detect potential hangs)
+*  a debugger specific to debugging the rules.  It allows to set breakpoints step through the execution of the rules while inspect returned by the excution of each rule. This debugger debugs the rules, not R code!
 
 Usage
 -------
@@ -45,20 +58,17 @@ We currently supply 2 approaches to usage:
 
 Design Considerations (Open for Your Input/Discussion)
 ---------
-There are at least 3 design considerations which are still open, and which I would love feedback on:
-* **peg + rule + rule** for adding rules may not be the best choice, currently considering using **peg <= rule <= rule** as a replacement
-* **peg\[rule.id](input.txt)** violates the usual usage of \[] in R. ([] returns an attachedRule object, not a Peg, and this [] does not vectors of rule.ids greater than length 1) A more proper version would be to ues **peg\[\[rule.id]](text.input)**. But this is messier and perhaps less intuitive. Also matrices violate the return type rule, so maybe this isn't so bad.
+There are a couple of design considerations which are still open, and which I would love feedback on:
+* **peg + rule + rule** for adding rules may not be the best choice of operator
 * pegs are really environments with wrappers, so the usual copy doesnot work. I will probably change this.
 
 What's Needed
 -------
 
-Some obvious  inprovements to consider:
-*  More  and more examples
-*  A better user guide (in addition to the vignette)
-*  Cleaner code with a cleaner interface
+Some obvious  improvements to consider:
+*  More and more examples
+*  Enhancing the tutorial
 *  Reading and writing peg rules to file. 
-*  Detection of rules producing infinite recursion
 *  Profiling and replacing R functions with C code
 
 
