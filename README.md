@@ -2,7 +2,7 @@ pegr package
 ====
 
 This a ***Development Version*** of an R package for generating a peg parser. Peg is short for
-**parsing expression grammer**, whose specification can be found in \link{http://bford.info/pub/lang/peg}. 
+**parsing expression grammer**, whose specification can be found at http://bford.info/pub/lang/peg. 
 This software generates parsers based on that specification. By stay as close as possible to the 
 original specification, we hope to provide an implementation agnostic solution to parsing. 
 
@@ -45,8 +45,8 @@ Features of this Tool
     *  check  and test component rules
 *  Easy inspection of the evaluation tree with the **tree** command. Provides a textual representation of how the final evalution was obtained.
 *  Graphing the evalutation tree with the **plot** command. 
-*  A way to limit the depth of rule calls, and to inspect that stack when exceeded (to help detect potential hangs)
-*  **A  specialized rule debugger** to ease the effort of debugging rule logic.  The debugger allows one to inpsect all rules in the order in which they applied to the input: both when the rule is entered and exited. This allows one to inspect return status (whether or not the rule accepts the input), the text consumed, and any values produced by the rule.  ***The rule debugger is for debugging  logic of the set of rules, not R code!***
+*  A way to limit the depth of calls to rules by using the **set_rule_stack_limit** command, and then by using **get_rule_stack**, the stack may be inspected whenever the limit is exceeded (This is to help detect the source of  hangning due to infinite recursion)
+*  **A  specialized rule debugger** to ease the effort of debugging rule logic.  The debugger allows one to inpsect all rules in the order in which they applied to the input: both when the rule is entered and exited. This allows one to inspect return status (whether or not the rule accepts the input), the text consumed, and any values produced by the rule.  ***The rule debugger is for debugging the RULE SET LOGIC, not R code!***
 
 Usage
 -------
@@ -55,6 +55,7 @@ Usage is described in the vignette.   In addition to the examples contained in h
 there are several demos that may provide additional insight.
 
 We currently supply 2 approaches to usage:
+
 1. Traditional form: commands of the form 
    * **add_rule(peg, rule, ...)** : *adds (attaches) a rule to the peg*
    * **apply_rule(peg, rule.id, input.txt, ...)**  : *applys an attached rule to the input text*
