@@ -5,8 +5,6 @@ library(testthat)
 #print("test 1")
 pegE<-new.env()
 pegE$.RECORD.NODE<-F
-DEVEL.DEBUG<-FALSE
-pegE$DEVEL.DEBUG<-FALSE
 
 #source("sComponents.r")
 include.sComponents(pegE)

@@ -34,9 +34,6 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
      envS$s.sequence<-function(...){ 
        lf<-list(...)
        h<-function(input, exe=TRUE,  p=1){  
-         if(envS$DEVEL.DEBUG){
-           cat("sequence: input=",input," p=",p,"\n") ###good for debugging      
-         } 
          mn<-0
          val=list()
          if(pegE$.RECORD.NODE==T){ #create a container for a list of debug nodes of the children
@@ -78,9 +75,6 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
      envS$s.first<-function(...){ #(f > g) or
        lf<-list(...)
        h<-function(input, exe=TRUE,  p=1){  
-         if(envS$DEVEL.DEBUG){
-           cat("first: input=",input," p=",p,"\n") ###good for debugging      
-         } 
          val=list()
          for(f in lf){
            if("peg.name" %in% class(f)){ if(exists(f,envir=pegE)){ f<-get(f,envir=pegE)}}
@@ -107,9 +101,6 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
      
      envS$s.not<-function(f){ #not before
        h<-function(input, exe=TRUE,  p=1){ #not before
-         if(envS$DEVEL.DEBUG){
-           cat("negate: input=",input," p=",p,"\n") ###good for debugging      
-         }    
          exe<-FALSE #lookahead does not exe
          
          # grab

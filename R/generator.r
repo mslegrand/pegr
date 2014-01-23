@@ -91,7 +91,6 @@ new.parser<-function(record.mode=FALSE){
         #repeat the  last command (n or c)
         return()
       }
-      #browser()
       tolower(line)->cmd
       #convert cmd to lower
       if(grepl("^[+-]brk@", cmd)){ #break
@@ -127,20 +126,19 @@ new.parser<-function(record.mode=FALSE){
                pegE$.DEBUG$NEXT<-TRUE
                break #exit from loop
              },
-             q=,
+             q=, #"bail"
              quit={ 
                invokeRestart("quitDebug")
              },
-             r={
+             r={ #run from the beginning
                invokeRestart("restartDebug")
              },
-             h=,
+             h=, #display help
              help={ 
                pegE$.DEBUG$command.detail() 
              },
-             l=,
+             l=, #prings all break points
              list={
-               #ll<-subset(ll, ll$id!=NA)
                cat("PEG Breakpoint Listing:\n")
                if(nrow(pegE$.DEBUG$BRKPTS)>0){
                  ll<-pegE$.DEBUG$BRKPTS[with(pegE$.DEBUG$BRKPTS, order(id,at)),]
@@ -152,7 +150,7 @@ new.parser<-function(record.mode=FALSE){
              clr={ #clear all break points
                pegE$DEBUG$BRKPTS=data.frame(id=NA, at=NA)[numeric(0), ]
              },
-             v=,
+             v=, #prints the value list
              value={
                print(res$val)
              }
@@ -162,8 +160,7 @@ new.parser<-function(record.mode=FALSE){
   } #end of repeat
 } #end of loop
   
-  DEVEL.DEBUG<-FALSE
-  
+ 
   #' Combines IDENTIFIER , LEFTARROW , EXPRESSION , opt.01(EXEC) to make a rule
   #' definition.Node is essentially the same as sequence except for when res$ok==FALSE
   #' Used in generator rule DEFINITION only
@@ -171,10 +168,6 @@ new.parser<-function(record.mode=FALSE){
   definition.Node<-function(...){ #!!!maybe we should rename this to definitionNode
     lf<-list(...) # consists of IDENTIFIER , LEFTARROW , EXPRESSION , opt.01(EXEC)
     h<-function(input, exe=TRUE,  p=1){  
-      if(DEVEL.DEBUG){
-        cat("sequenceN: full input=\n",input,"\n p=",p,"\n") ###good for debugging      
-        cat("sequenceN: considering input=\n",substr(input,p,length(input)),"\n p=",p,"\n") ###good for debugging      
-      } 
       mn<-0
       val=list()
       if(pegE$.RECORD.NODE==TRUE){ 
@@ -192,9 +185,6 @@ new.parser<-function(record.mode=FALSE){
           d.node<-c(d.node, res$debugNode) #!!!
         }     
       }
-      if(DEVEL.DEBUG){
-        cat("sequenceN: captured input=\n",substr(input,p,p+mn),"\n p=",p,"\n") ###good for debugging      
-      } 
       res<-list(ok=TRUE, pos=mn, val=val)
       if(pegE$.RECORD.NODE==TRUE){
 #         defDiscription<-substr(input,p, p+mn) #!!!!we add the rule description here so that the debugger can use it later: this includes rule and action text   
@@ -376,7 +366,6 @@ new.parser<-function(record.mode=FALSE){
   create<-function(pegE){
     #we source here so that pegE we use the pegE argument from generator (and not a global pegE)
     #source("sComponents.r", local=TRUE)
-    DEVEL.DEBUG<-FALSE
     include.sComponents(pegE)
     include.sConnectives(pegE)
     include.gConnectives(pegE)

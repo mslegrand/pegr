@@ -40,17 +40,6 @@
 
 include.sComponents<-function(pegE, envS=parent.frame() ){
   
-  DEVEL.DEBUG<-envS$DEVEL.DEBUG # this will be a problem in the future!!!
-  
-  
-  
-#   envS$debuggin.peg<-function(){
-#     #   return(TRUE)
-#     return(exists("PEG.DEBUG.L1", envir=env)) 
-#   }
-  
-    
-  
   envS$s.range<-function(begChar,endChar){
     h<-function(input, exe=TRUE,  p=1){
       theChar<-substring(input,p,p)
@@ -69,9 +58,6 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   }
   
   envS$s.dot<-function(input, exe=TRUE,  p=1){
-    if(envS$DEVEL.DEBUG){
-      cat("s.dot"," input=",input," p=",p,"\n") ###good for debugging      
-    }    
     if(p>nchar(input)){
       return(list(ok=FALSE, pos=0, val=list("") ) )
     }
@@ -83,9 +69,6 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   envS$s.atom<-function(x){ # (x) terminal symbol 
     h<-function(input, exe=TRUE,  p=1){
       n<-nchar(x)-1 #for example if x=='a', then nchar('a')==1, so n=0
-      if(envS$DEVEL.DEBUG){
-        cat("atom.",x," input=",input," p=",p,"\n") ###good for debugging      
-      }    
       if( substring(input,p,p+n)==x){
         val=list(atom=x)
         return( list(ok=TRUE,pos=n+1, val=val  ) ) #and if x='a' then pos=1

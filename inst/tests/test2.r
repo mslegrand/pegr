@@ -3,7 +3,6 @@ library(stringr)
 #print("test 2")
 pegE<-new.env()
 pegE$.RECORD.NODE<-FALSE
-DEVEL.DEBUG<-FALSE
 
 include.sComponents()
 include.sComponents(pegE)

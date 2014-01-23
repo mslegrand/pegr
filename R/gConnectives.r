@@ -7,13 +7,9 @@ include.gConnectives<-function(pegE, envG=parent.frame() ){
   # '<.pe'
   
   
-  DEVEL.DEBUG<-envG$DEVEL.DEBUG
   
   envG$"/.pe"<-function(f,g){ #(f / g) prioritized choice
     h<-function(input, exe=TRUE,  p=1){
-      if(DEVEL.DEBUG){
-        cat("disjuction: input=",input," p=",p,"\n") ###good for debugging      
-      }    
       if("peg.name" %in% class(f)){ if(exists(f,envir=pegE)){ f<-get(f,envir=pegE)}}
       res1<-f(input, exe,  p)
       if(res1$ok){
@@ -36,14 +32,9 @@ include.gConnectives<-function(pegE, envG=parent.frame() ){
   envG$"+.pe"<-function(f,g){ #(f > g) sequence
     h<-function(input, exe=TRUE,  p=1){
       mn<-0
-      if(DEVEL.DEBUG){
-        cat("conjuction: input=",input," p=",p,"\n") ###good for debugging      
-      }
-      #f<-get.fn(f)
       if("peg.name" %in% class(f)){ if(exists(f,envir=pegE)){ f<-get(f,envir=pegE)}}   
       res1<-f(input, exe,  p)
       if(res1$ok){
-        #g<-get.fn(g)
         if("peg.name" %in% class(g)){ if(exists(g,envir=pegE)){ g<-get(g,envir=pegE)}}
         res2<-g(input,  exe, p+res1$pos)
         if(res2$ok){
@@ -100,32 +91,11 @@ include.gConnectives<-function(pegE, envG=parent.frame() ){
         mfm.mssg<-res$val[[1]]
       }
       if(res$ok==FALSE){   
-        if(DEVEL.DEBUG){ 
-          print(paste("Generator: ",mfn.mssg," Node Rejected: Exiting node: ",sep="=> ")) 
-          print(res$val)
-        }
         return(res)
       } else { #res$ok=TRUE
-        if(DEVEL.DEBUG){
-          pp<-p+res$pos
-          cat("      pp=",pp,"  :\n")
-          print(paste(mfn.mssg, "node value:", sep="=>"))
-          tmp<-unlist(res$val)
-          cat("      ")
-          print(paste(tmp,collapse=", "))
-        }    
         if(exe==TRUE  & !is.null(mfn.fn)){
           res$val<-mfn.fn(res$val)
-          if( DEVEL.DEBUG ){
-            print(paste(mfn.mssg, "action value:", sep="=>"))
-            tmp<-unlist(res$val)
-            cat("      ")
-            print(paste(tmp,collapse=", "))
-          }
         }
-        if( DEVEL.DEBUG ){
-          print(paste(mfn.mssg, "Node Succeeded: Exiting node:", sep="=>"))
-        }   
       }
       res
     }

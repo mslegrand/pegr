@@ -5,7 +5,6 @@ library(stringr)
 #source("literal.r")
 pegE<-new.env()
 pegE$.RECORD.NODE<-FALSE
-DEVEL.DEBUG<-FALSE
 include.sComponents(pegE)
 include.literal(pegE)
 
