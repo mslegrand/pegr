@@ -47,30 +47,30 @@ test_that("RULE_IDS",
 test_that("QR",
 {
   # A simple choice operator
-  expect_equal(value(qp("'a' / 'b'", "ab")), list(atom="a"))
+  expect_equal(value(qp("'a' / 'b'")( "ab")), list(atom="a"))
   # A simple sequence operator
-  expect_equal(value(qp("'a' 'b'", "ab")), list(atom="a", atom="b"))
+  expect_equal(value(qp("'a' 'b'")( "ab")), list(atom="a", atom="b"))
   # A combination of choice and sequence
-  expect_equal(value(qp("('a'/'c') ('b' / 'd')", "ab")), list(atom="a", atom="b"))
-  qp("('a'/'c') ('b' / 'd')", "ab")
-  expect_equal(value(qp("('a'/'c') ('b' / 'd')", "cd")), list(atom="c", atom="d"))
+  expect_equal(value(qp("('a'/'c') ('b' / 'd')")( "ab")), list(atom="a", atom="b"))
+  qp("('a'/'c') ('b' / 'd')")( "ab")
+  expect_equal(value(qp("('a'/'c') ('b' / 'd')")( "cd")), list(atom="c", atom="d"))
   # A lookahead not operator
-  expect_equal(status(qp("'a' !'b'", "ab" )), FALSE)
+  expect_equal(status(qp("'a' !'b'")( "ab" )), FALSE)
   # A lookahead not operator
-  expect_equal(status(qp("'a' !'b'", "ac" )), TRUE)
-  expect_equal(value(qp("'a' !'b'", "ac" )), list(atom="a"))
+  expect_equal(status(qp("'a' !'b'")( "ac" )), TRUE)
+  expect_equal(value(qp("'a' !'b'")( "ac" )), list(atom="a"))
   # An lookahead and operator
-  expect_equal(status(qp("'a' & 'b'", "ab")), TRUE)
-  expect_equal(value(qp("'a' & 'b'", "ab")), list(atom="a"))
-  expect_equal(status(qp("'a' & 'b'", "ac")), FALSE)
+  expect_equal(status(qp("'a' & 'b'")( "ab")), TRUE)
+  expect_equal(value(qp("'a' & 'b'")( "ab")), list(atom="a"))
+  expect_equal(status(qp("'a' & 'b'")( "ac")), FALSE)
   # An optional operator
-  expect_equal(status(qp("'a' 'b'?", "ab")), TRUE)
-  expect_equal(value(qp("'a' 'b'?", "ab")), list(atom="a", atom="b"))
-  expect_equal(status(qp("'a' 'b'?", "ab")), TRUE)
-  expect_equal(value(qp("'a' 'b'?", "ac")), list(atom="a"))
-  expect_equal(status(qp("'a'? 'b'", "ab")), TRUE)
-  expect_equal(value(qp("'a'? 'b'", "ab")), list(atom="a", atom="b"))
-  expect_equal(status(qp("'a'? 'b'", "ba")), TRUE)
-  expect_equal(value(qp("'a'? 'b'", "ba")), list( atom="b")) 
+  expect_equal(status(qp("'a' 'b'?")( "ab")), TRUE)
+  expect_equal(value(qp("'a' 'b'?")( "ab")), list(atom="a", atom="b"))
+  expect_equal(status(qp("'a' 'b'?")( "ab")), TRUE)
+  expect_equal(value(qp("'a' 'b'?")( "ac")), list(atom="a"))
+  expect_equal(status(qp("'a'? 'b'")( "ab")), TRUE)
+  expect_equal(value(qp("'a'? 'b'")( "ab")), list(atom="a", atom="b"))
+  expect_equal(status(qp("'a'? 'b'")( "ba")), TRUE)
+  expect_equal(value(qp("'a'? 'b'")( "ba")), list( atom="b")) 
 })
 
