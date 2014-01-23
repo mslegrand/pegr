@@ -7,31 +7,33 @@
 #' @return PEGResult, an object giving the result
 #' @examples
 #' # A simple choice operator
-#' qp("'a' / 'b'", "ab")
+#' qp("'a' / 'b'")( "ab")
 #' # A simple sequence operator
-#' qp("'a' 'b'", "ab")
+#' qp("'a' 'b'")( "ab")
 #' # A combination of choice and sequence
-#' qp("('a'/'c') ('b' / 'd')", "ab")
-#' qp("('a'/'c') ('b' / 'd')", "cd")
+#' qp("('a'/'c') ('b' / 'd')")( "ab")
+#' qp("('a'/'c') ('b' / 'd')")( "cd")
 #' # A lookahead not operator
-#' qp("'a' !'b'", "ab" )
-#' qp("'a' !'b'", "ac" )
+#' qp("'a' !'b'")( "ab" )
+#' qp("'a' !'b'")( "ac" )
 #' # An lookahead and operator
-#' qp("'a' & 'b'", "ab")
-#' qp("'a' & 'b'", "ac")
+#' qp("'a' & 'b'")( "ab")
+#' qp("'a' & 'b'")( "ac")
 #' # An optional operator
-#' qp("'a' 'b'?", "ab")
-#' qp("'a' 'b'?", "ac")
-#' qp("'a'? 'b'", "ab")
-#' qp("'a'? 'b'", "ba")
+#' qp("'a' 'b'?")( "ab")
+#' qp("'a' 'b'?")( "ac")
+#' qp("'a'? 'b'")( "ab")
+#' qp("'a'? 'b'")( "ba")
 #' @export
-qp<-function(p.expression, text.input, record=TRUE){
-  if(!("character" %in% class(text.input))){
-    stop("qp is the missing text.input", call.=FALSE)
+qp<-function(p.expression, record=TRUE){
+  function(text.input){
+    if(!("character" %in% class(text.input))){
+      stop("qp is the missing text.input", call.=FALSE)
+    }
+    peg<-new.parser()
+    add_rule(peg, paste("R<-", p.expression))->res
+    apply_rule(peg, 'R', text.input, record)->res
+    res$Call$rule.id<-"Anonomous"
+    return(res)    
   }
-  peg<-new.parser()
-  add_rule(peg, paste("R<-", p.expression))->res
-  apply_rule(peg, 'R', text.input, record)->res
-  res$Call$rule.id<-"Anonomous"
-  return(res)
 }

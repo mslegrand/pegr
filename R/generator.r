@@ -45,7 +45,7 @@ new.parser<-function(record.mode=FALSE){
   pegE$.DEBUG<-list(
     NEXT=TRUE,           #TRUE is next, FALSE is continue
     BRKPTS=data.frame(id=NA, at=NA)[numeric(0), ],
-    command.summary=function(){cat("Rdbg> Commands: h, n, c, clr, +brk@, -brk@, Q, r, l\n")},
+    command.summary=function(){cat("Rdb> Commands: h, n, c, clr, +brk@, -brk@, Q, r, l\n")},
     command.detail=function(){
       cat(
         "Command Summary",
