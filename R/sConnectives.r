@@ -66,10 +66,11 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
            return(list(ok=TRUE, pos=mn, val=val))      
          }    
        }
-       class(h)<-c("pe",class(h))
-       h
-       #   fn<-memoize(h)
-       #   fn
+#        class(h)<-c("pe",class(h))
+#        h
+       fn<-memoize(h)
+       class(fn)<-c("pe",class(fn))
+       fn
      }
      
      ###
@@ -96,10 +97,11 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
          }
          return(list(ok=FALSE, pos=0, val=list() ))
        }
-       class(h)<-c("pe",class(h))
-       h
-       #   fn<-memoize(h)
-       #   fn
+#        class(h)<-c("pe",class(h))
+#        h
+       fn<-memoize(h)
+       class(fn)<-c("pe",class(fn))
+       fn
      }
      
      
@@ -123,10 +125,11 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
            return(list(ok=TRUE,pos=0, val=list() ))
          }
        }
-       class(h)<-c("pe",class(h))
-       h
-       #   fn<-memoize(h)
-       #   fn
+#        class(h)<-c("pe",class(h))
+#        h
+       fn<-memoize(h)
+       class(fn)<-c("pe",class(fn))
+       fn
      }
   
     envS$s.and<-function(f){ # f* :lookahead or "and" or &
@@ -147,10 +150,11 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
         }
         return(list(ok=FALSE,pos=0, val=list() ))
       }  
-      class(h)<-c("pe",class(h))
-      h
-      #   fn<-memoize(h)
-      #   fn
+#       class(h)<-c("pe",class(h))
+#       h
+      fn<-memoize(h)
+      class(fn)<-c("pe",class(fn))
+      fn
     }
      
      envS$opt.01<-function(f){ # [f] (optional: one possible occurance of f)
@@ -169,10 +173,11 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
          }
          return(list(ok=TRUE,pos=0,val=list() ))
        }  
-       class(h)<-c("pe",class(h))
-       h
-       #   fn<-memoize(h)
-       #   fn
+#        class(h)<-c("pe",class(h))
+#        h
+       fn<-memoize(h)
+       class(fn)<-c("pe",class(fn))
+       fn
      } 
      
      envS$opt.0x<-function(f){ # f* :zero more repititions
@@ -207,10 +212,11 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
            return(list(ok=TRUE, pos=m, val=val))      
          }    
        }  
-       class(h)<-c("pe",class(h))
-       h
-       #   fn<-memoize(h)
-       #   fn
+#        class(h)<-c("pe",class(h))
+#        h
+       fn<-memoize(h)
+       class(fn)<-c("pe",class(fn))
+       fn
      }
      
      
@@ -236,10 +242,11 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
          }
          return(list(ok=FALSE,pos=0, pos=list() ))
        }  
-       class(h)<-c("pe",class(h))
-       h
-       #   fn<-memoize(h)
-       #   fn
+#        class(h)<-c("pe",class(h))
+#        h
+       fn<-memoize(h)
+       class(fn)<-c("pe",class(fn))
+       fn
      }
      
 

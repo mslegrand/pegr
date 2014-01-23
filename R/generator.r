@@ -242,10 +242,11 @@ new.parser<-function(record.mode=FALSE){
       #       return(list(ok=TRUE, pos=mn, val=val))      
       #     }    
     }
-    class(h)<-c("pe",class(h))
-    h
-    #   fn<-memoize(h)
-    #   fn
+#     class(h)<-c("pe",class(h))
+#     h
+    fn<-memoize(h)
+    class(fn)<-c("pe",class(fn))
+    fn
   }
   #___________________________________
     

@@ -61,10 +61,11 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
         return(list(ok=FALSE,pos=0))
       }
     }
-    class(h)<-c("pa", "pe",class(h))
-    h
-    #   fn<-memoize(h)
-    #   fn  
+#     class(h)<-c("pa", "pe",class(h))
+#     h
+    fn<-memoize(h)
+    class(fn)<-c("pa", "pe",class(fn))
+    fn  
   }
   
   envS$s.dot<-function(input, exe=TRUE,  p=1){
@@ -92,11 +93,11 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
         return(list(ok=FALSE,pos=0))
       }
     }
-    class(h)<-c("pa", "pe",class(h))
-    
-    h
-    #   fn<-memoize(h)
-    #   fn
+#     class(h)<-c("pa", "pe",class(h))    
+#     h
+    fn<-memoize(h)
+    class(fn)<-c("pa", "pe",class(fn))
+    fn
   }
   
     

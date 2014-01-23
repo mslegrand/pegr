@@ -26,10 +26,11 @@ include.gConnectives<-function(pegE, envG=parent.frame() ){
       } else
         return(list(ok=FALSE, pos=0, val=list() ))
     }
-    class(h)<-c("pe",class(h))
-    h
-    #   fn<-memoize(h)
-    #   fn
+#      class(h)<-c("pe",class(h))
+#      h
+    fn<-memoize(h)
+    class(fn)<-c("pe",class(fn))
+    fn
   }
   
   envG$"+.pe"<-function(f,g){ #(f > g) sequence
@@ -60,10 +61,11 @@ include.gConnectives<-function(pegE, envG=parent.frame() ){
       }
       return(list(ok=FALSE,pos=0, val=list() ))
     }
-    class(h)<-c("pe",class(h))
-    h
-    #   fn<-memoize(h)
-    #   fn
+#     class(h)<-c("pe",class(h))
+#     h
+    fn<-memoize(h)
+    class(fn)<-c("pe",class(fn))
+    fn
   }
   
   #'Used by generator to parse the user peg. 
