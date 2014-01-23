@@ -12,7 +12,7 @@
 #'   @note for readability, quotes are left out when printing the list.
 #' @export
 print.PEGResult<-function(res){
-  if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")} 
+  if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result", call. = FALSE)} 
   odt<-res$options$record
   oex<-res$options$exe
   tmp<-c("; Options: ",": record=", res$options$record, ": exe=", res$options$exe)

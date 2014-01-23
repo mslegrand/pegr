@@ -20,6 +20,6 @@
 #' See also 
 #' @export
 status<-function(res){
-  if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")} 
+  if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result", call. = FALSE)} 
   res$ok
 }

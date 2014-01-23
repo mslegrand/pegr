@@ -20,8 +20,8 @@
 #' value(apply_rule(peg, 'A', 'b', exe=TRUE))
 #' @export
 set_rule<-function(parser, rule){
-  if( !( "pegR" %in% class(parser) ) ){ stop("first argument not a parser") }  
-  if( !( "character" %in% class(rule))){ stop("Second argument is not a rule")}
+  if( !( "pegR" %in% class(parser) ) ){ stop("first argument not a parser", call. = FALSE) }  
+  if( !( "character" %in% class(rule))){ stop("Second argument is not a rule", call. = FALSE)}
   #add check for existing rule
   #res<-parser$DEFINITION(rule) 
 #   res<-parser$DEFINITION(parser$pegE, rule) 
@@ -62,16 +62,16 @@ set_rule<-function(parser, rule){
    #cat("hello/n")
    arg<-value
   if( is.null(rule.id) | !(rule.id %in% rule_ids(parser) )){
-    stop("invalid rule id")
+    stop("invalid rule id", call. = FALSE)
   }
   if( length(rule.id)!=1 ){
-    stop("The index must contain exactly one rule")
+    stop("The index must contain exactly one rule", call. = FALSE)
   }
   if( is.null(arg) ) {
     stop("NULL assignment not yet implemented") #TODO!!! inplement as delete
   }
   if( !("character" %in% class(arg)) & !( "list" %in% class(arg))){
-    stop("Bad Rule assignment")
+    stop("Bad Rule assignment", call. = FALSE)
   }
   if( is.null(names(arg) ) ){
     nR<-"rule"
@@ -92,7 +92,7 @@ set_rule<-function(parser, rule){
     name<-strsplit(rule,"<-")[[1]][1]
     name <- gsub("^\\s+|\\s+$", "", name)
     if(name!=rule.id){
-      stop("Rule does not match rule.id!")
+      stop("Rule does not match rule.id!", call. = FALSE)
     }
     #set_rule(parser, arg.L$rule)
     pexSetRule(parser, rule)

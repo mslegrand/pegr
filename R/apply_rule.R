@@ -33,15 +33,15 @@
 #' demo/distConv.R
 #' @export
 apply_rule<-function(parser, rule.id, input.text, exe=NULL, record=NULL){
-  if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser")}  
-  if( !( rule.id %in% rule_ids(parser) ) ){stop("cannot parse: invalid rule identifier")}
+  if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser", call. = FALSE)}  
+  if( !( rule.id %in% rule_ids(parser) ) ){stop("cannot parse: invalid rule identifier", call. = FALSE)}
   #parser$pegE$.RECORD.NODE<-record
   #parser$pegE[[rule.id]](input.text, exe)->res
   pexApplyRule(parser, rule.id, input.text, exe, record)->res
   if(pexIsDebugging(parser)){
     return(invisible(NULL)) 
   }
-  if(!"list" %in% (class(res)) ){ stop("Bad Action Rule: resulting value is not a list")}
+  if(!"list" %in% (class(res)) ){ stop("Bad Action Rule: resulting value is not a list", call. = FALSE)}
   class(res)<-c("PEGResult")
   res
 }
@@ -66,10 +66,10 @@ apply_rule<-function(parser, rule.id, input.text, exe=NULL, record=NULL){
 #' 
 #' @export
 "[[.pegR"<-function(parser, rule.id){
-  if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser")}  
+  if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser", call. = FALSE)}  
   #to return a attached rule (i hope)
   if(!("character" %in% class(rule.id))){
-    stop("second argument is not a string")
+    stop("second argument is not a string", call. = FALSE)
   }
   if( rule.id %in% rule_ids(parser)){ #return an attached rule
     ar<-function(...){

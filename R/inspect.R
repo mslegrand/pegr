@@ -15,7 +15,7 @@
 #' inspect_rule(peg, "DOG")
 #' @export
 inspect_rule<-function(peg, rule.id){
-  if( !( "pegR" %in% class(peg) ) ){ stop("first argument not a parser") }   
+  if( !( "pegR" %in% class(peg) ) ){ stop("first argument not a parser", call. = FALSE) }   
   rs<-pexGetRuleStructure(peg, rule.id)
   rs
 }

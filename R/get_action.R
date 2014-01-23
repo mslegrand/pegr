@@ -26,12 +26,12 @@
 #' get_action(peg, "R")
 #' @export
 get_action<-function(pegR, rule.id){
-  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
+  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser", call. = FALSE)}  
   if( rule.id %in% rule_ids(pegR)){
     #actionTxt<-pegR$pegE$.ACTION_NAMES[[rule.id]]  
     actionTxt<-pexGetActionInfo(pegR, rule.id)
   } else {
-    stop("cannot get action: invalid rule identifier")
+    stop("cannot get action: invalid rule identifier", call. = FALSE)
   }
   actionTxt
 }

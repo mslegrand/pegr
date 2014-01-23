@@ -33,7 +33,7 @@
 set_action<-function(pegR, rule.id, action){
   #TODO:  ( expression?)
   #TODO: refactor using switch?
-  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
+  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser", call. = FALSE)}  
   if( rule.id %in% rule_ids(pegR)){
     if(class(action)=="character"){
       
@@ -56,10 +56,10 @@ set_action<-function(pegR, rule.id, action){
       pexSetActionInfo(pegR, rule.id, NULL)
     }
     else {
-      stop("cannot set action: invalid action")
+      stop("cannot set action: invalid action", call. = FALSE)
     }   
   } else {
-    stop("cannot set action: invalid rule identifier")
+    stop("cannot set action: invalid rule identifier", call. = FALSE)
   }
   invisible(TRUE)
 }

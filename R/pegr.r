@@ -32,13 +32,13 @@ NULL
 #' @param description, a text string describing the rule
 #' @export
 set_description<-function(pegR, rule.id, description){
-  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
+  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser", call. = FALSE)}  
   if( rule.id %in% rule_ids(pegR)){
     #pegR$SET_DESCRIPTION(rule.id, description)
     pexSetDescription(pegR, rule.id, description)
     invisible(TRUE)
   } else {
-    stop("cannot set description: invalid rule identifier")
+    stop("cannot set description: invalid rule identifier", call. = FALSE)
   }
 }
 
@@ -52,13 +52,13 @@ set_description<-function(pegR, rule.id, description){
 #' @return description, a character string describing the parser
 #' @export
 get_description<-function(pegR, rule.id){
-  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
+  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser", call. = FALSE)}  
   if( rule.id %in% rule_ids(pegR)){
     #description<-pegR$GET_DESCRIPTION( rule.id)
     description<-pexGetDescription(pegR, rule.id)
     return(description)
   } else {
-    stop("cannot get description: invalid rule identifier")
+    stop("cannot get description: invalid rule identifier", call. = FALSE)
   }  
 }
 
@@ -69,7 +69,7 @@ get_description<-function(pegR, rule.id){
 #' @export
 delete_rule<-function(pegR, rule.id){
   #delete rule 
-  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser")}  
+  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser", call. = FALSE)}  
   pegR$pegE$.SOURCE.RULES[[rule.id]]<-NULL
   pegR$pegE$.ACTION[[rule.id]]<-NULL
   pegR$pegE$.RULE_DESCRIPT[[rule.id]]<-NULL
@@ -96,7 +96,7 @@ rule_source<-function(parser, rule.id){
 #' @export
 print.pegR<-function(parser){
   #list the rules in this peg
-  if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser")}  
+  if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser", call. = FALSE)}  
   for(name in rule_ids(parser)){
     rs<-inspect_rule(parser, name)
     cat("\n")
@@ -128,7 +128,7 @@ print.ruleStructure<-function(rs){
 #' Summarizes a parsing result
 #' @export
 summary.PEGResult<-function(res){
-  if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result")}
+  if(!("PEGResult" %in% class(res))){ stop("Argument not a peg parsing result", call. = FALSE)}
   s<-list(
   Call=paste0(res$Call$rule.id, "(" ,res$Call$arg, ")" ),
   Options=paste("Options:", "Apply Actions=",res$options$exe,"Make Tree=",res$options$record,""),

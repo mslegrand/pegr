@@ -30,14 +30,14 @@
 #' inspect_rule(peg,"X")
 #' @export
 add_rule<-function(parser, rule, des=NULL, act=NULL){
-  if( !( "pegR" %in% class(parser) ) ){ stop("first argument not a parser") }
+  if( !( "pegR" %in% class(parser) ) ){ stop("first argument not a parser", call. = FALSE) }
   if(!("character" %in% class(rule))){
-    stop("second argument is not a character string")
+    stop("second argument is not a character string", call. = FALSE)
   }
   pos<-badQuotePos(rule)
   if(pos>0){
     msg<-paste("Unbalance quotes at:", substr(rule, 1, pos))
-    stop(msg)
+    stop(msg, call. = FALSE)
   }
   #res<-parser$DEFINITION( rule ) 
   res<-parser$SET_RULE( rule )
@@ -83,13 +83,13 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
   #
   #use "{}" for act; use "#" for comment, use  =.. <- for rule
   if(is.null(arg)){
-    stop("arg is null")
+    stop("arg is null", call. = FALSE)
   } else {
     cmd<-arg2list(arg)
     res<-add_rule(parser, cmd$rule, des=cmd$des, act=cmd$act)
     if(res$parsed!=cmd$rule){
       delete_rule(parser, res$rule.id )
-      stop(paste("Partial Processed:", res$rule.id ))
+      stop(paste("Partial Processed:", res$rule.id ), call. = FALSE)
     }
   }
   invisible(parser)
@@ -97,7 +97,7 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
 
 arg2list<-function(arg){
   if( !("character" %in% class(arg)) & !( "list" %in% class(arg))){
-    stop("NULL encountered")
+    stop("NULL encountered", call. = FALSE)
   }
   if( is.null(names(arg))){
     nm<-"rule"

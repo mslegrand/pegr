@@ -32,14 +32,14 @@
 plot.PEGResult<-function(res, shadow=TRUE, show="names", bg = ifelse(match(par("bg"), "transparent", 0), "white", par("bg")), border = TRUE, xpad = 1.0, ypad = 2.5, 
                          cex = 1,  adj = 0.5, ...){
   if( is.null(res$debugNode) ){
-    stop("Tree option not set, rerun parse with option record=True")
+    stop("Tree option not set, rerun parse with option record=True", call. = FALSE)
   }
   if("rules" %in% show){
     show<-c("names", show)
   }
   show.opts<-c("all","names","args","vals", "rules")
   if(!(any(show %in% show.opts))){
-    stop("plot error: value of show must contain one or more of 'rules', 'names', 'args', 'vals', 'all'")
+    stop("plot error: value of show must contain one or more of 'rules', 'names', 'args', 'vals', 'all'", call. = FALSE)
   }
   boxHeight.scale.factor<-.7
   if( any(show.opts[show.opts!="names"] %in% show )){ #anything except names will grow

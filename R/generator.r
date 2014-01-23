@@ -424,8 +424,9 @@ new.parser<-function(record.mode=FALSE){
     PREFIX <- opt.01(AND / NOT) + SUFFIX < list("PREFIX", function(v){ fn<-mk.prefix(v); list(pre=fn) } )
     SEQUENCE <- opt.0x(PREFIX) < list("SEQ",function(v){ 
       if(!("list" %in% class(v))){
+        cat("ERROR: EXPECTING A LIST, GOT INSTEAD")
         print(v)
-        stop("bad rule syntax")
+        stop("BAD ACTION: RETURN MUST BE A LIST", call. = FALSE)
       }
       fn<-do.call(s.sequence, v); list(seq=fn)}) 
     EXPRESSION <- SEQUENCE + opt.0x(SLASH + SEQUENCE) < list("EXPRESSION", function(v){fn<-do.call(s.first,v); list(exp=fn)})
@@ -472,7 +473,7 @@ new.parser<-function(record.mode=FALSE){
                  name.id <- gsub("^\\s+|\\s+$", "", name.id)
                  pegE$.SOURCE.RULES[[name.id]]<-ruleDef   
                } else {
-                 stop(paste("invalid syntax:",ruleDef))
+                 stop(paste("invalid syntax:",ruleDef), call. = FALSE)
                }
                res$rule.id=name.id
                res
