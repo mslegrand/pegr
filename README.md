@@ -21,7 +21,7 @@ To delete
 remove.packages("pegr")
 ```
 
-Motiation
+Motivation
 ------
 
 One of the biggest issues in using a peg generator to produce a parser is getting the rules "right"."
@@ -39,12 +39,14 @@ Thus the parser is built from rules entered as text.
 
 Features of this Tool
 -------
-*  an easy way to enter and evaluate rules. 
-*  an easy way to break down and test component rules
-*  the ability to inspect how the final evalution was obtained.
-*  the abiltiy to plot the parsing tree of an evaluation.
-*  a way to limit the depth of rule calls, and to inspect that stack when exceeded (to help detect potential hangs)
-*  a debugger specific to debugging the rules.  It allows to set breakpoints step through the execution of the rules while inspect returned by the excution of each rule. This debugger debugs the rules, not R code!
+*  Easy **Interactive**  Makes easy 
+    *  adding rules to the peg
+    *  applying a rule to text input
+    *  check  and test component rules
+*  Easy inspection of the evaluation tree with the **tree** command. Provides a textual representation of how the final evalution was obtained.
+*  Graphing the evalutation tree with the **plot** command. 
+*  A way to limit the depth of rule calls, and to inspect that stack when exceeded (to help detect potential hangs)
+*  **A  specialized rule debugger** to ease the effort of debugging rule logic.  The debugger allows one to inpsect all rules in the order in which they applied to the input: both when the rule is entered and exited. This allows one to inspect return status (whether or not the rule accepts the input), the text consumed, and any values produced by the rule.  ***The rule debugger is for debugging  logic of the set of rules, not R code!***
 
 Usage
 -------
@@ -53,12 +55,12 @@ Usage is described in the vignette.   In addition to the examples contained in h
 there are several demos that may provide additional insight.
 
 We currently supply 2 approaches to usage:
-* traditional form: commands of the form 
-...+ **add_rule(peg, rule, ...)** :adds (attaches) a rule to the peg
-...+ **apply_rule(peg, rule.id, input.txt, ...)**  :applys an attached rule to the input text
-* operator form: commands of the form 
-...+ **peg + rule1 + rule 2 + ...** : adds (attaches) rules to the peg
-...+ **peg\[\[rule]](input.txt)** : applys an attached rule to the input text
+1. Traditional form: commands of the form 
+   * **add_rule(peg, rule, ...)** : *adds (attaches) a rule to the peg*
+   * **apply_rule(peg, rule.id, input.txt, ...)**  : *applys an attached rule to the input text*
+2. Operator form: commands of the form 
+   * **peg + rule1 + rule 2 + ...** : *adds (attaches) rules to the peg*
+   * **peg\[\[rule,id]](input.txt)** : *applys an attached rule to the input text*
 
 Design Considerations (Open for Your Input/Discussion)
 ---------
