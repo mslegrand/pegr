@@ -6,7 +6,7 @@
 #' @details  Since a rule can call other rules or even itself, the depth of a calling sequence
 #' can grow and potentially be infinited. By setting the stop level one is restricting that depth,
 #' and hence can detect possible infinite recursive calls. To inspect the calling sequence of those
-#' rules when the stop level is exceed, use \code{\link{get_rule_stack}}
+#' rules when the max depth of the rule stack is exceed, use \code{\link{get_rule_stack}}
 #' @examples
 #' peg<-new.parser()
 #' set_rule_stack_limit(peg, 10)
@@ -29,7 +29,7 @@ set_rule_stack_limit<-function(pegR, stop.level.limit){
 #' set_rule_stack_limit(peg, 10)
 #' add_rule(peg, "A<-'a' A / ''" ) #consumes all a's at the beginning of a string
 #' apply_rule(peg, "A", "aaaaaaaaaaaax") #there are 12 a's but will stop at 10
-#' #error, stop level exceeded
+#' #error, rule stack depth limit exceeded
 #' unset_rule_stack_limit(peg)
 #'apply_rule(peg, "A", "aaaaaaaaaaaax") #now succeeds
 #' @seealso \code{\link{get_rule_stack}}, \code{\link{set_rule_stack_limit}}
