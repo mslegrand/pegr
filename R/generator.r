@@ -80,10 +80,10 @@ new.parser<-function(record.mode=FALSE){
       #if simulation()
       if(length(pegE$.DEBUG$SIMULATION)>0){
         #pop the first entry
-        line<-pegE$.DEBUG$SIMULATION
+        line<-pegE$.DEBUG$SIMULATION[1]
         pegE$.DEBUG$SIMULATION<-pegE$.DEBUG$SIMULATION[-1] 
         #echo to terminal simated command
-        cat("Rdb>", line)
+        cat("Rdb>", line, "\n")
       } else {
         line<-str_trim(readline("Rdb>"))        
       }      
@@ -152,8 +152,13 @@ new.parser<-function(record.mode=FALSE){
              },
              v=, #prints the value list
              value={
-               print(res$val)
-             }
+               if(is.null(res)){
+                 cat("Return Value Not Availabe\n")
+               } else  {
+                 cat("Returned value:\n")
+                 print(res$val)                 
+               }
+              }
             
         ) #end of switch 
       } #end of other commands
@@ -274,17 +279,7 @@ new.parser<-function(record.mode=FALSE){
       if(is.finite(pegE$.STOP_LEVEL)){
         pegE$.STACK<-pegE$.STACK[-nrow, ]
       }
-      #THIS MAY A GOOD PLACE FOR DEBUGGER TO RECORD EXITING A RULE
-      if(pegE$.DEBUG_ON==TRUE){ ##THIS IS TEMPORARY
-        if(pegE$.DEBUG$NEXT | ( any(with(pegE$.DEBUG$BRKPTS, (id==defName & at=='<')  ) )    )    ){
-          cat("<==Exiting Rule:", defName, "\n")
-          cat("   Rule Definiton:", pegE$.SOURCE.RULES[[defName]], "\n")
-          cat("   Status:",res$ok,"\n")
-          cat("   Consumed: '", substr(input, p, res$pos), "'\n", sep="")
-          pegE$.debug.loop()          
-        } 
-      }
-      
+      #THIS MAY A GOOD PLACE FOR DEBUGGER TO RECORD EXITING A RULE      
       # BUT THE ACTION HAS NOT BEEN APPLIES
       # ALTERNATIVE TO THIS WOULD BE TO PUT AT 2 PLACES, 
       #  1. AFTER RES$OK==FALSE
@@ -297,11 +292,11 @@ new.parser<-function(record.mode=FALSE){
       # if node fails and debugging print something
       if(res$ok==FALSE){   
         # ALTERNATIVE PART 1
-        if(pegE$.DEBUG_ON==TRUE){ ##THIS IS TEMPORARY
+        if(pegE$.DEBUG_ON==TRUE){ 
           if(pegE$.DEBUG$NEXT | ( any(with(pegE$.DEBUG$BRKPTS, (id==defName & at=='<')  ) )    )    ){
             cat("<==Exiting Rule:", defName, "\n")
             cat("   Rule Definiton:", pegE$.SOURCE.RULES[[defName]], "\n")
-            cat("   Status:",res$ok," ; Rule", defName," rejected the input\n")
+            cat("   Status: ",res$ok," ; Rule ", defName," rejected the input: '", substr(input,p, nchar(input)),"'\n", sep="")
             cat("   Consumed: '", substr(input, p, p-1 +res$pos), "'\n", sep="") #pos is number of characters consumend
             pegE$.debug.loop()          
           } 
@@ -319,11 +314,11 @@ new.parser<-function(record.mode=FALSE){
           #
         }
         # ALTERNATIVE PART 2
-        if(pegE$.DEBUG_ON==TRUE){ ##THIS IS TEMPORARY
+        if(pegE$.DEBUG_ON==TRUE){
           if(pegE$.DEBUG$NEXT | ( any(with(pegE$.DEBUG$BRKPTS, (id==defName & at=='<')  ) )    )    ){
             cat("<==Exiting Rule:", defName, "\n")
             cat("   Rule Definiton:", pegE$.SOURCE.RULES[[defName]], "\n")
-            cat("   Status:",res$ok," ; Rule", defName," accepted the input\n")
+            cat("   Status: ",res$ok," ; Rule ", defName," accepted the input '", substr(input,p, nchar(input)),"'\n", sep="")
             #cat("   Status:",res$ok,"\n")
             cat("   Consumed: '", substr(input, p, res$pos), "'\n", sep="")
             pegE$.debug.loop(res)          
@@ -620,7 +615,7 @@ pexApplyRule<-function(pegR, rule.id, input.text, exe=NULL, record=NULL){
        restartDebug=function(){cat("Restarting:\n"); more<<-TRUE}
       ) 
     } 
-    cat("Debugging is terminated\n")
+    cat(" Bye\n")
   } else {
     #else not debugging
     pegR$APPLY_RULE(rule.id, input.text, exe, record)->res    
