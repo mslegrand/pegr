@@ -16,7 +16,7 @@
 #' @export
 tree<-function(res){
   if( is.null(res$debugNode) ){
-    stop("Tree option not set, rerun parse with option record=True", call. = FALSE)
+    stop("Record option was not set, rerun parse with option record=TRUE", call. = FALSE)
   }
   #requires 2 passes, 1 for the links/levels, second actualy prints
   node.print<-function(n, indent="", lastChild=TRUE){

@@ -186,17 +186,18 @@ plot.PEGResult<-function(res, shadow=TRUE, show="names", bg = ifelse(match(par("
     df<-data.frame(x=x,y=y) 
     lines(df$x, df$y)
   }
-  
-  for(i in 1:nrow(arrows)){
-    id.from<-arrows[i,1]
-    id.to<-arrows[i,2]
-    r1<-subset(nodes, nodes$id==id.from) 
-    r2<-subset(nodes, nodes$id==id.to)
-    p.x<-xr[r1$level+1]
-    q.x<-xl[r2$level+1]
-    p.y<-delta*r1$pos
-    q.y<-delta*r2$pos
-    cubic(p.x, p.y, q.x, q.y)
+  if(!is.null(arrows)){
+    for(i in 1:nrow(arrows)){
+      id.from<-arrows[i,1]
+      id.to<-arrows[i,2]
+      r1<-subset(nodes, nodes$id==id.from) 
+      r2<-subset(nodes, nodes$id==id.to)
+      p.x<-xr[r1$level+1]
+      q.x<-xl[r2$level+1]
+      p.y<-delta*r1$pos
+      q.y<-delta*r2$pos
+      cubic(p.x, p.y, q.x, q.y)
+    }    
   }
   
 }
