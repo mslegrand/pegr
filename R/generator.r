@@ -338,7 +338,7 @@ new.parser<-function(record.mode=FALSE){
             cat("<==Exiting Rule:", defName, "\n")
             cat("   Rule Definiton:", pegE$.SOURCE.RULES[[defName]], "\n")
             cat("   Status:",res$ok," ; Rule", defName," rejected the input\n")
-            cat("   Consumed: '", substr(input, p, res$pos), "'\n", sep="")
+            cat("   Consumed: '", substr(input, p, p-1 +res$pos), "'\n", sep="") #pos is number of characters consumend
             pegE$.debug.loop()          
           } 
         }

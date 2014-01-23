@@ -81,13 +81,13 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
   #this is used by envS$mk.atom (and twice in test2.r ) 
   envS$s.atom<-function(x){ # (x) terminal symbol 
     h<-function(input, exe=TRUE,  p=1){
-      n<-nchar(x)-1
+      n<-nchar(x)-1 #for example if x=='a', then nchar('a')==1, so n=0
       if(envS$DEVEL.DEBUG){
         cat("atom.",x," input=",input," p=",p,"\n") ###good for debugging      
       }    
       if( substring(input,p,p+n)==x){
         val=list(atom=x)
-        return( list(ok=TRUE,pos=n+1, val=val  ) )
+        return( list(ok=TRUE,pos=n+1, val=val  ) ) #and if x='a' then pos=1
       }else{
         return(list(ok=FALSE,pos=0))
       }

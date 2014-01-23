@@ -2,7 +2,7 @@
 #first we create the parser
 peg<-new.parser()
 add_rule(peg, "NUM<-('-')? [0-9]+" )
-add_rule(peg, "ATOM <- NUM | ( '(' & SUM & ')' ) ")
+add_rule(peg, "ATOM <- NUM / ( '(' & SUM & ')' ) ")
 add_rule(peg, "DIV <- ATOM '/' PROD" )
 add_rule(peg, "MULT <- ATOM '*' PROD" )
 add_rule(peg, "PROD <- MULT / DIV / ATOM")

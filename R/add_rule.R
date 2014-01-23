@@ -89,7 +89,7 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
     res<-add_rule(parser, cmd$rule, des=cmd$des, act=cmd$act)
     if(res$parsed!=cmd$rule){
       delete_rule(parser, res$rule.id )
-      stop(paste("Partial Processed:", rule, ))
+      stop(paste("Partial Processed:", res$rule.id ))
     }
   }
   invisible(parser)

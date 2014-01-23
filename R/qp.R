@@ -26,6 +26,9 @@
 #' qp("'a'? 'b'", "ba")
 #' @export
 qp<-function(p.expression, text.input, record=TRUE){
+  if(!("character" %in% class(text.input))){
+    stop("qp is the missing text.input", call.=FALSE)
+  }
   peg<-new.parser()
   add_rule(peg, paste("R<-", p.expression))->res
   apply_rule(peg, 'R', text.input, record)->res
