@@ -1,8 +1,9 @@
 library(testthat)
 library(stringr)
-# print("test 3")
-#source("sComponents.r")
-#source("literal.r")
+
+context("Test3")
+
+
 pegE<-new.env()
 pegE$.RECORD.NODE<-FALSE
 include.sComponents(pegE)

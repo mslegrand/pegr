@@ -1,5 +1,7 @@
 library(testthat)
 
+context("Test7")
+
 
 test_that("ADD_RULE",
 {

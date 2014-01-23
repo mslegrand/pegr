@@ -1,9 +1,7 @@
 library(testthat)
 
-#source("generator.r")
+context("Test6")
 
-#test  true for
-#def literal true
 test_that("DEFINITION",
 {
   genE<-new.parser()

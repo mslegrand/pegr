@@ -1,8 +1,10 @@
 #Unit tests
 library(testthat)
-#source("../../R/pegs.r")
 
-#print("test 1")
+
+context("Test1")
+
+
 pegE<-new.env()
 pegE$.RECORD.NODE<-F
 

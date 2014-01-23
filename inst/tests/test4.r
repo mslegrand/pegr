@@ -1,6 +1,6 @@
 library(testthat)
 
-#source("generator.r")
+context("Test4")
 
 pegR<-new.parser()
 gen<-pegR$getGenE() #slimmly way to keep unit test working

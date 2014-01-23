@@ -1,5 +1,7 @@
 library(testthat)
 
+context("test_add_rule")
+
 test_that("ADD_RULE",
 {
 #expect_equal(0,1)

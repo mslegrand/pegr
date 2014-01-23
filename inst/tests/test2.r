@@ -9,7 +9,7 @@ include.sComponents(pegE)
 include.sConnectives(pegE)
 include.gConnectives(pegE)
 
-context("Test quote capabilities")
+context("Test2")
 
 s.quote1<-s.atom("\'")
 s.quote2<-s.atom("\"")

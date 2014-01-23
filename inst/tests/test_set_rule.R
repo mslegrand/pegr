@@ -1,5 +1,7 @@
 library(testthat)
 
+context("test_set_rule")
+
  
 
 # test_that("SET_RULE",

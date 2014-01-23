@@ -1,6 +1,7 @@
 library(testthat)
 
- 
+context("test_apply_rule")
+
 
 test_that("APPLY_RULE",
 {
