@@ -53,14 +53,18 @@ Usage is described in the vignette.   In addition to the examples contained in h
 there are several demos that may provide additional insight.
 
 We currently supply 2 approaches to usage:
-* traditional form: commands of the form **add_rule(peg, rule, ...)**, **apply_rule(peg, rule.id, input.txt, ...)**
-* operator form: commands of the form **peg + rule** , **peg\[rule](input.txt)**
+* traditional form: commands of the form 
+...+ **add_rule(peg, rule, ...)** :adds (attaches) a rule to the peg
+...+ **apply_rule(peg, rule.id, input.txt, ...)**  :applys an attached rule to the input text
+* operator form: commands of the form 
+...+ **peg + rule1 + rule 2 + ...** : adds (attaches) rules to the peg
+...+ **peg\[\[rule]](input.txt)** : applys an attached rule to the input text
 
 Design Considerations (Open for Your Input/Discussion)
 ---------
 There are a couple of design considerations which are still open, and which I would love feedback on:
-* **peg + rule + rule** for adding rules may not be the best choice of operator
-* pegs are really environments with wrappers, so the usual copy doesnot work. I will probably change this.
+* **peg + rule1 + rule2** for adding rules may not be the best choice of operator
+* pegs are really environments with wrappers, so the usual copy doesnot work.
 
 What's Needed
 -------
@@ -70,6 +74,7 @@ Some obvious  improvements to consider:
 *  Enhancing the tutorial
 *  Reading and writing peg rules to file. 
 *  Profiling and replacing R functions with C code
+*  Replacing environments with lists to make make copy work?
 
 
 
