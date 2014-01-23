@@ -19,14 +19,16 @@ of a calling sequence can grow and potentially be
 infinited. By setting the stop level one is restricting
 that depth, and hence can detect possible infinite
 recursive calls. To inspect the calling sequence of those
-rules when the stop level is exceed, use
+rules when the max depth of the rule stack is exceed, use
 \code{\link{get_rule_stack}}
 }
 \examples{
+\dontrun{
 peg<-new.parser()
 set_rule_stack_limit(peg, 10)
 add_rule(peg, "A<-A" ) #an infinite recursive call
 apply_rule(peg, "A", "x") #the input is irrevelant, throws error
+}
 }
 \seealso{
 \code{\link{get_rule_stack}},

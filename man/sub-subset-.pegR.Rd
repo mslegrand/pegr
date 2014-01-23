@@ -12,7 +12,8 @@
   modified}
 
   \item{value,}{the modifications to be applied. Can be
-  either a vector or a list.}
+  either a vector or a list or NULL, which case the rule is
+  deleted.}
 }
 \value{
 peg parser
@@ -22,12 +23,18 @@ Used to Modify the rule definition and or description or
 value of of an exiting rule
 }
 \examples{
+# Modfiying a rule
 peg<-new.parser()
 peg + "A<-'a'"
 peg
 peg[["A"]]<-"A<-'ab'"
 peg
 peg[["A"]]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
+
+# Deleteing a rule
+peg<-new.parser()
+peg + "A<-'a'" + "B<-'b'"
+peg[["A"]]<-NULL
 peg
 }
 

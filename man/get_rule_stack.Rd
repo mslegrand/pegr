@@ -15,6 +15,7 @@ encounterd prior to the exceeding the stop level
 Returns the call stack when the stop level was exceeded
 }
 \examples{
+\dontrun{
 peg<-new.parser()
 set_rule_stack_limit(peg, 20)
 add_rule(peg, "A<-B" )
@@ -22,5 +23,6 @@ add_rule(peg, "B<-C")
 add_rule(peg, "C<-A") # A vicious circle of calls resulting in infinite recursion
 apply_rule(peg, "A", "x") # will stop at 20
 get_rule_stack(peg)
+}
 }
 
