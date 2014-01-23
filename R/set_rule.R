@@ -46,15 +46,21 @@ set_rule<-function(parser, rule){
 #' @param parser, the peg parser containing the rule to be modified
 #' @param rule.id, the identifier of the rule to be modified
 #' @param value, the modifications to be applied. Can be either a vector or a
-#' list. 
+#' list or NULL, which case the rule is deleted.
 #' @return peg parser
 #' @examples
+#' # Modfiying a rule
 #' peg<-new.parser()
 #' peg + "A<-'a'"
 #' peg
 #' peg[["A"]]<-"A<-'ab'"
 #' peg
 #' peg[["A"]]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
+#' 
+#' # Deleteing a rule
+#' peg<-new.parser()
+#' peg + "A<-'a'" + "B<-'b'"
+#' peg[["A"]]<-NULL
 #' peg
 #' @export
 "[[<-.pegR"<-function(parser, rule.id, value){
@@ -68,7 +74,9 @@ set_rule<-function(parser, rule){
     stop("The index must contain exactly one rule", call. = FALSE)
   }
   if( is.null(arg) ) {
-    stop("NULL assignment not yet implemented") #TODO!!! inplement as delete
+    # delete_rule
+    delete_rule(parser, rule.id)
+    return(invisible(parser))
   }
   if( !("character" %in% class(arg)) & !( "list" %in% class(arg))){
     stop("Bad Rule assignment", call. = FALSE)
