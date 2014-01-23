@@ -39,7 +39,7 @@ Thus the parser is built from rules entered as text.
 
 Features of this Tool
 -------
-*  Easy **Interactive**  Makes easy 
+*  Easy **Interactive**  makes easy 
     *  adding rules to the peg
     *  applying a rule to text input
     *  check  and test component rules
@@ -47,7 +47,7 @@ Features of this Tool
 *  Graphing the evalutation tree with the **plot** command. 
 *  A way to limit the depth of calls to rules by using the **set_rule_stack_limit** command, and then by using **get_rule_stack**, the stack may be inspected whenever the limit is exceeded (This is to help detect the source of  hangning due to infinite recursion)
 *  **A  specialized rule debugger** to ease the effort of debugging rule logic.  The debugger allows one to inpsect all rules in the order in which they applied to the input: both when the rule is entered and exited. This allows one to inspect return status (whether or not the rule accepts the input), the text consumed, and any values produced by the rule.  ***The rule debugger is for debugging the RULE SET LOGIC, not R code!***
-
+* A tutorial included to help get started.
 Usage
 -------
 
