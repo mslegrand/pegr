@@ -9,11 +9,17 @@ delete_rule(pegR, rule.id)
 
   \item{rule.id,}{a character string naming the rule
 
-  #' # Deleteing a rule peg<-new.parser() add_rule(peg,
-  "A<-'a'") add_rule(peg, "B<-'b'") delete_rule(peg, "A")
-  peg}
+  #' # Deleteing a rule}
 }
 \description{
 Deletes the given rule form the parser.
+}
+\examples{
+peg<-new.parser()
+add_rule(peg,  "A<-'a'")
+add_rule(peg,  "B<-'b'")
+peg
+delete_rule(peg, "A")
+peg
 }
 
