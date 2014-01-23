@@ -43,6 +43,7 @@ new.parser<-function(record.mode=FALSE){
   pegE$.STACK<-data.frame()
   pegE$.DEBUG_ON<-FALSE
   pegE$.DEBUG<-list(
+    SIMULATION=c(), # used for knitr docs (enter here a sequence of debugger commands to simulate user input)
     NEXT=TRUE,           #TRUE is next, FALSE is continue
     BRKPTS=data.frame(id=NA, at=NA)[numeric(0), ],
     command.summary=function(){cat("Rdb> Commands: h, n, c, clr, +brk@, -brk@, Q, r, l\n")},
@@ -76,7 +77,16 @@ new.parser<-function(record.mode=FALSE){
   #main debug loow
   pegE$.debug.loop<-function(res=NULL){  
     repeat{ #forever
-      line<-str_trim(readline("Rdb>"))
+      #if simulation()
+      if(length(pegE$.DEBUG$SIMULATION)>0){
+        #pop the first entry
+        line<-pegE$.DEBUG$SIMULATION
+        pegE$.DEBUG$SIMULATION<-pegE$.DEBUG$SIMULATION[-1] 
+        #echo to terminal simated command
+        cat("Rdb>", line)
+      } else {
+        line<-str_trim(readline("Rdb>"))        
+      }      
       if(line==""){
         #repeat the  last command (n or c)
         return()
@@ -151,43 +161,6 @@ new.parser<-function(record.mode=FALSE){
       } #end of other commands
   } #end of repeat
 } #end of loop
-
-#       if(cmd %in% c('c','n')){
-#         pegE$.DEBUG$NC<-ifelse(cmd=='n', TRUE, FALSE)
-#         return()
-#       }
-#       if(cmd == 'q'){
-#         invokeRestart("quitDebug")
-#       }
-#       if(cmd == 'r'){
-#         invokeRestart("restartDebug")
-#       }
-#       if(cmd %in% c('h', '?')){
-#         pegE$.DEBUG$command.detail()
-#       }
-#       if(grep("^\+brk@<")){
-#         
-#       } else  if(grep("^\+brk@>")){
-#         
-#       } else if(f(grep("^\+brk@"){
-#         
-#       }
-
-
-      # if cmd is Q, throw an exception to exit : NEED EXCEPTION HANDLE WITH TYPE
-      # if cmd is r, throw an exception to exit
-      # if cmd is ? or h, display help : NEED HELP DIPLAY FUNC
-      # if cmd is l , list all break points : NEED DATAFRAME FOR BRKPTS WITH RULEID, IN, OUT
-      # if cmd is +brk@ [> < .]? ruleName , set breakpt :need set, add fn
-      # if cmd is -brk@ [> < .]? ruleName ,  remove breakpt: need rm, fn
-      # if cmd is anything else, put help commamd     
-  #  }
-    #
-  #}
-  
-           
-  
-  #source("node.r", local=TRUE)
   
   DEVEL.DEBUG<-FALSE
   
