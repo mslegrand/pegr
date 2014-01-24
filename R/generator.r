@@ -36,7 +36,7 @@ new.parser<-function(record.mode=FALSE){
   pegE$.ACTION<-list() #executable for the rule
   pegE$.SOURCE.RULES<-list() #text containing the rule source, i.e A<-'c'
   pegE$.RULE_DESCRIPT<-list() #text containing the rule description
-  pegE$.ACTION_NAME<-list() #list containing the names of actions which are functions
+  pegE$.ACTION_NAMES<-list() #list containing the names of actions which are functions
   pegE$.AUTO_ACTION<-FALSE
   pegE$.ACTION_DEFAULT<-FALSE
   pegE$.STOP_LEVEL<-Inf #use Inf to indicate that there is no stop level (allow infinite deep recursion)
@@ -403,7 +403,7 @@ new.parser<-function(record.mode=FALSE){
     LITERAL <- (s.sequence(QUOTE1 , opt.0x(s.not(QUOTE1) + CHAR) ,  QUOTE1 , SPACING)  /
                   s.sequence(QUOTE2 , opt.0x(s.not(QUOTE2) + CHAR) ,  QUOTE2 , SPACING) ) < list("atom", function(v){a<-mk.l.a(v);  list(leaf=a)} )
     
-    IDENTSTART<-s.range('a','z') / s.range('A','Z') / '_'
+    IDENTSTART<-s.range('a','z') / s.range('A','Z') 
     IDENTCONT<-IDENTSTART / s.range('0','9')
     IDENTIFIER<-IDENTSTART + opt.0x(IDENTCONT) + SPACING < list("", function(v){ v<-paste(v,collapse="");class(v)<-c("peg.name",class(v)); list(ID=v) } )
     
