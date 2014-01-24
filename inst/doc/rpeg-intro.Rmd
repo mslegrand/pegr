@@ -199,7 +199,7 @@ plot(res.ABA, show=c("names", "args"))
 #plot only the values
 plot(res.ABA, show="vals")
 #plot all
-plot(res.ABA, show="all")
+plot(res.ABA, show="all", cex=.8)
 ```
 
 
