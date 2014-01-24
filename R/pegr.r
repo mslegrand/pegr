@@ -179,4 +179,19 @@ debug.pegR<-function(peg){
 undebug.pegR<-function(peg){
   pexSetDebugOn(peg, FALSE)    
 }
+
+
+#' @export
+"[.pegR"<-function(parser, rule.id){
+  stop("pegR is not subsettable", call.=FALSE)
+}
+
+#' @export
+"[<-.pegR"<-function(parser, rule.id){
+  stop("pegR is not subsettable", call.=FALSE)
+}
+
+"[.pegR"<-function(parser, rule.id, value){
+  stop("pegR is not subsettable", call.=FALSE)
+}  
   
