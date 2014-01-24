@@ -52,7 +52,7 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
     }
 #     class(h)<-c("pa", "pe",class(h))
 #     h
-    fn<-memoize(h)
+    fn<-memoise::memoize(h)
     class(fn)<-c("pa", "pe",class(fn))
     fn  
   }
@@ -78,7 +78,7 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
     }
 #     class(h)<-c("pa", "pe",class(h))    
 #     h
-    fn<-memoize(h)
+    fn<-memoise::memoize(h)
     class(fn)<-c("pa", "pe",class(fn))
     fn
   }

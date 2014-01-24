@@ -24,7 +24,7 @@ include.gConnectives<-function(pegE, envG=parent.frame() ){
     }
 #      class(h)<-c("pe",class(h))
 #      h
-    fn<-memoize(h)
+    fn<-memoise::memoize(h)
     class(fn)<-c("pe",class(fn))
     fn
   }
@@ -54,7 +54,7 @@ include.gConnectives<-function(pegE, envG=parent.frame() ){
     }
 #     class(h)<-c("pe",class(h))
 #     h
-    fn<-memoize(h)
+    fn<-memoise::memoize(h)
     class(fn)<-c("pe",class(fn))
     fn
   }

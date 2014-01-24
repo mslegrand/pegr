@@ -36,7 +36,7 @@ new.parser<-function(record.mode=FALSE){
   pegE$.ACTION<-list() #executable for the rule
   pegE$.SOURCE.RULES<-list() #text containing the rule source, i.e A<-'c'
   pegE$.RULE_DESCRIPT<-list() #text containing the rule description
-  pegE$.ACTION_NAMES<-list() #list containing the names of actions which are functions
+  pegE$.ACTION_INFO<-list() #list containing the names of actions which are functions
   pegE$.AUTO_ACTION<-FALSE
   pegE$.ACTION_DEFAULT<-FALSE
   pegE$.STOP_LEVEL<-Inf #use Inf to indicate that there is no stop level (allow infinite deep recursion)
@@ -212,7 +212,7 @@ new.parser<-function(record.mode=FALSE){
     }
 #     class(h)<-c("pe",class(h))
 #     h
-    fn<-memoize(h)
+    fn<-memoise::memoize(h)
     class(fn)<-c("pe",class(fn))
     fn
   }
@@ -241,13 +241,13 @@ new.parser<-function(record.mode=FALSE){
     if(is.null(action)){ #if no inline action
       if(pegE$.AUTO_ACTION){ # and inline action flag is on
         pegE$.ACTION[[defName]]<-NULL   #null the actions
-        pegE$.ACTION_NAMES[[defName]]<-NULL        
+        pegE$.ACTION_INFO[[defName]]<-NULL        
       }
       # no inline action and auto is off so we do nothing (ie. keep status)
     } else {
       #if there is inline action we overwrite the action no matter what the flag is (probably not what we wanted!!!!)
       pegE$.ACTION[[defName]]<-eval(parse(text=action)) #this parses the user action text for later invokation      
-      pegE$.ACTION_NAMES[[defName]]=action
+      pegE$.ACTION_INFO[[defName]]=action
     }
     
     #h IS A WRAPPER WHICH CALLS def, def comes from definition.node (the sequence on the rhs of <- before {})
@@ -488,11 +488,11 @@ new.parser<-function(record.mode=FALSE){
              GET_ACTION=function(rule.id){ #not used?
                pegE$.ACTION[[rule.id]]
              },
-             SET_ACTION_INFO=function(rule.id, actionName){
-               pegE$.ACTION_NAMES[[rule.id]]<-actionName 
+             SET_ACTION_INFO=function(rule.id, actionInfo){
+               pegE$.ACTION_INFO[[rule.id]]<-actionInfo 
              },
              GET_ACTION_INFO=function(rule.id){
-               pegE$.ACTION_NAMES[[rule.id]]
+               pegE$.ACTION_INFO[[rule.id]]
              },            
              GET_IDS=function(){
                ls(envir=pegE)->tmp

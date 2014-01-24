@@ -65,7 +65,7 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
        }
 #        class(h)<-c("pe",class(h))
 #        h
-       fn<-memoize(h)
+       fn<-memoise::memoize(h)
        class(fn)<-c("pe",class(fn))
        fn
      }
@@ -93,7 +93,7 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
        }
 #        class(h)<-c("pe",class(h))
 #        h
-       fn<-memoize(h)
+       fn<-memoise::memoize(h)
        class(fn)<-c("pe",class(fn))
        fn
      }
@@ -118,7 +118,7 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
        }
 #        class(h)<-c("pe",class(h))
 #        h
-       fn<-memoize(h)
+       fn<-memoise::memoize(h)
        class(fn)<-c("pe",class(fn))
        fn
      }
@@ -143,7 +143,7 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
       }  
 #       class(h)<-c("pe",class(h))
 #       h
-      fn<-memoize(h)
+      fn<-memoise::memoize(h)
       class(fn)<-c("pe",class(fn))
       fn
     }
@@ -166,7 +166,7 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
        }  
 #        class(h)<-c("pe",class(h))
 #        h
-       fn<-memoize(h)
+       fn<-memoise::memoize(h)
        class(fn)<-c("pe",class(fn))
        fn
      } 
@@ -205,7 +205,7 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
        }  
 #        class(h)<-c("pe",class(h))
 #        h
-       fn<-memoize(h)
+       fn<-memoise::memoize(h)
        class(fn)<-c("pe",class(fn))
        fn
      }
@@ -235,7 +235,7 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
        }  
 #        class(h)<-c("pe",class(h))
 #        h
-       fn<-memoize(h)
+       fn<-memoise::memoize(h)
        class(fn)<-c("pe",class(fn))
        fn
      }
