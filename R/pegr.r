@@ -42,6 +42,8 @@ set_description<-function(pegR, rule.id, description){
   }
 }
 
+
+
 #' Gets a description of a given rule
 #' 
 #' Descriptions are like comments for rules, it is a good practice to comment 

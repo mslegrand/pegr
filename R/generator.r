@@ -1,4 +1,5 @@
-#todo: rewrite definition.node for post mortum actions
+
+
 
 # hint and tips
 # for debugging:
@@ -7,11 +8,6 @@
 # browser()
 #____________________________________________________
 # _____________________________________
-
-#TODO!!!
- 
-
-
 
 
 #' Creates an instance of a new PEG parser.
@@ -29,20 +25,32 @@ new.parser<-function(record.mode=FALSE){
   #to create rules to construct the user defined parser, pegE. However, since the process
   #is to be dynamiclly interpetive (i.e. user can put in one rule at a time), the generator, genE
   #must be able to modify the pegE and hence needs to contain the pegE.
+  
+  # NEW ENV FOR TO CONTAIN THE USER DEFINED PARSER
   pegE<-new.env()
   class(pegE)<-c("pegE",class(pegE))
+  
+  # RECORD FLAGS FOR TREE AND PLOTTING
   pegE$.RECORD.NODE.DEFAULT<-record.mode
   pegE$.RECORD.NODE<-record.mode
+  
+  # CONTAINER FOR ACTUAL EXECUTABLE ACTIONS
   pegE$.ACTION<-list() #executable for the rule
+  pegE$.AUTO_ACTION<-FALSE #AUTO ACTION REFERS TO ACTIONS ADDED VIA TEXT INLINE: NOT SURE IF THIS SHOULD STILL BE SUPPORTED
+  pegE$.ACTION_DEFAULT<-FALSE #DEFAULT FOR RUNNING ACTIONS (BY DEFAULT THIS IS OFF)
+  
+  #TODO!!!??? PUT SOURCE.RULES, RULE DESCRIPT AND ACTION INFO INTO A SINGLE .RULES DATA FRAME???
   pegE$.SOURCE.RULES<-list() #text containing the rule source, i.e A<-'c'
   pegE$.RULE_DESCRIPT<-list() #text containing the rule description
   pegE$.ACTION_INFO<-list() #list containing the names of actions which are functions
-  pegE$.AUTO_ACTION<-FALSE
-  pegE$.ACTION_DEFAULT<-FALSE
+  
+  #STACK 
   pegE$.STOP_LEVEL<-Inf #use Inf to indicate that there is no stop level (allow infinite deep recursion)
-  pegE$.STACK<-data.frame()
-  pegE$.DEBUG_ON<-FALSE
-  pegE$.DEBUG<-list(
+  pegE$.STACK<-data.frame() #RULE STACK TO BE RECORDED WHEN STACK STOP LIMIT IS SET
+  
+#BEGIN DEBUGGER  
+  pegE$.DEBUG_ON<-FALSE # Flag rules use to check, to see if any debugging is on
+  pegE$.DEBUG<-list( #Structure to hold debugger related data
     SIMULATION=c(), # used for knitr docs (enter here a sequence of debugger commands to simulate user input)
     NEXT=TRUE,           #TRUE is next, FALSE is continue
     BRKPTS=data.frame(id=NA, at=NA)[numeric(0), ],
@@ -74,7 +82,7 @@ new.parser<-function(record.mode=FALSE){
     }
   ) #end of pegE$.DEBUG list
   
-  #main debug loow
+  #main debug looP MAY WANT TO MOVE THIS INSIDE pegE$.DEBUG
   pegE$.debug.loop<-function(res=NULL){  
     repeat{ #forever
       #if simulation()
@@ -163,9 +171,11 @@ new.parser<-function(record.mode=FALSE){
         ) #end of switch 
       } #end of other commands
   } #end of repeat
-} #end of loop
+} #end of pegE$.debug.loop
   
- 
+#END DEBUGGER
+
+#BEGIN DEFINITION NODE
   #' Combines IDENTIFIER , LEFTARROW , EXPRESSION , opt.01(EXEC) to make a rule
   #' definition.Node is essentially the same as sequence except for when res$ok==FALSE
   #' Used in generator rule DEFINITION only
@@ -192,33 +202,22 @@ new.parser<-function(record.mode=FALSE){
       }
       res<-list(ok=TRUE, pos=mn, val=val)
       if(pegE$.RECORD.NODE==TRUE){
-#         defDiscription<-substr(input,p, p+mn) #!!!!we add the rule description here so that the debugger can use it later: this includes rule and action text   
-#         #add def to enviroment
-#         rule.id<-lf[[1]]
-#         defList<-envir$.DEFS
-#         defList$
-#           assign(".DEFS", TRUE, envir=pegE)     
+        # when pegE$DEBUG.NODE==T we add to the results res an
+        # additional field called debugNode (to get res$debugNode)
         res$debugNode=d.node
       }
       return(res)
-      # when pegE$DEBUG.NODE==T we add to the results res an
-      # additional field called debugNode (to get res$debugNode)
-      # this field contains
-      #     if(debug.Node()){
-      #       return(list(ok=TRUE, pos=mn, val=val, debugNode=d.node)) #add here the consumed piece to recover the rule definition
-      #     } else {
-      #       return(list(ok=TRUE, pos=mn, val=val))      
-      #     }    
     }
 #     class(h)<-c("pe",class(h))
 #     h
     fn<-memoise::memoize(h)
     class(fn)<-c("pe",class(fn))
     fn
-  }
-  #___________________________________
-    
-  #' Generates new unique ID values for debug nodes #for new.ID only!!!!
+  } 
+#END OF DEFINITION NODE
+
+#BEGIN ID GENERATOR
+  #' Generates new unique ID values for debugNode (see .RECORD.NODE)  #for new.ID only!!!!
   new.ID.generator<-function(){
     IDCount<-1
     getID<-function(){
@@ -227,15 +226,15 @@ new.parser<-function(record.mode=FALSE){
     }
     getID  
   } 
-  new.ID<-new.ID.generator() #for mk.rule only!!!!
-  
-  #def should be a the user definition to add the action to.
-  #defName is the user name of the def
-  #defAction is the user action to be applied to the results of the definition
-  #in terms of create
-  #devName<-def {action}
+  new.ID<-new.ID.generator() #Used only by  mk.rule!!!!
+#END ID GENERATOR
+
+#BEGIN MAKE RULE
+  #def:   the user rule (rule.souce) to add the action to.
+  #defName: the rule.id
+  #action:  an inline action for that rule (may deprecate this )
   mk.Rule<-function(defName, def, action){ 
-    #  action is inline action 
+    #  action is an inline action (may deprecate)
 
     #ADJUST THE ACTION WHEN AUTO_ACTION IS ON AND WE HAVE AN INLINE ACTION
     if(is.null(action)){ #if no inline action
@@ -253,7 +252,6 @@ new.parser<-function(record.mode=FALSE){
     #h IS A WRAPPER WHICH CALLS def, def comes from definition.node (the sequence on the rhs of <- before {})
     h<-function(input, exe=TRUE,  p=1){
       mfn.mssg<-defName #record the rule.id for latter (say for when record=T)
-      #browser()
       #this is before the node fn is executed (the node fn is def)
       #THIS IS A GOOD PLACE FOR DEBUGGER TO RECORD ENTERING A RULE
       if(pegE$.DEBUG_ON==TRUE){
@@ -263,7 +261,6 @@ new.parser<-function(record.mode=FALSE){
           cat("   Input text: \'", substr(input,p, nchar(input)),"\'\n", sep="")      
           pegE$.debug.loop()          
         } 
-        #cat("made it out of the loop\n")
       }
       #THIS MAY BE A GOOD PLACE TO RECORD ENTERING RULE
       if( is.finite( pegE$.STOP_LEVEL ) ) {
@@ -273,25 +270,29 @@ new.parser<-function(record.mode=FALSE){
         #else add to stack
         pegE$.STACK<-rbind(pegE$.STACK, data.frame(node.id=defName, pos=p ))
       }
+      
+      # *******************BEGIN EXECUTION OF THE RULE NODE HERE***********
       res<-def(input, exe,  p)
-      #this is after the node fn is executed
+      # *******************END EXECUTION OF THE RULE NODE HERE************
+      
       #THIS WOULD BE WHERE WE RECORD EXITING RULE (OR SHALL WE DO IT AFTER USER EXE IS DONE?)
       if(is.finite(pegE$.STOP_LEVEL)){
         pegE$.STACK<-pegE$.STACK[-nrow, ]
       }
-      #THIS MAY A GOOD PLACE FOR DEBUGGER TO RECORD EXITING A RULE      
-      # BUT THE ACTION HAS NOT BEEN APPLIES
-      # ALTERNATIVE TO THIS WOULD BE TO PUT AT 2 PLACES, 
+      # THIS POTENTIAL PLACE FOR DEBUGGER TO RECORD EXITING IS A RULE      
+      # BUT THE ACTION HAS NOT BEEN APPLIES SO WE PLACE IN
+      # ALTERNATIVES:  2 PLACES: 
       #  1. AFTER RES$OK==FALSE
       #  2. AFTER RES$OK==TRUE AND ACTION HAS BEEN EXECUTED
-      #the node should never return any thing other than a list so
+      
+#      #A NODE SHOULD NEVER RETURN ANYTHING BUT A LIST!!!
 #       if(res$ok==TRUE & !list %in$ class(res$val)){
 #         stop("Value did not return a list! (Bad Action?)")
 #       }
       
       # if node fails and debugging print something
       if(res$ok==FALSE){   
-        # ALTERNATIVE PART 1
+        # DEBUGGER: EXITING NODE (ALTERNATIVE PART 1)
         if(pegE$.DEBUG_ON==TRUE){ 
           if(pegE$.DEBUG$NEXT | ( any(with(pegE$.DEBUG$BRKPTS, (id==defName & at=='<')  ) )    )    ){
             cat("<==Exiting Rule:", defName, "\n")
@@ -303,17 +304,14 @@ new.parser<-function(record.mode=FALSE){
         }
         return(res)
       } 
-      else { #res$ok=TRUE #node succeeds
-        #if  res$ok=TRUE #node succeeds
-        #execute rule action
-        if(exe==TRUE  ){ #this is where we execute the user action
-          # make this refer to a memmber of action array in pegE
-          if(!is.null(pegE$.ACTION[[defName]])){
+      else { # ELSE THE NODE HAS SUCCEEDED: # res$ok=TRUE
+        # EXECUTE ACTION IF THERE IS ONE
+        if(exe==TRUE  ){ #this is where we execute the user action         
+          if(!is.null(pegE$.ACTION[[defName]])){ # refers to a memmber of action array in pegE
             res$val<-pegE$.ACTION[[defName]](res$val)          
           }
-          #
         }
-        # ALTERNATIVE PART 2
+        # DEBUGGER: EXITING NODE (ALTERNATIVE PART 2)
         if(pegE$.DEBUG_ON==TRUE){
           if(pegE$.DEBUG$NEXT | ( any(with(pegE$.DEBUG$BRKPTS, (id==defName & at=='<')  ) )    )    ){
             cat("<==Exiting Rule:", defName, "\n")
@@ -324,7 +322,7 @@ new.parser<-function(record.mode=FALSE){
             pegE$.debug.loop(res)          
           } 
         }
-        #add the debug node here
+        # ADD RECORD NODE HERE (FOR TREE AND PLOT )
         if(pegE$.RECORD.NODE==TRUE){  # record is TRUE, (for tree and plot)        
           #get res$debug list.
           children<-res$debugNode
@@ -343,28 +341,26 @@ new.parser<-function(record.mode=FALSE){
           node<-new.node(id,msg.name,data=data, children=children)
           res$debugNode<-list(node=node) #!!!
         }       
-      } #end of else: res$ok=TRUE
+      } #end of else: i.e. #THE NODE  SUCCEEDED: res$ok=TRUE
       res
     }
     class(h)<-c("rule",class(def))
     h
-  }
-  
-  s.ID<-function(fn){ #used only for P2 of new.generator:create
+  } 
+#END MAKE RULE
+
+#BEGIN CREATE
+  s.ID<-function(fn){ # Used only for P2 of new.generator::create
     h<-function(input,  exe, pos){
       fn(input,  exe, pos)
     }
     h
   } 
   
-  
   create<-function(pegE){
-    #we source here so that pegE we use the pegE argument from generator (and not a global pegE)
-    #source("sComponents.r", local=TRUE)
     include.sComponents(pegE)
     include.sConnectives(pegE)
     include.gConnectives(pegE)
-    #source("literal.r", local=TRUE)
     include.literal(pegE)
     
     #PEG GENERATION RULES
@@ -443,21 +439,57 @@ new.parser<-function(record.mode=FALSE){
     environment() #return  of the generator, which will contain a peg object   
   }
   genE<-create(pegE)
-  #of course we can turn this around and set pegE$.genE<-genE
-  #the future calls to add a rule would be pegE$genE$DEFINITION instead of genE$DEFINITION
+# END CREATE
+  # of course we can turn this around and set pegE$.genE<-genE
+  # the future calls to add a rule would be pegE$genE$DEFINITION instead of genE$DEFINITION
   # however, what is probably better is to have a list with $genE, $pegE as members.
   # then, since we don't need to keep genE around unless we are adding a rule, we could
   # have just a structure, list(pegE, add_rule(pegE, rule) ), where 
   # add_rule<-function(pegE, rule){ genE<- create(pegE); genE$Definiton(rule)->result} 
   # in this case we would return the list(pegE, add_rule(pegE, rule) ), with a pegR class associated 
   # with it.
-#   class(genE)<-c("pegR",class(genE))
-#   genE
+
+#??? Shall we do this differently
+get_IDS<-function(){
+  ls(envir=pegE)->tmp
+  if( any(grepl("atom.",tmp) ) ){
+    tmp<-tmp[-grep("atom.",tmp)]    
+  }
+  tmp              
+} # end get_IDS
+
+#BEGIN pegR OBJECT
   pegR<-list(pegE=pegE, 
              getGenE=function(){genE}, #this is just for unit tests
              DEFINITION=function(ruleDef){ 
               #genE<-create(pegE); 
               genE$DEFINITION(ruleDef)
+             },
+             GET_DATA_FRAME=function(...){
+               df<-data.frame(rule.id=NA, rule.source=NA, 
+                              rule.description=NA, action.type=NA, 
+                              action.specification=NA, ...)[numeric(0),]
+               #loop over rules and extract
+               ids<-get_IDS()
+               for(id in ids){
+                 rule.id<-id
+                 rule.source<-pegE$.SOURCE.RULES[[id]]
+                 rule.description<-pegE$.RULE_DESCRIPT[[id]]
+                 rule.description<-ifelse(is.null(pegE$.RULE_DESCRIPT[[id]] ), NA, pegE$.RULE_DESCRIPT[[id]])
+                 if(is.null(pegE$.ACTION_INFO) | is.null(pegE$..ACTION_INFO[[id]])){
+                   action.type<-NA 
+                   action.specification<-NA
+                 } else {
+                   action.info<-pegE$.ACTION_INFO[[id]]
+                   action.type<-action.info[1]
+                   action.specification<-action.info[2]
+                 }
+                 df1<-data.frame(rule.id=rule.id, rule.source=rule.source, 
+                                 rule.description=rule.description, action.type=action.type, 
+                                 action.specification=action.specification, ...)
+                 df<-rbind(df,df1)
+               }
+               df
              },
              SET_RULE=function(ruleDef){
                #res<-parser$DEFINITION(pegE, ruleDef) 
@@ -495,29 +527,25 @@ new.parser<-function(record.mode=FALSE){
                pegE$.ACTION_INFO[[rule.id]]
              },            
              GET_IDS=function(){
-               ls(envir=pegE)->tmp
-               if( any(grepl("atom.",tmp) ) ){
-                 tmp<-tmp[-grep("atom.",tmp)]    
-               }
-               tmp              
+               return(get_IDS())       
              }, # end GET_IDS
              APPLY_RULE=function(rule.id,input.text, exe.Action=NULL, record=NULL){
                # prep
-               #action
-               #browser()
+               #
+               # prep: action
                exe.Action<-ifelse(is.null(exe.Action), pegE$.ACTION_DEFAULT, exe.Action)
                #clear stack
                if(is.finite(pegE$.STOP_LEVEL)){
                  pegE$STACK<-data.frame()
                } 
-               #recording mode
+               # prep: recording mode
                record<-ifelse(is.null(record), pegE$.RECORD.NODE.DEFAULT, record)
                pegE$.RECORD.NODE<-record
                #if debugging set show help menu
                # exec
                pegE[[rule.id]](input.text, exe.Action)->res
                # clean up
-               #if debugging show exit status
+               # if debugging show exit status
                res$Call<-list(rule.id=rule.id, arg=input.text)
                res$options<-list(exe=exe.Action, record=pegE$.RECORD.NODE )
                res
@@ -546,16 +574,17 @@ new.parser<-function(record.mode=FALSE){
              GET_DEBUG_ON=function(){
                pegE$.DEBUG_ON
              } 
-#             ,
-#              GET_RULE_STRUCTURE=function(rule.id){
-#                #wtf?
-#             }
     )
-  #class(pegR)<-c("pegR",class(pegR))
-  class(pegR)<-c("pegR")
-  pegR
-}
+#class(pegR)<-c("pegR",class(pegR))
+class(pegR)<-c("pegR")
 
+# END OF pegR OBJECT
+
+  pegR # Return pegR object
+}
+# END OF new.parser
+
+# BEGIN PEX INTERFACE
 pexGetStack<-function(pegR){
   pegR$GET_STACK()
 }
@@ -599,12 +628,11 @@ pexIsDebugging<-function(pegR){
   pegR$GET_DEBUG_ON()
 }
 
-pexApplyRule<-function(pegR, rule.id, input.text, exe=NULL, record=NULL){
-  #parser$pegE[[rule.id]](input.text, exe)->res 
-  #get the debug status
-  #if debugging
+pexApplyRule<-function(pegR, rule.id, input.text, exe=NULL, record=NULL){  
   res<-NULL
-  if(pegR$pegE$.DEBUG_ON==TRUE){
+  # two cases"
+  if(pegR$pegE$.DEBUG_ON==TRUE){ 
+    # case 1: if debugging
     pegR$pegE$.DEBUG$command.summary()
     more<-TRUE
     while(more){
@@ -616,8 +644,8 @@ pexApplyRule<-function(pegR, rule.id, input.text, exe=NULL, record=NULL){
       ) 
     } 
     cat(" Bye\n")
-  } else {
-    #else not debugging
+  } else { 
+    #else case2: not debugging
     pegR$APPLY_RULE(rule.id, input.text, exe, record)->res    
   }
   res
@@ -647,4 +675,8 @@ pexSetRecordDefault<-function(pegR, on){
   pegR$SET_RECORD_DEFAULT(on)
 }
 
+pexGetRulesAsDataFrame<-function(pegR, ...){
+  pegR$GET_DATA_FRAME(...)
+}
 
+#END PEX INTERFACE
