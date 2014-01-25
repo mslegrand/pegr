@@ -36,10 +36,11 @@ new.parser<-function(record.mode=FALSE){
   
   # CONTAINER FOR ACTUAL EXECUTABLE ACTIONS
   pegE$.ACTION<-list() #executable for the rule
-  pegE$.AUTO_ACTION<-FALSE #AUTO ACTION REFERS TO ACTIONS ADDED VIA TEXT INLINE: NOT SURE IF THIS SHOULD STILL BE SUPPORTED
+  pegE$.AUTO_ACTION<-FALSE # MAY DEPRECATE AUTO ACTION: refers to action added inline from legacy text input
   pegE$.ACTION_DEFAULT<-FALSE #DEFAULT FOR RUNNING ACTIONS (BY DEFAULT THIS IS OFF)
   
   #TODO!!!??? PUT SOURCE.RULES, RULE DESCRIPT AND ACTION INFO INTO A SINGLE .RULES DATA FRAME???
+  #           GOOD OR BAD IDEA???
   pegE$.SOURCE.RULES<-list() #text containing the rule source, i.e A<-'c'
   pegE$.RULE_DESCRIPT<-list() #text containing the rule description
   pegE$.ACTION_INFO<-list() #list containing the names of actions which are functions
@@ -468,7 +469,7 @@ get_IDS<-function(){
              GET_DATA_FRAME=function(...){
                df<-data.frame(rule.id=NA, rule.source=NA, 
                               rule.description=NA, action.type=NA, 
-                              action.specification=NA, ...)[numeric(0),]
+                              action.specification=NA, stringsAsFactors=FALSE, ...)[numeric(0),]
                #loop over rules and extract
                ids<-get_IDS()
                for(id in ids){
@@ -486,7 +487,7 @@ get_IDS<-function(){
                  }
                  df1<-data.frame(rule.id=rule.id, rule.source=rule.source, 
                                  rule.description=rule.description, action.type=action.type, 
-                                 action.specification=action.specification, ...)
+                                 action.specification=action.specification, stringsAsFactors=FALSE, ...)
                  df<-rbind(df,df1)
                }
                df
