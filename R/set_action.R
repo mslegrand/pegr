@@ -36,7 +36,11 @@ set_action<-function(pegR, rule.id, action){
   if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser", call. = FALSE)}  
   if( rule.id %in% rule_ids(pegR)){
     if(class(action)=="character"){
-      
+      #check if action has valid syntax
+      if(!check.action.syntax.ok(action)==TRUE){
+        cat("Cannot set action for", rule.id, "\n")
+        return(NULL)
+      }
       actionFn<-paste("function(v){",action,"}")
       #pegR$pegE$.ACTION[[rule.id]]<-eval(parse(text=action))  
       pexSetAction(pegR, rule.id, eval(parse(text=actionFn)))
@@ -63,3 +67,9 @@ set_action<-function(pegR, rule.id, action){
   }
   invisible(TRUE)
 }
+
+check.action.syntax.ok<-function(action){
+  tryCatch( parse(text=action), error=function(e) cat("Bad action syntax", action, "\n") )->x
+  ifelse(is.null(x), FALSE, TRUE)
+}
+
