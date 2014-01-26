@@ -38,8 +38,9 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
   if(pos>0){
     msg<-paste("Unbalance quotes at:", substr(rule, 1, pos))
     stop(msg, call. = FALSE)
-  }  
-  res<-parser$SET_RULE( rule )
+  }
+  res<-pexSetRule(parser, rule)
+  #res<-parser$SET_RULE( rule )
   if(res$ok==TRUE){
     pexSetDescription(parser, res$rule.id, des) # direct call, no id checking
     set_action(parser, res$rule.id, act)
