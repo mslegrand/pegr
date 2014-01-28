@@ -2,7 +2,7 @@
 \alias{new.parser}
 \title{Creates an instance of a new PEG parser.}
 \usage{
-new.parser(data.frame = NULL, record.mode = FALSE)
+new.parser(peg.data.frame = NULL, record.mode = FALSE)
 }
 \arguments{
   \item{peg.data.frame,}{a data frame with rules to

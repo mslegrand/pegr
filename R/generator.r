@@ -19,7 +19,7 @@
 #' * *rule.description* a column to contain a rules description (optional, and may contain NA)
 #' * *action.type* a column indicating the type of action ("Inline" or "External") (optional if there are no actions, may contain NA)
 #' * *action.specification*, a column containg either a valid inline action or the name of an existing rule (optional if there are no actions)
-#' @param record.mode, when set, will keep a record to display with tree or plot. (default is FALSE)
+#' @param record.mode, when set, will keep a record to display with \code{\link{tree}} or \code{\link{plot}. (default is FALSE)
 #' @return Returns a new instance of a PEG parser  
 #' @keywords PEG parser grammer
 #' @examples
@@ -38,8 +38,9 @@
 #' action.specification=c("list()", "fn"), 
 #' stringsAsFactors=FALSE)
 #' peg<-new.parser(df)
+#' @seealso \code{\link{as.data.frame}}
 #' @export
-new.parser<-function(data.frame=NULL, record.mode=FALSE){
+new.parser<-function(peg.data.frame=NULL, record.mode=FALSE){
   #internally we have two parsers, a genE a peg Generator which takes text and processes it
   #to create rules to construct the user defined parser, pegE. However, since the process
   #is to be dynamiclly interpetive (i.e. user can put in one rule at a time), the generator, genE
