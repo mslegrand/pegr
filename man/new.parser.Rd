@@ -7,19 +7,24 @@ new.parser(peg.data.frame = NULL, record.mode = FALSE)
 \arguments{
   \item{peg.data.frame,}{a data frame with rules to
   populate the parser. (default is NULL) A peg.data.frame
-  consists of the following fields: * *rule.id*, column
-  containing the rule's id (mandatory) * *rule.source*, a
-  column containing the rule's definition (mandatory) *
-  *rule.description* a column to contain a rules
-  description (optional, and may contain NA) *
-  *action.type* a column indicating the type of action
-  ("Inline" or "External") (optional if there are no
-  actions, may contain NA) * *action.specification*, a
-  column containg either a valid inline action or the name
-  of an existing rule (optional if there are no actions)}
+  consists of the following fields: \itemize{
+  \item{rule.id} \emph{(mandatory)}, {The column containing
+  the rule's id. \emph{(NA values not allowed)}}
+  \item{rule.source} \emph{(mandatory)}, {The column
+  containing the rule's definition \emph{(NA values not
+  allowed)}} \item{rule.description}, \emph{(optional)}
+  {The column containing any rules description (may have NA
+  values) } \item{action.type}, \emph{(optional)}
+  {Indicates type of action ("Inline" or "External"). Set
+  to NA if no action is associated with this rule }
+  \item{action.specification}, \emph{(optional)} {The
+  column containing the rule specifiation. May be either a
+  valid inline action or the name of an existing rule (Set
+  to NA if e no action is associated with this rule.)} }}
 
   \item{record.mode,}{when set, will keep a record to
-  display with tree or plot. (default is FALSE)}
+  display with \code{\link{tree}} or \code{\link{plot}}.
+  (default is FALSE)}
 }
 \value{
 Returns a new instance of a PEG parser
@@ -43,6 +48,9 @@ action.type=c("Inline","External"),
 action.specification=c("list()", "fn"),
 stringsAsFactors=FALSE)
 peg<-new.parser(df)
+}
+\seealso{
+\code{\link{as.data.frame}}
 }
 \keyword{PEG}
 \keyword{grammer}

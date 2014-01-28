@@ -12,15 +12,20 @@
 
 #' Creates an instance of a new PEG parser.
 #' 
-#' @param peg.data.frame, a data frame with rules to populate the parser. (default is NULL) A peg.data.frame  consists of the following
+#' @param peg.data.frame, a data frame with rules to populate the parser. (default is NULL) 
+#'  A  peg.data.frame  consists of the following
 #'  fields:
-#' * *rule.id*,  column containing the rule's id (mandatory)
-#' * *rule.source*, a  column containing the rule's definition (mandatory)
-#' * *rule.description* a column to contain a rules description (optional, and may contain NA)
-#' * *action.type* a column indicating the type of action ("Inline" or "External") (optional if there are no actions, may contain NA)
-#' * *action.specification*, a column containg either a valid inline action or the name of an existing rule (optional if there are no actions)
-#' @param record.mode, when set, will keep a record to display with \code{\link{tree}} or \code{\link{plot}. (default is FALSE)
-#' @return Returns a new instance of a PEG parser  
+#'  \itemize{
+#'  \item{rule.id} \emph{(mandatory)}, {The column containing the rule's id. \emph{(NA values not allowed)}} 
+#'  \item{rule.source} \emph{(mandatory)}, {The  column containing the rule's definition \emph{(NA values not allowed)}} 
+#'  \item{rule.description}, \emph{(optional)} {The column containing any rules description (may have NA values) }
+#'  \item{action.type}, \emph{(optional)} {Indicates type of action ("Inline" or "External"). Set to  NA if no action is associated with this rule
+#'  }
+#'  \item{action.specification}, \emph{(optional)} {The column containing the rule specifiation. May be either a valid inline action or 
+#'  the name of an existing rule (Set to NA if e no action is associated with this rule.)}
+#' }  
+#' @param record.mode, when set, will keep a record to display with \code{\link{tree}} or \code{\link{plot}}. (default is FALSE)
+#' @return Returns a new instance of a PEG parser
 #' @keywords PEG parser grammer
 #' @examples
 #' #Create an empty parser
