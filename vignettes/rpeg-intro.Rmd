@@ -190,7 +190,7 @@ plot(res.AAB, show=c("names", "args"))
 #plot only the values
 plot(res.AAB, show="vals")
 #plot all
-plot(res.AAB, show="all")
+plot(res.AAB, show="all", cex=.5)
 ```
 
 
