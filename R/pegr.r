@@ -140,8 +140,6 @@ print.summary.PEGResult<-function(sum){
 #' @export
 paste1<-function(v){ list(paste(v,collapse='')) }
 
-#todo:
-#turn on all memoize
 
 
 #' Turn on the pegR rule debugger

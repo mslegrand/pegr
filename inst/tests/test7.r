@@ -12,7 +12,7 @@ test_that("ADD_RULE",
   expect_equal(s1,answ1)
   add_rule(peg, "X<-'x'", act="list('X')")
   inspect_rule(peg, "X")->s2
-  answ2<-ruleStruct("X", "X<-'x'", NULL, c("Inline:", "list('X')") )
+  answ2<-ruleStruct("X", "X<-'x'", NULL, c("Inline", "list('X')") )
   expect_equal(s2,answ2)
 })
 

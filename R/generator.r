@@ -20,7 +20,7 @@
 #' parser<-new.parser() 
 #' add_rule(parser, "Any<-.")  
 #' rule_ids(parser)  # returns "Any"
-new.parser<-function(record.mode=FALSE){
+new.parser<-function(df=NULL, record.mode=FALSE){
   #internally we have two parsers, a genE a peg Generator which takes text and processes it
   #to create rules to construct the user defined parser, pegE. However, since the process
   #is to be dynamiclly interpetive (i.e. user can put in one rule at a time), the generator, genE
@@ -350,14 +350,24 @@ new.parser<-function(record.mode=FALSE){
   } 
 #END MAKE RULE
 
+
+#??? Shall we do this differently
+get_IDS<-function(){
+  ls(envir=pegE)->tmp
+  if( any(grepl("atom.",tmp) ) ){
+    tmp<-tmp[-grep("atom.",tmp)]    
+  }
+  tmp              
+} # end get_IDS
+
+
 #BEGIN CREATE
   s.ID<-function(fn){ # Used only for P2 of new.generator::create
     h<-function(input,  exe, pos){
       fn(input,  exe, pos)
     }
     h
-  } 
-  
+  }   
   create<-function(pegE){
     include.sComponents(pegE)
     include.sConnectives(pegE)
@@ -439,8 +449,8 @@ new.parser<-function(record.mode=FALSE){
     GRAMMAR <- SPACING + opt.1x(DEFINITION) 
     environment() #return  of the generator, which will contain a peg object   
   }
-  genE<-create(pegE)
 # END CREATE
+
   # of course we can turn this around and set pegE$.genE<-genE
   # the future calls to add a rule would be pegE$genE$DEFINITION instead of genE$DEFINITION
   # however, what is probably better is to have a list with $genE, $pegE as members.
@@ -450,16 +460,20 @@ new.parser<-function(record.mode=FALSE){
   # in this case we would return the list(pegE, add_rule(pegE, rule) ), with a pegR class associated 
   # with it.
 
-#??? Shall we do this differently
-get_IDS<-function(){
-  ls(envir=pegE)->tmp
-  if( any(grepl("atom.",tmp) ) ){
-    tmp<-tmp[-grep("atom.",tmp)]    
-  }
-  tmp              
-} # end get_IDS
+genE<-create(pegE)
 
+include.readDF()
 
+if(!is.null(df)){
+  # 1. assert df is of class dataframe
+  # 2. add df to genE
+  ok<-add_data.frame(genE,df)
+  # 3. if failed, return null
+  if(!ok){
+    return(NULL)
+  } 
+}
+#
 
 #BEGIN pegR OBJECT
   pegR<-list(pegE=pegE, 

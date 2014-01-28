@@ -68,6 +68,11 @@ apply_rule<-function(parser, rule.id, input.text, exe=NULL, record=NULL){
 "[[.pegR"<-function(parser, rule.id){
   if(!("pegR" %in% class(parser))){ stop("first argument not a peg parser", call. = FALSE)}  
   #to return a attached rule (i hope)
+#   if("integer" %in% class(rule.id)){
+#     tmp<-parser
+#     class(tmp)<-"list"
+#     return(tmp[[list.rule.id]])
+#   }
   if(!("character" %in% class(rule.id))){
     stop("second argument is not a string", call. = FALSE)
   }
