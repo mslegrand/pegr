@@ -12,15 +12,34 @@
 
 #' Creates an instance of a new PEG parser.
 #' 
-#' 
-#' @export
+#' @param peg.data.frame, a data frame with rules to populate the parser. (default is NULL) A peg.data.frame  consists of the following
+#'  fields:
+#' * *rule.id*,  column containing the rule's id (mandatory)
+#' * *rule.source*, a  column containing the rule's definition (mandatory)
+#' * *rule.description* a column to contain a rules description (optional, and may contain NA)
+#' * *action.type* a column indicating the type of action ("Inline" or "External") (optional if there are no actions, may contain NA)
+#' * *action.specification*, a column containg either a valid inline action or the name of an existing rule (optional if there are no actions)
+#' @param record.mode, when set, will keep a record to display with tree or plot. (default is FALSE)
 #' @return Returns a new instance of a PEG parser  
 #' @keywords PEG parser grammer
 #' @examples
+#' #Create an empty parser
 #' parser<-new.parser() 
 #' add_rule(parser, "Any<-.")  
 #' rule_ids(parser)  # returns "Any"
-new.parser<-function(df=NULL, record.mode=FALSE){
+#' 
+#' #Create a parser from a data.frame
+#' fn<-function(x){list()}
+#' df<-data.frame(
+#' rule.id=c('A','B'), 
+#' rule.source=c("A<-'a'", "B<-'b'"), 
+#' rule.description=c("aaa",NA),  
+#' action.type=c("Inline","External"), 
+#' action.specification=c("list()", "fn"), 
+#' stringsAsFactors=FALSE)
+#' peg<-new.parser(df)
+#' @export
+new.parser<-function(data.frame=NULL, record.mode=FALSE){
   #internally we have two parsers, a genE a peg Generator which takes text and processes it
   #to create rules to construct the user defined parser, pegE. However, since the process
   #is to be dynamiclly interpetive (i.e. user can put in one rule at a time), the generator, genE
@@ -464,10 +483,10 @@ genE<-create(pegE)
 
 include.readDF()
 
-if(!is.null(df)){
+if(!is.null(peg.data.frame)){
   # 1. assert df is of class dataframe
   # 2. add df to genE
-  ok<-add_data.frame(genE,df)
+  ok<-add_data.frame(genE,peg.data.frame)
   # 3. if failed, return null
   if(!ok){
     return(NULL)

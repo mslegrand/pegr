@@ -1,5 +1,5 @@
 
-#' get data.frame consisting of peg rules
+#' produces data.frame consisting of peg rules
 #' 
 #' @param parser, a peg parser produced by  new.parser
 #' @return data.frame of rules
