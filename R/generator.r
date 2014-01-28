@@ -493,7 +493,7 @@ if(!is.null(df)){
                  rule.source<-pegE$.SOURCE.RULES[[id]]
                  rule.description<-pegE$.RULE_DESCRIPT[[id]]
                  rule.description<-ifelse(is.null(pegE$.RULE_DESCRIPT[[id]] ), NA, pegE$.RULE_DESCRIPT[[id]])
-                 if(is.null(pegE$.ACTION_INFO) | is.null(pegE$..ACTION_INFO[[id]])){
+                 if(is.null(pegE$.ACTION_INFO[[id]]) | is.null(pegE$.ACTION_INFO[[id]])){
                    action.type<-NA 
                    action.specification<-NA
                  } else {
