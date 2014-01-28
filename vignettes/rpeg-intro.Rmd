@@ -160,37 +160,46 @@ value(res.AAB)
 Debugging the logic of a grammar can be accomplished testing the component rules starting with the leaves and building up  Also, it's probably better, to start with actions disabled  to see if the general flow is correct first. To add in the anaylsis of a given parse there are two 
 visualizations tools:
 * **tree**: 
-* **plot**: 
+* **plot**:
 Thesse  visualizaton tools are discussed in the next section
+
+In addition to the visualization tools, we have:
+* **a rule stack**, activated by setting the depth via **set_rule_stack_limit** and inspected using **get_rule_stack**
+* **a rule debugger**, activated by **debug.pegR**, which allows one to step through and inspect the rules as they are encountered in the parsing of text input. Additionally, set break points be set. The ***rule debugger*** is to debug the ***RULE LOGIC*** minimal R code involvement. 
 
 ### Visualization
 Visualization consists of showing the nodes visited (and their values) during a parse of an input. This requires that the
 **record** flag be set to **TRUE** in the invocation of **apply_rule**. 
 ```{r debugRuleT}
 # Here record is set to True
-apply_rule(parser, "C", "aab", exe=TRUE, record=TRUE)->res.AAB 
+peg<-new.parser()
+add_rule(peg, "A<-'a'")
+add_rule(peg,"B<-'b' A")
+add_rule(peg, "C<- A B")
+set_action(peg,"A","list('X')")
+apply_rule(peg, "C", "aba", exe=TRUE, record=TRUE)->res.ABA 
 # also, since exe isTrue, so action is taken
 # action A capitalizes, action C pastes together
-value(res.AAB) 
+value(res.ABA) 
 ```
 
 #### Ways to Visualize
 There are two methods of visualization:
 * **Tree**: Prints the tree to console
 ```{r debugRuleTree}
-tree(res.AAB) 
+tree(res.ABA) 
 ```
 
 * **Plot**: Plots the tree to the graphics device
 ```{r debugRulePlot}
 #plot only the ruleids (names)
-plot(res.AAB) 
+plot(res.ABA) 
 #plot only the ruleids (names and inputs)
-plot(res.AAB, show=c("names", "args")) 
+plot(res.ABA, show=c("names", "args")) 
 #plot only the values
-plot(res.AAB, show="vals")
+plot(res.ABA, show="vals")
 #plot all
-plot(res.AAB, show="all", cex=.5)
+plot(res.ABA, show="all", cex=.8)
 ```
 
 
