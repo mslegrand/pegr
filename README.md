@@ -1,10 +1,11 @@
 pegr package
 ====
 
-This a ***Development Version*** of an R package for generating a peg parser. Peg is short for
-**parsing expression grammer**, whose specification can be found at http://bford.info/pub/lang/peg. 
-This software generates parsers based on that specification. By stay as close as possible to the 
-original specification, we hope to provide an implementation agnostic solution to parsing. 
+This an R package for generating a peg parser. Peg is short for
+**parsing expression grammer**. The specification for the Peg grammar can be found at http://bford.info/pub/lang/peg. 
+This software generates parsers based on that specification. By staying as close as possible to the 
+original specification, we hope to provide a parsing solution which is language agnostic. That is, our hope is 
+for a tool allowing one to concentrate on rule building, and not the nuances of a particular programming language.
 
 Installation
 -----
@@ -67,7 +68,7 @@ Design Considerations (Open for Your Input/Discussion)
 ---------
 There are a couple of design considerations which are still open, and which I would love feedback on:
 * **peg + rule1 + rule2** for adding rules may not be the best choice of operator
-* pegs are really environments with wrappers, so the usual copy doesnot work.
+* pegs are really environments with wrappers, so the usual copy does not work.
 
 What's Needed
 -------
@@ -75,7 +76,6 @@ What's Needed
 Some obvious  improvements to consider:
 *  More and more examples
 *  Enhancing the tutorial
-*  Reading and writing peg rules to file. 
 *  Profiling and replacing R functions with C code
 *  Replacing environments with lists to make make copy work?
 
