@@ -613,6 +613,13 @@ if(!is.null(peg.data.frame)){
                  pegE$.DEBUG$NEXT<-TRUE
                }
              },
+             DELETE_RULE=function(rule.id){
+               pegE$.SOURCE.RULES[[rule.id]]<-NULL
+               pegE$.ACTION[[rule.id]]<-NULL
+               pegE$.RULE_DESCRIPT[[rule.id]]<-NULL
+               pegE$.ACTION_NAMES[[rule.id]]<-NULL
+               rm(list=rule.id, envir=pegE)                  
+             },
              GET_DEBUG_ON=function(){
                pegE$.DEBUG_ON
              } 

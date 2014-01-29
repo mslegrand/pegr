@@ -2,7 +2,6 @@ library(testthat)
 
 context("test_apply_rule")
 
-
 test_that("APPLY_RULE",
 {
    # The simplest example: a parser that only accepts a single character 'a'
@@ -42,7 +41,3 @@ test_that('[.PEGR"',
   expect_equal(length(res$val), 1)
   expect_equal(res$val[[1]], 'a')
 })
-
- 
- 
-

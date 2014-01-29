@@ -15,9 +15,5 @@
 delete_rule<-function(pegR, rule.id){
   #delete rule 
   if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser", call. = FALSE)}  
-  pegR$pegE$.SOURCE.RULES[[rule.id]]<-NULL
-  pegR$pegE$.ACTION[[rule.id]]<-NULL
-  pegR$pegE$.RULE_DESCRIPT[[rule.id]]<-NULL
-  pegR$pegE$.ACTION_NAMES[[rule.id]]<-NULL
-  rm(list=rule.id, envir=pegR$pegE)    
+  pexDeleteRule(pegR, rule.id)
 }

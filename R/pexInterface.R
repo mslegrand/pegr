@@ -3,6 +3,10 @@ pexGetStack<-function(pegR){
   pegR$GET_STACK()
 }
 
+pexDeleteRule<-function(pegR, rule.id){
+ pegR$DELETE_RULE(rule.id)  
+}
+
 #pex are wrappers around the pegR to be more S like
 pexSetRule<-function(pegR, rule){
   pegR$SET_RULE(rule)
