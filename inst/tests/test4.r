@@ -3,7 +3,10 @@ library(testthat)
 context("Test4")
 
 pegR<-new.parser()
-gen<-pegR$getGenE() #slimmly way to keep unit test working
+#gen<-pegR$getGenE() #slimmly way to keep unit test working
+#equally slimmy
+pegE<-pegR$pegE
+gen<-create(pegE)
 
 # used in  unittest4 unitTest4 
 as.ID=function(v){
