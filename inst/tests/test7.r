@@ -25,7 +25,7 @@ test_that("SET_RULE",
   expect_equal(length(v),1)
   expect_equal(v[[1]], list("A")[[1]] )
   
-  set_rule(peg, "A<-'b'")
+  set_definition(peg, "A", "A<-'b'")
   # Now A will only recognize 'b', so it will now fail on input 'a'
   status(apply_rule(peg, 'A', 'a', exe=TRUE))->v
   expect_equal(v,FALSE)

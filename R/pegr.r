@@ -5,7 +5,7 @@
 #' in Bryan Fords seminal work \href{http://www.brynosaurus.com/pub/lang/peg.pdf}{ParsingExpressionGrammars: A Recognition-Based Syntactic Foundation}. 
 #' 
 #' This implementation contains the following benefits
-#' \enumerate{
+#' \itemize{
 #' \item Easy debugging of rules, since we can set any node to be the root
 #' \item A tool (qp) to quickly parse simple expressions on the fly, great for learning PEG or confirming those constructs.
 #' \item Printing a tree of all nodes visited during a parse, again helpful in debugging the rule set.
