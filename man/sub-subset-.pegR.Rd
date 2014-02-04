@@ -35,20 +35,20 @@ both cases, the vectors are character vectors and the list
 components are either strings or a function representing an
 action.
 }
-\section{Using Named Vector/Lists}{
-  For \bold{named vectors/lists} the valid names are:
-  \itemize{ \item \emph{rule}: The name \emph{rule} is used
-  to specify a field containing a \emph{rule definition}
+\section{Using Named Vector}{
+  For \bold{named vectors} the valid names are: \itemize{
+  \item \emph{rule}: The name \emph{rule} is used to
+  specify a field containing a \emph{rule definition}
   (a.k.a. source). (like "A<-'a'") to be associated with
   the named rule. \item \emph{des}: The name \emph{des} is
   used to specify a field containing a \emph{description}
   or comment to be associated with the named rule \item
   \emph{act}: The name \emph{act} is used to specify a
   field containing an \emph{action} to be associated with
-  the rule. The action can either be NULL, or an existing
-  function (taking a single list argument and returing a
-  list) or text which represents the body of such a
-  function. When NULL, any existing action is deleted.}
+  the rule. The action can either be NULL, or text which
+  representing the body of function taking a single
+  parameter v that is a list and returns a list. When NULL,
+  any existing action is deleted. }
 }
 
 \section{Using Unnamed Vectors}{
@@ -60,12 +60,9 @@ action.
   with the rule (like "# my clever rule") \item
   \code{"{...} "} Specifies an inline \emph{action} to be
   associated with the rule. (like
-  "{list(toupper(unlist(v)))}" ) \item \code{"{}=..."}
-  Specifies an external \emph{action} to be associated with
-  the rule. (like "{}=fn", where fn is an existing function
-  of one variable that returns a list.) \item
-  \code{"{}=NULL"} Specifies to delete any existing to be
-  associated with the rule. }
+  "{list(toupper(unlist(v)))}" ) \item \code{"{}=NULL"}
+  Specifies to delete any existing to be associated with
+  the rule. }
 }
 
 \section{Inline Action Short Cuts}{
@@ -77,7 +74,7 @@ action.
   which says paste all the values together. }
 }
 \examples{
-# Modfiying a rule (adding a comment and inline action):
+# Modfiying a rule (adding a comment and  action):
 peg<-new.parser()
 peg + "A<-'a'"
 peg
@@ -85,7 +82,7 @@ peg[["A"]]<-"A<-'ab'"
 peg
 peg[["A"]]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
 
-# Another way of doing the same thing (adding a comment and inline action):
+# Another way of doing the same thing (adding a comment and  action):
 peg<-new.parser()
 peg + "A<-'a'"
 peg
@@ -93,10 +90,7 @@ peg[["A"]]<-"A<-'ab'"
 peg
 peg[["A"]]<-c("A<-'xx'", "#replace xx by a", "{list('a')}")
 
-# External functions can be added either by,
-fn<-function(v){paste(v,collapse="")}
-
-# The following produce the same result:
+# The following are equivalent:
 peg[['A']]<-list(act="list()")
 peg[['A']]<-"{}" # A shortcut
 

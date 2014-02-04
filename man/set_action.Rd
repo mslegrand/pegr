@@ -22,17 +22,7 @@ set_action(pegR, rule.id, action)
 Attach an (optional) action to a specified rule
 }
 \examples{
-#Capitalize all occurances of t using function calls
-peg<-new.parser()
-add_rule(peg, "T<-'t'")
-add_rule(peg, "R<-(T / .)+")
-f<-function(v){return(list('T'))}
-set_action(peg, "T", f)
-g<-function(v){return(list(paste(v,collapse='')))}
-set_action(peg, "R", g )
-value(apply_rule(peg, "R", "cat in the hat", exe=T))
-
-#Capitalize all occurances of A using inline actions
+#Capitalize all occurances of 'a' using inline actions
 peg<-new.parser()
 add_rule(peg, "A<-'a'")
 add_rule(peg, "R<-(A / .)+")

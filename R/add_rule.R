@@ -75,21 +75,28 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
 #' peg + "A<-'a'" + "B<-'b'" + "C<-'c'"
 #' #to suppress the output use invisible"
 #' invisible(peg + "A<-'a'" + "B<-'b'" + "C<-'c'")
-#' #now add rule D with action and comment
+#' #now add rule D with action and comment using a named character vector
 #' peg + c("D<-'d'", des="capitalize D", act="list(atom='D')")
+#' 
+#' #now add rule E with action and comment a unnamed character
+#' peg + c( "E<-'e'", "#double E", "{list('EE')}" )
 #' 
 #' @export
 "+.pegR"<-function(parser, arg){
   #
   #use "{}" for act; use "#" for comment, use  =.. <- for rule
   if(is.null(arg)){
-    stop("arg is null", call. = FALSE)
+    stop("arg is null") #, call. = FALSE)
   } else {
-    cmd<-arg2list(arg)
+    cmd<-preProcessArg(arg) #rule.id is null so no checking!
+    #cmd<-arg2list(arg)
+    if(is.null(cmd$rule)){
+      stop("Missing Rule Definition")
+    }
     res<-add_rule(parser, cmd$rule, des=cmd$des, act=cmd$act)
     if(res$parsed!=cmd$rule){
       delete_rule(parser, res$rule.id )
-      stop(paste("Partial Processed:", res$rule.id ), call. = FALSE)
+      stop(paste("Only Partially Processed! Stopped after:", res$rule.id ), call. = FALSE)
     }
   }
   invisible(parser)

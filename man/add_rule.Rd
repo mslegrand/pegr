@@ -7,8 +7,8 @@ add_rule(parser, rule, des = NULL, act = NULL)
 \arguments{
   \item{parser,}{a peg parser produced by new.parser}
 
-  \item{rule,}{a quoted string that defines a rule
-  according to the PEG Grammer}
+  \item{rule,}{the rule description, a quoted string that
+  defines a rule according to the PEG Grammer}
 
   \item{des,}{(optional: NULL by default) sets a rule
   description for this rule}

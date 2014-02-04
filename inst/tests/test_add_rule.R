@@ -49,10 +49,18 @@ test_that('+.PEGR"',
    #now add rule D with action and comment
    peg + c("D<-'d'", des="capitalize D", act="list(atom='D')")
    inspect_rule(peg,"D")->rs
-  expect_equal(rs$name,"D")
-  expect_equal(rs$def,"D<-'d'")
-  expect_equal(rs$com,"capitalize D")
-  expect_equal(rs$act, "list(atom='D')" )
+   expect_equal(rs$name,"D")
+   expect_equal(rs$def,"D<-'d'")
+   expect_equal(rs$com,"capitalize D")
+   expect_equal(rs$act, "list(atom='D')" )
+  
+   peg + c( "E<-'e'", "#double E", "{list('EE')}" )
+   inspect_rule(peg,"E")->rs
+   expect_equal(rs$name,"E")
+   expect_equal(rs$def,"E<-'e'")
+   expect_equal(rs$com,"double E")
+   expect_equal(rs$act, "list('EE')" )
+           
 })
 
  
