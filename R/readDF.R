@@ -2,7 +2,7 @@
 # just did syntax check for set action.
 # do we need to do syntax check for add and <- ???
 # 
-# df1<-data.frame(rule.id=rule.id, rule.source=rule.source, 
+# df1<-data.frame(rule.id=rule.id, rule.definition=rule.definition, 
 #                 rule.description=rule.description, action.type=action.type, 
 #                 action.specification=action.specification, stringsAsFactors=FALSE, ...)
 # df<-rbind(df,df1)
@@ -68,25 +68,25 @@ check.action.syntax.ok<-function(action){
 #       return(paste(mssg,"contains duplicated ids"))
 #     }
 #   # check rul.source
-#     mssg<-"Dataframe Column: rule.source"
-#     if(! "rule.source" %in% names(df)){
+#     mssg<-"Dataframe Column: rule.definition"
+#     if(! "rule.definition" %in% names(df)){
 #       return(paste(mssg,"Missing") ) 
 #     }
 #     # characters?
-#     if(!"character" %in%  class(df$rule.source)){
+#     if(!"character" %in%  class(df$rule.definition)){
 #       return(paste(mssg,"Not character!") )
 #     }
 #     # no NA
-#     if(any(is.na(df$rule.source))){
+#     if(any(is.na(df$rule.definition))){
 #       return(paste(mssg,"contains missing value") )
 #     }    
 #     # balanced quotes?
-#     pos<-badQuotePos(df$rule.source)
+#     pos<-badQuotePos(df$rule.definition)
 #     if(any(pos>0)){
 #       return(paste(mssg,"contains unbalanced quotes") )
 #     }
 #     # assignment with left side matching rule.id
-#     str_match(df$rule.source, "^\\s*([A-Z][A-Z,a-z,0-9,_]*)\\s*<-" )->m1
+#     str_match(df$rule.definition, "^\\s*([A-Z][A-Z,a-z,0-9,_]*)\\s*<-" )->m1
 #     str_match(df$rule.id, "^\\s*([A-Z][A-Z,a-z,0-9,_]*)\\s*")->m2
 #     if(any(is.na(m1)) | any(is.na(m2)) ){
 #       return(paste(mssg, "failed to extract rule from rule definition"))
@@ -155,13 +155,13 @@ include.readDF<-function(env=parent.frame() ){
 env$add_data.frame<-function(genE, df){
 # check data.frame 
   mssg<-"Dataframe Column "
-  #1. must have both rule.id, rule.source
+  #1. must have both rule.id, rule.definition
   if(! "rule.id" %in% names(df)){   
     cat(mssg,"rule.id:", "Missing\n")
     return(FALSE)
   }
-  if(! "rule.source" %in% names(df)){   
-    cat(mssg,"rule.source:","Missing\n")
+  if(! "rule.definition" %in% names(df)){   
+    cat(mssg,"rule.definition:","Missing\n")
     return(FALSE)
   }
   #2. cannot have any na for rule.id and source.id
@@ -170,26 +170,26 @@ env$add_data.frame<-function(genE, df){
     cat(mssg,"rule.id:", "Contains NA\n")
     return(FALSE)
   }
-  if(any(is.na(df$rule.source))){
-    cat(mssg,"rule.source:", "Contains NA\n")
+  if(any(is.na(df$rule.definition))){
+    cat(mssg,"rule.definition:", "Contains NA\n")
     return(FALSE)
   }
   #3. must have both or neither action  
-  if("action.type" %in% names(df) & ! "action.specification" %in% names(df) ){
-    cat(mssg,"action.type exists but no actions.specification\n")
-    return(FALSE)
-  }
-  if("action.specification" %in% names(df) & ! "action.type" %in% names(df) ){
-    cat(mssg,"action.specification exists but no action.type\n")
-    return(FALSE)
-  }
-  #4. rule.id, rule.source, action.specification should be character
+#   if("action.type" %in% names(df) & ! "action.specification" %in% names(df) ){
+#     cat(mssg,"action.type exists but no actions.specification\n")
+#     return(FALSE)
+#   }
+#   if("action.specification" %in% names(df) & ! "action.type" %in% names(df) ){
+#     cat(mssg,"action.specification exists but no action.type\n")
+#     return(FALSE)
+#   }
+  #4. rule.id, rule.definition, action.specification should be character
   #df <- rapply(df, as.character, classes="factor", how="replace")
   if(is.factor(df$rule.id)){
     df$rule.id<-as.character(df$rule.id)
   }
-  if(is.factor(df$rule.source)){
-    df$rule.source<-as.character(df$rule.source)
+  if(is.factor(df$rule.definition)){
+    df$rule.definition<-as.character(df$rule.definition)
   }
   if(is.factor(df$rule.description)){
     df$rule.description<-as.character(df$rule.description)
@@ -197,35 +197,35 @@ env$add_data.frame<-function(genE, df){
   if("action.specification" %in% names(df) & is.factor(df$action.specification)){
     df$action.specification<-as.character(df$action.specification)
   }
-  if("action.type" %in% names(df) & is.factor(df$action.type)){
-    df$action.type<-as.character(df$action.type)
-  }
+#   if("action.type" %in% names(df) & is.factor(df$action.type)){
+#     df$action.type<-as.character(df$action.type)
+#   }
   if(!"character" %in% class(df$rule.id)){
     cat(mssg,"rule.id has wrong class\n")
     return(FALSE)    
   }
-  if(!"character" %in% class(df$rule.source)){
-    cat(mssg,"rule.source has wrong class\n")
+  if(!"character" %in% class(df$rule.definition)){
+    cat(mssg,"rule.definition has wrong class\n")
     return(FALSE)    
   }
   if(!"character" %in% class(df$rule.description)){
     cat(mssg,"rule.description has wrong class\n")
     return(FALSE)    
   }
-  if(!"character" %in% class(df$action.type)){
-    cat(mssg,"action.type has wrong class\n")
-    return(FALSE)    
-  }
+#   if(!"character" %in% class(df$action.type)){
+#     cat(mssg,"action.type has wrong class\n")
+#     return(FALSE)    
+#   }
   if(!"character" %in% class(df$action.specification)){
     cat(mssg,"action.specification has wrong class\n")
     return(FALSE)    
   }
   #next process the rows one at a time
   for(i in 1:nrow(df) ){
-    # we already checked rule.id matches rule.source
+    # we already checked rule.id matches rule.definition
     # and action is ok
     rule.id<-str_trim(df$rule.id[i]) #need to trim?
-    ruleDef<-df$rule.source[i]
+    ruleDef<-df$rule.definition[i]
     res<-genE$DEFINITION(ruleDef)
     if(res$ok==TRUE){
       #record source
@@ -238,50 +238,27 @@ env$add_data.frame<-function(genE, df){
         }
       }
       #  action:
-      if("action.type" %in% names(df) & ("action.specification" %in% names(df))){
+      if("action.specification" %in% names(df)){
         #browser()
-        type<-df$action.type[i]
         spec<-df$action.specification[i]
-        if(is.na(type) & is.na(spec)){
+        if( is.na(spec) ){
           next
+        } else {
+          ok<-check.action.syntax.ok(spec)
+          if(ok==TRUE){
+            actionFn<-paste("function(v){",spec,"}")
+            #pegR$genE$pegE$.ACTION[[rule.id]]<-eval(parse(text=action))  
+            action<-eval(parse(text=actionFn))             
+            genE$pegE$.ACTION[[rule.id]]<-action 
+            #pegR$genE$pegE$.ACTION_NAMES[[rule.id]]<-c("Inline",action)
+            #actionInfo<-c("Inline",spec) 
+            genE$pegE$.ACTION_INFO[[rule.id]]<-spec #actionInfo
+          } else { #bail
+            cat("Error at row :",i, " Action syntax invalid", "\n" )
+            return(FALSE) 
+          }          
+          
         }
-        if( ( is.na(type) & (!is.na(spec)) ) | ( (!is.na(type)) & is.na(spec) ) ){
-          cat("Error at row :",i, " Inconsisent action NA", "\n" )
-          return(FALSE)
-        }
-        if( (!is.na(type)) & (!is.na(spec))){
-          #browser()
-          if(type=="Inline"){
-            # check
-            ok<-check.action.syntax.ok(spec)
-            if(ok==TRUE){
-              actionFn<-paste("function(v){",spec,"}")
-              #pegR$genE$pegE$.ACTION[[rule.id]]<-eval(parse(text=action))  
-              action<-eval(parse(text=actionFn))             
-              genE$pegE$.ACTION[[rule.id]]<-action 
-              #pegR$genE$pegE$.ACTION_NAMES[[rule.id]]<-c("Inline",action)
-              actionInfo<-c("Inline",spec) 
-              genE$pegE$.ACTION_INFO[[rule.id]]<-actionInfo
-            } else { #bail
-              cat("Error at row :",i, " Action syntax invalid", "\n" )
-              return(FALSE) 
-            }          
-          } else{
-            if(type=="External"){
-              #find and set it
-              ok<-exists(spec, envir=.GlobalEnv)
-              if(ok){
-                action<-get(spec, envir = .GlobalEnv)
-                genE$pegE$.ACTION[[rule.id]]<-action
-                actionInfo<-c("External",spec)   
-                genE$pegE$.ACTION_INFO[[rule.id]]<-actionInfo
-              } else {
-                cat("Error at row :",i, " Action cannot find", spec, "\n" )
-                return(FALSE)                
-              }              
-            }
-          }
-        }      
       }      
     } else { # res$ok==FALSE
       cat("Error at row :",i, " Invalid Rule Syntax", "\n" )
@@ -302,7 +279,7 @@ env$add_data.frame<-function(genE, df){
 # rd<-c("aaa",NA)
 # rs<-c("A<-'a'", "B<-'b'")
 # ri<-c('A','B')
-# df<-data.frame(rule.source=rs, rule.id=ri, 
+# df<-data.frame(rule.definition=rs, rule.id=ri, 
 #                rule.description=rd,  action.type=at, 
 #               action.specification=as, stringsAsFactors=FALSE)
 # isDataFrameGood(df)

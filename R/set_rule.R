@@ -29,23 +29,51 @@ set_definition<-function(parser, rule.id, rule.definition){
 }
 
 
-#' Reset an existing rule
+#' Reset an existing rule: definition, description, action
 #' 
-#' Used to Modify the rule definition and or description or value of of an exiting rule
+#' Used to modify the rule \emph{definition} and/or \emph{description} and/or \emph{action} of of an exiting rule
 #' 
 #' @param parser, the peg parser containing the rule to be modified
 #' @param rule.id, the identifier of the rule to be modified
 #' @param value, the modifications to be applied. Can be either a named vector or a
-#' named list, a unnamed character vector, or NULL, which case the rule is deleted. 
-#' For named vectors/lists the names are:
-#' \itemize{
-#' \item {rule} The source of the rule (like "A<-'a'")
-#' \item {des} A comment to be associated with the rule
-#' \item  {act} An action to be associated with the rule
-#' }
+#' named list (see below), a unnamed character vector(see below), or NULL, which case the rule is deleted. 
 #' @return peg parser
+#' 
+#' @details
+#' This is a very flexiable way of resetting the action, description and even the definition of an existing rule.
+#' This encompasses the functionality of \code{\link{set_definition}}, \code{\link{set_description}} and \code{\link{set_action}} 
+#' This rule accepts either \emph{named} vectors/lists or \emph{unnamed} vectors. In both cases, the vectors are character vectors
+#' and the list components are either strings or a function representing an action. 
+#' 
+#' @section Using Named Vector:
+#' For \bold{named vectors} the valid names are:
+#' \itemize{
+#' \item \emph{rule}: The name \emph{rule} is used to specify a field containing a \emph{rule definition}  (a.k.a. source). (like "A<-'a'") to be associated with the named rule.
+#' \item \emph{des}: The name \emph{des} is used to specify a field containing a \emph{description} or comment to be associated with the named rule
+#' \item  \emph{act}: The name \emph{act} is used to specify a field containing an \emph{action} to be associated with the rule. The action 
+#' can either be NULL, or text which representing the body of function taking a single parameter v that is a list and returns a list.
+#' When NULL, any existing action is deleted.
+#' }
+#' 
+#' @section Using Unnamed Vectors:
+#' For \bold{unnamed vectors}, each vector consists of a single string of the form:
+#' \itemize{
+#' \item \code{"...<-..."}: Specifies a \emph{rule definition}  (a.k.a. source). (like "A<-'a'")
+#' \item \code{"#..."} Specifies \emph{description} or comment to be associated with the rule (like "# my clever rule")
+#' \item  \code{"{...} "} Specifies an inline \emph{action} to be associated with the rule. (like "{list(toupper(unlist(v)))}" )
+#' \item \code{"{}=NULL"} Specifies to delete any existing to be associated with the rule. 
+#' }
+#' 
+#' @section Inline Action Short Cuts:
+#' As a convenience the following short cuts are provided:
+#' \itemize{
+#' \item \code{"{}"}: Specifies the action \code{"{list()}"}, which essentially says drop (ignore) the values produce by this rule.
+#' \item \code{"{-}"} Specifies the action \code{"list(paste(v,collapse=''))"}, which says paste all the values together.
+#' }
+#' 
+#' 
 #' @examples
-#' # Modfiying a rule (adding a comment and inline action):
+#' # Modfiying a rule (adding a comment and  action):
 #' peg<-new.parser()
 #' peg + "A<-'a'"
 #' peg
@@ -53,7 +81,7 @@ set_definition<-function(parser, rule.id, rule.definition){
 #' peg
 #' peg[["A"]]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
 #' 
-#' # Another way of doing the same thing (adding a comment and inline action):
+#' # Another way of doing the same thing (adding a comment and  action):
 #' peg<-new.parser()
 #' peg + "A<-'a'"
 #' peg
@@ -61,12 +89,7 @@ set_definition<-function(parser, rule.id, rule.definition){
 #' peg
 #' peg[["A"]]<-c("A<-'xx'", "#replace xx by a", "{list('a')}")
 #' 
-#' # External functions can be added either by,
-#' fn<-function(v){paste(v,collapse="")}
-#  peg[['A']]<-list(act=fn)
-#  peg[['A']]<-"{}=fn" # A shortcut for list(act=fn)
-#' 
-#' # The following produce the same result:
+#' # The following are equivalent:
 #' peg[['A']]<-list(act="list()")
 #' peg[['A']]<-"{}" # A shortcut
 #' 
@@ -106,7 +129,10 @@ set_definition<-function(parser, rule.id, rule.definition){
     pexSetDescription(parser, rule.id, arg.L$des)
   }
   if('act' %in% names(arg.L)){
-    set_action(parser, rule.id, arg.L$act)
+    action<-arg.L$act
+#     print(class(action))
+#     print(body(action))
+    set_action(parser, rule.id, action)
   }
   invisible(parser)
 }
@@ -114,11 +140,13 @@ set_definition<-function(parser, rule.id, rule.definition){
 
 preProcessArg<-function(arg, rule.id=NULL){
   arg<-as.list(arg)
+#   tmp<-deparse(substitute(arg))
+#   print( tmp )
   if( is.null(names(arg) ) ){
     names(arg)<-rep("",length(arg))
   } 
   which("function"==sapply(arg, function(x){class(x)}))->indx
-  names(arg)[indx]<-"function"
+  names(arg)[indx]<-"act"
   arg.w.name<-arg[names(arg)!=""]
   arg.wo.name<-arg[names(arg)==""]
   #process each blank name
@@ -160,21 +188,32 @@ validate.src<-function(src, rule.id=NULL){
 }
 
 validate.act<-function(action){
-  #if function, do nothing
+  #must be NULL or character vector
+  if((!is.null(action)) & (!("character" %in% class(action)))){
+    stop("Bad action\n")
+  }
   if("character" %in% class(action)){
     str_match(action, "^\\s*$")->mat
     if(!is.na(mat[1])){ #makes an easy shortcut for list()
       action<-"list()"
     }
+    str_match(action, "^\\s*-\\s*$")->mat
+    if(!is.na(mat[1])){ #makes an easy shortcut for list(paste(v,collapse=''))
+      action<-"list(paste(v,collapse=''))"
+    }
+    str_match(action, "^\\s*NULL\\s*$")->mat
+    if(!is.na(mat[1])){ #makes an easy shortcut for NULL
+      action<-NULL
+    }   
     ok<-check.action.syntax.ok(action)
     if(!ok){
       stop("cannot set action\n")
     }
-  }    
+  }   
   return(action)
 }
 
-#extract type fron unamed txt field
+#extract type fron unnamed txt field
 txt.2.fldName<-function( txt, rule.id=NULL ){
   txt<-str_trim(txt)
   mat<-str_match(txt, "^#\\s*(.+)")

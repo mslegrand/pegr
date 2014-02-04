@@ -2,7 +2,7 @@ library(testthat)
 
 context("test_add_rule")
 
-test_that("ADD_RULE",
+test_that("ADD_RULE1",
 {
 #expect_equal(0,1)
    peg<-new.parser()
@@ -30,7 +30,7 @@ test_that("ADD_RULE",
    expect_equal(rs$name,"X")
    expect_equal(rs$def,"X<-'x'")
    expect_equal(rs$com,NULL)
-   expect_equal(rs$act[2], "list('X')")
+   expect_equal(rs$act, "list('X')")
 })
 
  
@@ -52,7 +52,7 @@ test_that('+.PEGR"',
   expect_equal(rs$name,"D")
   expect_equal(rs$def,"D<-'d'")
   expect_equal(rs$com,"capitalize D")
-  expect_equal(rs$act[2], "list(atom='D')" )
+  expect_equal(rs$act, "list(atom='D')" )
 })
 
  

@@ -11,17 +11,7 @@
 #'  \item  NULL, in which case the action associated with the given rule is removed.
 #' }
 #' @examples
-#' #Capitalize all occurances of t using function calls
-#' peg<-new.parser()
-#' add_rule(peg, "T<-'t'")
-#' add_rule(peg, "R<-(T / .)+")
-#' f<-function(v){return(list('T'))}
-#' set_action(peg, "T", f)
-#' g<-function(v){return(list(paste(v,collapse='')))}
-#' set_action(peg, "R", g )
-#' value(apply_rule(peg, "R", "cat in the hat", exe=T))
-#' 
-#' #Capitalize all occurances of A using inline actions
+#' #Capitalize all occurances of 'a' using inline actions
 #' peg<-new.parser()
 #' add_rule(peg, "A<-'a'")
 #' add_rule(peg, "R<-(A / .)+")
@@ -42,18 +32,18 @@ set_action<-function(pegR, rule.id, action){
         return(NULL)
       }
       actionFn<-paste("function(v){",action,"}")
+      #browser()
       #pegR$pegE$.ACTION[[rule.id]]<-eval(parse(text=action))  
-      pexSetAction(pegR, rule.id, eval(parse(text=actionFn)))
+      #tmp<-parse(text=actionFn)
+      tmpf<-eval(parse(text=actionFn))
+      environment(tmpf)<-parent.frame()
+      pexSetAction(pegR, rule.id, tmpf)
+      #pexSetAction(pegR, rule.id, eval(parse(text=actionFn)))
       #pegR$pegE$.ACTION_NAMES[[rule.id]]<-c("Inline",action)
-      actionInfo<-c("Inline",action)
+      actionInfo<-c(action)
       pexSetActionInfo(pegR, rule.id, actionInfo)
-    } else if (class(action)=="function"){
-      #pegR$pegE$.ACTION[[rule.id]]<-action 
-      pexSetAction(pegR, rule.id, action)
-      #pegR$pegE$.ACTION_NAMES[[rule.id]]<-c("External Function:", deparse(substitute(action)))
-      actionInfo<-c("External", deparse(substitute(action)))
-      pexSetActionInfo(pegR, rule.id, actionInfo)
-    } else if (is.null(action)){
+    } else 
+    if (is.null(action)){
       #pegR$pegE$.ACTION[[rule.id]]<-NULL
       #pegR$pegE$.ACTION_NAMES[[rule.id]]<-NULL
       pexSetAction(pegR, rule.id, action)

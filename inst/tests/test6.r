@@ -28,15 +28,16 @@ test_that("SET ACTION: TEXT",
 })
 
 
-test_that("SET ACTION: FUNCTION",
+test_that("SET ACTION: FUNCTION 1",
 {
   genE<-new.parser()
   add_rule(genE,"XX<-.")->res
   expect_equal(res$parsed, "XX<-." )
   fn<-function(v){n<-length(v)+1; v<-c(v,n); v<-paste(v,collapse='');list(v)}
-  set_action(genE,"XX", fn)
+  set_action(genE,"XX", "fn<-get('fn'); fn(v)")
   rules<-rule_ids(genE)
   expect_equal(rules[1],"XX")
+  #browser()
   apply_rule(genE,"XX","b", exe=TRUE)->res2
   expect_equal(res2$val[[1]],"b2")
 })
@@ -65,7 +66,7 @@ test_that("SET RULE DESCRIPTION",
   txt<-"any char"
   set_description(genE,"X",txt)
   fn<-function(v){ n<-length(v)+1; v<-c(v,n); v<-paste(v,collapse='');list(v)}
-  set_action(genE,"X", fn) 
+  set_action(genE,"X", "fn(v)") 
   txt2<-get_description(genE,"X")
   expect_equal(txt,txt2)
   expect_equal(length(genE$pegE$.SOURCE.RULES),1)

@@ -5,7 +5,7 @@
 #' a new (possibly empty) description, and a new (possibly empty) action.
 #' 
 #' @param parser, a peg parser produced by  new.parser
-#' @param rule, a quoted string that defines a rule according to the PEG Grammer
+#' @param rule, the rule description, a quoted string that defines a rule according to the PEG Grammer
 #' @param des, (optional: NULL by default) sets a rule description for this rule
 #' @param act, (optional: NULL by default) sets an action, to be executed by this rule. This NULL by default.
 #' @return Status and the rule processed

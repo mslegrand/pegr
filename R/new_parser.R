@@ -237,26 +237,26 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE){
                genE$DEFINITION(ruleDef)
              },
              GET_DATA_FRAME=function(...){
-               df<-data.frame(rule.id=NA, rule.source=NA, 
+               df<-data.frame(rule.id=NA, rule.definition=NA, 
                               rule.description=NA, action.type=NA, 
                               action.specification=NA, stringsAsFactors=FALSE, ...)[numeric(0),]
                #loop over rules and extract
                ids<-get_IDS()
                for(id in ids){
                  rule.id<-id
-                 rule.source<-pegE$.SOURCE.RULES[[id]]
+                 rule.definition<-pegE$.SOURCE.RULES[[id]]
                  rule.description<-pegE$.RULE_DESCRIPT[[id]]
                  rule.description<-ifelse(is.null(pegE$.RULE_DESCRIPT[[id]] ), NA, pegE$.RULE_DESCRIPT[[id]])
-                 if(is.null(pegE$.ACTION_INFO[[id]]) | is.null(pegE$.ACTION_INFO[[id]])){
-                   action.type<-NA 
+                 if(is.null(pegE$.ACTION_INFO[[id]])){
+                   #action<-NA 
                    action.specification<-NA
                  } else {
                    action.info<-pegE$.ACTION_INFO[[id]]
-                   action.type<-action.info[1]
-                   action.specification<-action.info[2]
+                   #action.type<-action.info[1]
+                   action.specification<-action.info #[2]
                  }
-                 df1<-data.frame(rule.id=rule.id, rule.source=rule.source, 
-                                 rule.description=rule.description, action.type=action.type, 
+                 df1<-data.frame(rule.id=rule.id, rule.definition=rule.definition, 
+                                 rule.description=rule.description,  
                                  action.specification=action.specification, stringsAsFactors=FALSE, ...)
                  df<-rbind(df,df1)
                }

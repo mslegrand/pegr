@@ -18,32 +18,63 @@ context("test_set_rule")
 #    value(apply_rule(peg, 'A', 'b', exe=TRUE))
 # })
 
- 
 
-test_that("[<-.PEGR",
+
+test_that("[<-.PEGR def",
 {
+  #add rule A
    peg<-new.parser()
    invisible(peg + "A<-'a'")
    inspect_rule(peg,'A')->rs
-  expect_equal(rs$name,"A")
-  expect_equal(rs$def,"A<-'a'")
-  expect_equal(rs$com,NULL)
-  expect_equal(rs$act, NULL )
+   expect_equal(rs$name,"A")
+   expect_equal(rs$def,"A<-'a'")
+   expect_equal(rs$com,NULL)
+   expect_equal(rs$act, NULL )
 
+   #edit rule defn 1
    peg[["A"]]<-"A<-'ab'"
-inspect_rule(peg,'A')->rs
-expect_equal(rs$name,"A")
-expect_equal(rs$def,"A<-'ab'")
-expect_equal(rs$com,NULL)
-expect_equal(rs$act, NULL )
+   inspect_rule(peg,'A')->rs
+   expect_equal(rs$name,"A")
+   expect_equal(rs$def,"A<-'ab'")
+   expect_equal(rs$com,NULL)
+   expect_equal(rs$act, NULL )
 
    peg[["A"]]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
-inspect_rule(peg,'A')->rs
-expect_equal(rs$name,"A")
-expect_equal(rs$def,"A<-'xx'")
-expect_equal(rs$com,"replace xx by a")
-expect_equal(rs$act[2], "list('a')" )
+  inspect_rule(peg,'A')->rs
+  expect_equal(rs$name,"A")
+  expect_equal(rs$def,"A<-'xx'")
+  expect_equal(rs$com,"replace xx by a")
+  expect_equal(rs$act, "list('a')" )
 })
+
+test_that("[<-.PEGR  w.names: (rule), des, act-inline",
+{
+  #add rule A
+  peg<-new.parser()
+  invisible(peg + "A<-'a'")
+  
+  peg[["A"]]<-c("A<-'xx'", des="replace xx by a", act="list('a')")
+  inspect_rule(peg,'A')->rs
+  expect_equal(rs$name,"A")
+  expect_equal(rs$def,"A<-'xx'")
+  expect_equal(rs$com,"replace xx by a")
+  expect_equal(rs$act, "list('a')" )
+})
+
+test_that("[<-.PEGR  wo.names: rule, des, act",
+{
+  #add rule A
+  peg<-new.parser()
+  invisible(peg + "A<-'a'")  
+  peg[["A"]]<-c("A<-'xx'", "# replace xx by a", "{list('a')}")
+  inspect_rule(peg,'A')->rs
+  expect_equal(rs$name,"A")
+  expect_equal(rs$def,"A<-'xx'")
+  expect_equal(rs$com,"replace xx by a")
+  expect_equal(rs$act, "list('a')" )
+  expect_equal(value(peg[["A"]]("xx",exe=TRUE))[[1]],"a")
+})
+
 
  
 
