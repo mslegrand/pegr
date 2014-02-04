@@ -19,7 +19,7 @@ include.sConnectives<-function(pegE, envS=parent.frame() ){
       if(exists(f,envir=pegE)){ 
         f<-get(f,envir=pegE)
       } else {
-        stop(paste("missing symbol:", f , "(rule missing quotes?)" ), call.=FALSE )
+        stop(paste("missing rule or symbol:", f , "(literal missing quotes?)" ), call.=FALSE )
       }
     }
     f
