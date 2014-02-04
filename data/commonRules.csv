@@ -1,9 +1,9 @@
 "","rule.id","rule.definition","rule.description","action.specification"
-"1","ALPHA","ALPHA<- [a-z]/[A-Z]",NA,NA
-"2","DIGIT","DIGIT<-[0-9]",NA,NA
-"3","EOF","EOF<- !.","End of Input",""
+"1","ALPHA","ALPHA<- [a-z]/[A-Z]","Any letter",NA
+"2","DIGIT","DIGIT<-[0-9]","Digit",NA
+"3","EOF","EOF<- !.","End of Input","list()"
 "4","EOL","EOL<- '
-' / EOF","End of Line",""
-"5","NUM","NUM<-DIGIT+ ('.' DIGIT+)? WS",NA,NA
-"6","WORD","WORD<-ALPHA+ WS",NA,NA
-"7","WS","WS<- ' '/'	'/EOL","White space",""
+' / EOF","End of Line","list()"
+"5","NUM","NUM<-DIGIT+ ('.' DIGIT+)? WS","Number","v<-paste1(v); list(as.numeric(v[[1]]))"
+"6","WORD","WORD<-ALPHA+ WS","Any word","list(paste(v,collapse=''))"
+"7","WS","WS<- ' '/'	'/EOL","White space","list()"

@@ -23,9 +23,11 @@ preProcessArg<-function(arg, rule.id=NULL){
   for(type in names(arg.w.name)){
     if(type=="rule"){
       src<-validate.src( arg.w.name[[type]], rule.id)
+      arg.w.name[[type]]<-src
     }
     else if ( type=="act"){
       action<-validate.act(arg.w.name[[type]])
+      arg.w.name[[type]]<-action
     }
   }
   arg.w.name
