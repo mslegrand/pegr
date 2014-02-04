@@ -243,7 +243,7 @@ s.ID<-function(fn){ # Used only for P2 of new.generator::create
   PREFIX <- opt.01(AND / NOT) + SUFFIX < list("PREFIX", function(v){ fn<-mk.prefix(v); list(pre=fn) } )
   SEQUENCE <- opt.0x(PREFIX) < list("SEQ",function(v){ 
     if(!("list" %in% class(v))){
-      cat("ERROR: EXPECTING A LIST, GOT INSTEAD")
+      cat("ERROR: EXPECTING A LIST, GOT INSTEAD ")
       print(v)
       stop("BAD ACTION: RETURN MUST BE A LIST", call. = FALSE)
     }
