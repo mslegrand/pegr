@@ -4,9 +4,9 @@
 peg<-new.parser()
 add_rule(peg, "sq<- \"'\"" )
 add_rule(peg, "dq<- '\"'" )
-add_rule(peg, "nqp<-  (!(sq / dq) .)+ ")
-add_rule(peg, "sqp<-sq (!sq .)* sq")
-add_rule(peg, "dqp<-dq (!dq .)* dq")
+add_rule(peg, "nqp<-  (!(sq / dq) .)+ ")                              
+add_rule(peg, "sqp<-sq (!sq .)* sq") #"sqp<-sq (!sq (\\ sq / .)*) sq" 
+add_rule(peg, "dqp<-dq (!dq .)* dq")                                  
 add_rule(peg, "extract<- ( nqp /  sqp / dqp )+ ")
 set_action(peg, "nqp", "list()")
 set_action(peg, "dqp", "list(paste(v[2:(length(v)-1)], collapse=''))")
