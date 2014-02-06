@@ -48,8 +48,13 @@ Features of this Tool
 *  Graphing the evalutation tree with the **plot** command. 
 *  A way to limit the depth of calls to rules by using the **set_rule_stack_limit** command, and then by using **get_rule_stack**, the stack may be inspected whenever the limit is exceeded (This is to help detect the source of  hangning due to infinite recursion)
 *  **A  specialized rule debugger** to ease the effort of debugging rule logic.  The debugger allows one to inpsect all rules in the order in which they applied to the input: both when the rule is entered and exited. This allows one to inspect return status (whether or not the rule accepts the input), the text consumed, and any values produced by the rule.  ***The rule debugger is for debugging the RULE SET LOGIC, not R code!***
+* Parser ***summary*** providing
+   * A listing of any rules used (by other rules) but not defined in the rule set.
+   * A listing of all rules that may either directly or indirectly call them selves (recursive)
+   * A listing of all rules that can only play the role of a root (not called by any rule)
+   * A listing of all rules that can only play the role of a leaf (does not call any rule)
 * A tutorial included to help get started.
-* Writing rules to a data.frame. The rules can then be read back in upon initialization. Thus by rbinding data frames rules sets can be saved to file or combined into a single peg.
+* Writing rules to a data.frame. The rules can then be read back in upon initialization. Thus by rbinding data frames rules sets can be saved to file or combined into a single peg. This allows for building base 'libraries' (in the form of data.frames) which can be loaded upon startup and then extended for customized solutions.
 
 Usage
 -------
@@ -78,8 +83,6 @@ What's Needed
 Some obvious  improvements to consider:
 *  More examples: there can never be too many examples
 *  Enhancing the tutorial
-*  Utility to list all references to rules have not yet been defined
-*  Utility to list all recursive rules. (need for porting a rule set to other peg based parsers)
 *  Ability to extend the basic grammar via some addon mechanism to customize (for convience/compatiblity with other pegs)
 *  Profiling and replacing R functions with C code
 
