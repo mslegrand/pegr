@@ -75,7 +75,7 @@ _**Step 2:**_ **Add** rules to the parser
 peg + c("A<- 'a' .", "{-}") + c("X<-.", "{}") + "R<- A / X"
 ```
 
-_**Step 3:**_ **Apply** the a rule to an input string
+_**Step 3:**_ **Apply** a rule to an input string
 ```
 example: peg[['R']]('abacda')
 ```
