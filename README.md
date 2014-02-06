@@ -63,16 +63,19 @@ Usage is described in the vignette and in the tutorial.   In addition to the exa
 there several demos are provide for additional insight.
 
 The steps for usage are:
-1. Construct a new peg parser: 
+
+**Step 1:** Construct a new peg parser: 
 ```
 peg<-new.parser()
 ```
 Note: An data.frame argument may be supplied, which will load a set of rules stored as a data.frame
-2. Add rules to the parser
+
+**Step 2:** Add rules to the parser
 ```
 peg + c("A<- 'a' .", "{-}") + c("X<-.", "{}") + "R<- A / X"
 ```
-3. Apply the a rule to an input string
+
+**Step 3:** Apply the a rule to an input string
 ```
 example: peg[['R']]('abacda')
 ```
@@ -81,7 +84,7 @@ We currently supply 2 approaches to usage:
 1. Traditional form: commands of the form 
    * **add_rule(peg, rule, ...)** : *adds (attaches) a single rule to the peg*
    * **apply_rule(peg, rule.id, input.txt, ...)**  : *applys an attached rule to the input text*
-2. Operator form: commands of the form 
+2. Operator form: commands of the form (also shown above)
    * **peg + rule1 + rule 2 + ...** : *adds (attaches) one or more rules to the peg*
    * **peg\[\[rule,id]](input.txt)** : *applys an attached rule to the input text*
 
