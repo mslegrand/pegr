@@ -71,7 +71,7 @@ Design Considerations (Open for Your Input/Discussion)
 There are a couple of design considerations which are still open, and which I would love feedback on:
 * **peg + rule1 + rule2** for adding rules may not be the best choice of operator
 * pegs are really environments with wrappers.
-
+* For more on design issues, see the Design Issues page under the Wiki
 What's Needed
 -------
 
