@@ -5,7 +5,7 @@ This an R package for generating a peg parser. Peg is short for
 **parsing expression grammer**. The specification for the Peg grammar can be found at http://bford.info/pub/lang/peg. 
 This software generates parsers based on that specification. By staying as close as possible to the 
 original specification, we hope to provide a parsing solution which is language agnostic. That is, our hope is 
-for a tool allowing one to concentrate on rule building, and not the nuances of a particular programming language.
+for a tool allowing one to concentrate on rule building, and not the nuances of any particular programming language.
 
 Installation
 -----
@@ -32,8 +32,8 @@ In particular:
 * Ensuring the rules accept the correct input
 * Ensuring the rules perform the right actions.
 
-The prime motivation for this tool is concentrate on the rules themselves and getting them "right" with as
-few of distractions as possible. This means that when debugging, it is the rules and not R code which should be of 
+The prime motivation for this tool is ***concentrate on the rules*** themselves and getting them "right" with as
+few of distractions as possible. This means that when debugging, ***it's the rules*** and not R code which should be of 
 concern. For this reason, it was decided rules should be textual, and not R code.  
 Thus the parser is built from rules entered as text.
 
@@ -47,7 +47,7 @@ Features of this Tool
 *  Easy inspection of the evaluation tree with the **tree** command. Provides a textual representation of how the final evalution was obtained.
 *  Graphing the evalutation tree with the **plot** command. 
 *  A way to limit the depth of calls to rules by using the **set_rule_stack_limit** command, and then by using **get_rule_stack**, the stack may be inspected whenever the limit is exceeded (This is to help detect the source of  hangning due to infinite recursion)
-*  **A  specialized rule debugger** to ease the effort of debugging rule logic.  The debugger allows one to inpsect all rules in the order in which they applied to the input: both when the rule is entered and exited. This allows one to inspect return status (whether or not the rule accepts the input), the text consumed, and any values produced by the rule.  ***The rule debugger is for debugging the RULE SET LOGIC, not R code!***
+*  **A  specialized rule debugger** to ease the effort of debugging rule logic.  The debugger allows one to inpsect all rules in the order in which they applied to the input: both when the rule is entered and exited. This allows one to inspect return status (whether or not the rule accepts the input), the text consumed, and any values produced by the rule.  ***The rule debugger is for debugging the RULES,  not code!***
 * Parser ***summary*** providing
    * A listing of any rules used (by other rules) but not defined in the rule set.
    * A listing of all rules that may either directly or indirectly call them selves (recursive)
