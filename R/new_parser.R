@@ -51,7 +51,6 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE){
   #to create rules to construct the user defined parser, pegE. However, since the process
   #is to be dynamiclly interpetive (i.e. user can put in one rule at a time), the generator, genE
   #must be able to modify the pegE and hence needs to contain the pegE.
-  
   # NEW ENV FOR TO CONTAIN THE USER DEFINED PARSER
   pegE<-new.env()
   class(pegE)<-c("pegE",class(pegE))
@@ -276,7 +275,7 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE){
                res$rule.id=name.id
                res
              }, #end SET_RULE
-             GET_RULE_TXT=function(rule.id){
+             GET_RULE_SOURCE=function(rule.id){
                pegE$.SOURCE.RULES[[rule.id]]
              },
              SET_DESCRIPTION=function(rule.id, description){

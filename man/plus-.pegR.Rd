@@ -30,7 +30,10 @@ peg<- new.parser()
 peg + "A<-'a'" + "B<-'b'" + "C<-'c'"
 #to suppress the output use invisible"
 invisible(peg + "A<-'a'" + "B<-'b'" + "C<-'c'")
-#now add rule D with action and comment
+#now add rule D with action and comment using a named character vector
 peg + c("D<-'d'", des="capitalize D", act="list(atom='D')")
+
+#now add rule E with action and comment a unnamed character
+peg + c( "E<-'e'", "#double E", "{list('EE')}" )
 }
 

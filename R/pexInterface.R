@@ -11,8 +11,8 @@ pexDeleteRule<-function(pegR, rule.id){
 pexSetRule<-function(pegR, rule){
   pegR$SET_RULE(rule)
 }
-pexGetRuleTxt<-function(pegR, rule.id){
-  pegR$GET_RULE_TXT(rule.id)
+pexGetRuleSource<-function(pegR, rule.id){
+  pegR$GET_RULE_SOURCE(rule.id)
 }
 pexSetDescription<-function(pegR, rule.id, description){
   pegR$SET_DESCRIPTION(rule.id, description)
@@ -82,7 +82,7 @@ pexSetDebugOn<-function(pegR, mode){
 pexGetRuleStructure<-function(pegR, rule.id){
   rs<-ruleStruct(
     rule.id, 
-    pegR$GET_RULE_TXT(rule.id), 
+    pegR$GET_RULE_SOURCE(rule.id), 
     pegR$GET_DESCRIPTION(rule.id), 
     pegR$GET_ACTION_INFO(rule.id)
   )
