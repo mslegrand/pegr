@@ -1,5 +1,10 @@
 calculator                   A simple calculator example.
-extractQuotedStrings         Extracts all quoted strings contained in the input.
-palindrome                   Tests to check if word is a palindrome.
+distConv                     Read inches, feet, centimeters, meters and return value in meters
+extractQuotedStrings         Extracts all quoted strings contained in the input and returs as a list.
+extractUnquoted              Extracts all unquote portions of input and returns as a list
+linesInTxt                   Extracts all lines in a text and return as a list 
+palindrome                   Tests to check if word is a palindrome. 
 powerTest                    A classic example on matching strings of 3 consecutive characters of equal length.
-tinyEnglish                  An a simple english grammar.
+ruleIdentifiers              Extracts a list of all identifers in a peg rule.
+tinyEnglish                  A simple english grammar.
+
