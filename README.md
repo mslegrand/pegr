@@ -64,18 +64,18 @@ there several demos are provide for additional insight.
 
 The steps for usage are:
 
-_**Step 1:**_ ***Construct*** a new peg parser: 
+_**Step 1:**_ **Construct** a new peg parser: 
 ```
 peg<-new.parser()
 ```
 Note: An data.frame argument may be supplied, which will load a set of rules stored as a data.frame
 
-_**Step 2:**_ ***Add*** rules to the parser
+_**Step 2:**_ **Add** rules to the parser
 ```
 peg + c("A<- 'a' .", "{-}") + c("X<-.", "{}") + "R<- A / X"
 ```
 
-_**Step 3:**_ ***Apply*** the a rule to an input string
+_**Step 3:**_ **Apply** the a rule to an input string
 ```
 example: peg[['R']]('abacda')
 ```
