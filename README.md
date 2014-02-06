@@ -59,8 +59,7 @@ Features of this Tool
 Usage
 -------
 
-Usage is described in the vignette and in the tutorial.   In addition to the examples contained in help,
-there several demos are provide for additional insight.
+Usage is described in the **vignette** and in the tutorial under **inst/documents/tutorial.pdf**.   Various examples contained in help the online help (rd docs). For additional insight, there is a growing number of demos located inside the **demos** directory.
 
 The steps for usage are:
 
@@ -75,7 +74,7 @@ _**Step 2:**_ **Add** rules to the parser
 peg + c("A<- 'a' .", "{-}") + c("X<-.", "{}") + "R<- A / X"
 ```
 
-_**Step 3:**_ **Apply** the a rule to an input string
+_**Step 3:**_ **Apply** a rule to an input string
 ```
 example: peg[['R']]('abacda')
 ```
