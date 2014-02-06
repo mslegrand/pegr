@@ -88,20 +88,6 @@ We currently supply 2 approaches to usage:
    * **peg + rule1 + rule 2 + ...** : *adds (attaches) one or more rules to the peg*
    * **peg\[\[rule,id]](input.txt)** : *applys an attached rule to the input text*
 
-Design Considerations (Open for Your Input/Discussion)
----------
-There are a couple of design considerations which are still open, and which I would love feedback on:
-* **peg + rule1 + rule2** for adding rules may not be the best choice of operator
-* pegs are really environments with wrappers.
-* For more on design issues, see the Design Issues page under the Wiki
-What's Needed
--------
-
-Some obvious  improvements to consider:
-*  More examples: there can never be too many examples
-*  Enhancing the tutorial
-*  Ability to extend the basic grammar via some addon mechanism to customize (for convience/compatiblity with other pegs)
-*  Profiling and replacing R functions with C code
 
 
 
