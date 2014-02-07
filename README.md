@@ -7,21 +7,6 @@ This software generates parsers based on that specification. By staying as close
 original specification, we hope to provide a parsing solution which is language agnostic. That is, our hope is 
 for a tool allowing one to concentrate on rule building, and not the nuances of any particular programming language.
 
-Installation
------
-
-From Git using R CMD build
-```
-install.packages("devtools")
-library(devtools)
-install_github("mslegrand/pegr")
-
-```
-To delete
-```
-remove.packages("pegr")
-```
-
 Motivation
 ------
 
@@ -88,6 +73,20 @@ We currently supply 2 approaches to usage:
    * **peg\[\[rule,id]](input.txt)** : *applys an attached rule to the input text*
 
 
+Installation
+-----
+
+From Git using R CMD build
+```
+install.packages("devtools")
+library(devtools)
+install_github("mslegrand/pegr")
+
+```
+To delete
+```
+remove.packages("pegr")
+```
 
 
 
