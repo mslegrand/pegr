@@ -12,15 +12,13 @@ Motivation
 
 One of the biggest issues in using a peg generator to produce a parser is getting the rules "right"."
 In particular:
-* Ensuring the rules have a valid PEG syntax
-* Ensuring the rules don't hang on a given input.
-* Ensuring the rules accept the correct input
+* Ensuring the rules have a valid PEG syntax.
+* Ensuring the rules don't hang on a given input. (infinite recursion)
+* Ensuring the rules accept the correct input.
 * Ensuring the rules perform the right actions.
 
-The prime motivation for this tool is ***concentrate on the rules*** themselves and getting them "right" with as
-few of distractions as possible. This means that when debugging, ***it's the rules*** and not R code which should be of 
-concern. For this reason, it was decided rules should be textual, and not R code.  
-Thus the parser is built from rules entered as text.
+This tool is built with one principle in mind: Let the user ***concentrate on the getting rules right***   with as
+few of distractions as possible. This means we want debug  ***RULES*** , not R code. Rules are entered as text- not code, debugging steps through the rules- not code, breakpoint are for rules- not code, stacks are stacks of rules -not code. To sum it up: ***It's the RULES*** that rule. 
 
 
 Features of this Tool
@@ -54,7 +52,7 @@ peg<-new.parser()
 ```
 Note: An data.frame argument may be supplied, which will load a set of rules stored as a data.frame
 
-_**Step 2:**_ **Add** rules to the parser
+_**Step 2:**_ **Add** rules to the parser (The "{...}" are optional actions.)
 ```
 peg + c("A<- 'a' .", "{-}") + c("X<-.", "{}") + "R<- A / X"
 ```
