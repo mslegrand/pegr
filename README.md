@@ -1,4 +1,4 @@
-pegr package
+pegR package
 ====
 
 This an R package for generating a peg parser. Peg is short for
