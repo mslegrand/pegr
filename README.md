@@ -10,7 +10,7 @@ for a tool allowing one to concentrate on rule building, and not the nuances of 
 Motivation
 ------
 
-One of the biggest issues in using a peg generator to produce a parser is getting the rules "right"."
+One of the biggest issues in using a peg generator to create a parser is getting the rules "right"."
 In particular:
 * Ensuring the rules have a valid PEG syntax.
 * Ensuring the rules don't hang on a given input. (infinite recursion)
