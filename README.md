@@ -18,7 +18,7 @@ In particular:
 * Ensuring the rules perform the right actions.
 
 This tool is built with one principle in mind: Let the user ***concentrate on the getting rules right***   with as
-few of distractions as possible. This means we want debug  ***RULES*** , not R code. Rules are entered as text- not code, debugging steps through the rules- not code, breakpoint are for rules- not code, stacks are stacks of rules -not code. To sum it up: ***It's the RULES*** that rule. 
+few of distractions as possible. This means we want debug  **rules** , not R code. Rules are entered as text- not code, debugging steps through the rules- not code, breakpoint are for rules- not code, stacks are stacks of rules -not code. To sum it up: *It's the RULES* that rule! 
 
 
 Features of this Tool
