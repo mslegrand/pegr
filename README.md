@@ -1,4 +1,4 @@
-pegr package
+pegR package
 ====
 
 This an R package for generating a peg parser. Peg is short for
@@ -7,35 +7,18 @@ This software generates parsers based on that specification. By staying as close
 original specification, we hope to provide a parsing solution which is language agnostic. That is, our hope is 
 for a tool allowing one to concentrate on rule building, and not the nuances of any particular programming language.
 
-Installation
------
-
-From Git using R CMD build
-```
-install.packages("devtools")
-library(devtools)
-install_github("mslegrand/pegr")
-
-```
-To delete
-```
-remove.packages("pegr")
-```
-
 Motivation
 ------
 
-One of the biggest issues in using a peg generator to produce a parser is getting the rules "right"."
+One of the biggest issues in using a peg generator to create a parser is getting the rules "right"."
 In particular:
-* Ensuring the rules have a valid PEG syntax
-* Ensuring the rules don't hang on a given input.
-* Ensuring the rules accept the correct input
+* Ensuring the rules have a valid PEG syntax.
+* Ensuring the rules don't hang on a given input. (infinite recursion)
+* Ensuring the rules accept the correct input.
 * Ensuring the rules perform the right actions.
 
-The prime motivation for this tool is ***concentrate on the rules*** themselves and getting them "right" with as
-few of distractions as possible. This means that when debugging, ***it's the rules*** and not R code which should be of 
-concern. For this reason, it was decided rules should be textual, and not R code.  
-Thus the parser is built from rules entered as text.
+This tool is built with one principle in mind: Let the user ***concentrate on the getting rules right***   with as
+few of distractions as possible. This means we want debug  **rules** , not code. Rules are entered as text- NOT CODE; debugging steps through the rules- NOT CODE; breakpoints are for rules- NOT CODE, stacks are stacks of rules -not code. To sum it up: **IT'S THE RULES** that rule! 
 
 
 Features of this Tool
@@ -53,7 +36,7 @@ Features of this Tool
    * A listing of all rules that may either directly or indirectly call them selves (recursive)
    * A listing of all rules that can only play the role of a root (not called by any rule)
    * A listing of all rules that can only play the role of a leaf (does not call any rule)
-* A tutorial included to help get started.
+* An extensive tutorial included to help get started.
 * Writing rules to a data.frame. The rules can then be read back in upon initialization. Thus by rbinding data frames rules sets can be saved to file or combined into a single peg. This allows for building base 'libraries' (in the form of data.frames) which can be loaded upon startup and then extended for customized solutions.
 
 Usage
@@ -69,7 +52,7 @@ peg<-new.parser()
 ```
 Note: An data.frame argument may be supplied, which will load a set of rules stored as a data.frame
 
-_**Step 2:**_ **Add** rules to the parser
+_**Step 2:**_ **Add** rules to the parser (The "{...}" are optional actions.)
 ```
 peg + c("A<- 'a' .", "{-}") + c("X<-.", "{}") + "R<- A / X"
 ```
@@ -88,6 +71,20 @@ We currently supply 2 approaches to usage:
    * **peg\[\[rule,id]](input.txt)** : *applys an attached rule to the input text*
 
 
+Installation
+-----
+
+From Git using R CMD build
+```
+install.packages("devtools")
+library(devtools)
+install_github("mslegrand/pegr")
+
+```
+To delete
+```
+remove.packages("pegr")
+```
 
 
 
