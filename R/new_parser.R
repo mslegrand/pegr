@@ -51,7 +51,8 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE){
   #to create rules to construct the user defined parser, pegE. However, since the process
   #is to be dynamiclly interpetive (i.e. user can put in one rule at a time), the generator, genE
   #must be able to modify the pegE and hence needs to contain the pegE.
-  # NEW ENV FOR TO CONTAIN THE USER DEFINED PARSER
+ #----------------------------------  
+ # NEW ENV FOR TO CONTAIN THE USER DEFINED PARSER
   pegE<-new.env()
   class(pegE)<-c("pegE",class(pegE))
   
@@ -103,6 +104,7 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE){
         "value: display the return value (upon exiting with statusa list)",
         "q: quit the debugger",
         "r: restart debugger",
+        "s: show rule stack",
         "l: list all rule breakpoints",
         sep="\n"
       )
@@ -184,6 +186,13 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE){
                },
                clr={ #clear all break points
                  pegE$DEBUG$BRKPTS=data.frame(id=NA, at=NA)[numeric(0), ]
+               },
+               s={ #show stack
+                 if(nrow( pegE$.STACK)>0){
+                   for(i in 1:nrow(pegE$.STACK)){
+                     cat("level=",i,"  pos=",pegE$.STACK$pos[i],"  Rule.Id=", as.character(pegE$.STACK$node.id[i]), "\n" )
+                   }
+                 }
                },
                v=, #prints the value list
                value={
@@ -306,7 +315,7 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE){
                exe.Action<-ifelse(is.null(exe.Action), pegE$.ACTION_DEFAULT, exe.Action)
                #clear stack
                if(is.finite(pegE$.STOP_LEVEL)){
-                 pegE$STACK<-data.frame()
+                 pegE$.STACK<-data.frame()
                } 
                # prep: recording mode
                record<-ifelse(is.null(record), pegE$.RECORD.NODE.DEFAULT, record)
@@ -322,11 +331,11 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE){
              }, #end APPLY_RULR
              SET_STOP_LEVEL=function(limit){
                pegE$.STOP_LEVEL<-limit
-               pegE$STACK<-data.frame()
+               pegE$.STACK<-data.frame()
              },
              UNSET_STOP_LEVEL=function(){
                pegE$.STOPLEVEL<-Inf
-               pegE$STACK<-data.frame()
+               pegE$.STACK<-data.frame()
              },
              GET_STACK=function(){
                pegE$.STACK
@@ -339,6 +348,8 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE){
                if(pegE$.DEBUG_ON) {
                  pegE$.DEBUG$BRKPTS<-data.frame(id=NA, at=NA)[numeric(0), ]
                  pegE$.DEBUG$NEXT<-TRUE
+                 pegE$.STACK<-data.frame()
+                 #pegE$.STOP_LEVEL<-limit
                }
              },
              DELETE_RULE=function(rule.id){

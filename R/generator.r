@@ -78,6 +78,15 @@ mk.Rule<-function(defName, def, action){
   h<-function(input, exe=TRUE,  p=1){
     mfn.mssg<-defName #record the rule.id for latter (say for when record=T)
     #this is before the node fn is executed (the node fn is def)
+    #THIS MAY BE A GOOD PLACE TO RECORD ENTERING RULE
+    if( is.finite( pegE$.STOP_LEVEL ) | pegE$.DEBUG_ON==TRUE ) {
+      if( nrow(pegE$.STACK)>=pegE$.STOP_LEVEL)  { #bail
+        stop("Max Call Depth of Rule Stack Exceeded! To see calling sequence use get_rule_stack", call. = FALSE)
+      } 
+      #else add to stack
+      pegE$.STACK<-rbind(pegE$.STACK, data.frame(node.id=defName, pos=p ))
+    }
+
     #THIS IS A GOOD PLACE FOR DEBUGGER TO RECORD ENTERING A RULE
     if(pegE$.DEBUG_ON==TRUE){
       if(pegE$.DEBUG$NEXT | ( any(with(pegE$.DEBUG$BRKPTS, (id==defName & at=='>')  ) )    )    ){
@@ -87,23 +96,13 @@ mk.Rule<-function(defName, def, action){
         pegE$.debug.loop()          
       } 
     }
-    #THIS MAY BE A GOOD PLACE TO RECORD ENTERING RULE
-    if( is.finite( pegE$.STOP_LEVEL ) ) {
-      if( nrow(pegE$.STACK)>=pegE$.STOP_LEVEL)  { #bail
-        stop("Max Call Depth of Rule Stack Exceeded! To see calling sequence use get_rule_stack", call. = FALSE)
-      } 
-      #else add to stack
-      pegE$.STACK<-rbind(pegE$.STACK, data.frame(node.id=defName, pos=p ))
-    }
     
     # *******************BEGIN EXECUTION OF THE RULE NODE HERE***********
     res<-def(input, exe,  p)
     # *******************END EXECUTION OF THE RULE NODE HERE************
     
     #THIS WOULD BE WHERE WE RECORD EXITING RULE (OR SHALL WE DO IT AFTER USER EXE IS DONE?)
-    if(is.finite(pegE$.STOP_LEVEL)){
-      pegE$.STACK<-pegE$.STACK[-nrow, ]
-    }
+    
     # THIS POTENTIAL PLACE FOR DEBUGGER TO RECORD EXITING IS A RULE      
     # BUT THE ACTION HAS NOT BEEN APPLIES SO WE PLACE IN
     # ALTERNATIVES:  2 PLACES: 
@@ -147,6 +146,11 @@ mk.Rule<-function(defName, def, action){
           pegE$.debug.loop(res)          
         } 
       }
+      
+      if(is.finite(pegE$.STOP_LEVEL) | pegE$.DEBUG_ON==TRUE ) {
+        pegE$.STACK<-pegE$.STACK[-nrow(pegE$.STACK), ]
+      }
+      
       # ADD RECORD NODE HERE (FOR TREE AND PLOT )
       if(pegE$.RECORD.NODE==TRUE){  # record is TRUE, (for tree and plot)        
         #get res$debug list.
