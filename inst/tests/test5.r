@@ -361,7 +361,7 @@ test_that("ACTION 2 TRUE",
   gen$pegE$Y("aaaab")->res2
   expect_true(res2$ok)
   expect_equal(res2$pos,5)
-  expect_equal(res2$val, "a_a_a_a_4_b")
+  expect_equal(res2$val, c(Y="a_a_a_a_4_b") )
   rm(X,  Y,  envir=gen$pegE)
   rm(ff,gg,pos=1)
 })
@@ -378,7 +378,7 @@ test_that("ACTION 3 TRUE",
     Y("aaaab",TRUE)->res2
     expect_true(res2$ok)
     expect_equal(res2$pos,5)
-    expect_equal(res2$val, "a*a*a*a*4*b")    
+    expect_equal(res2$val, c(Y="a*a*a*a*4*b") )    
   }, envir=gen$pegE)
   rm(X,  Y,  envir=gen$pegE)
   rm(ff,gg, pos=1)

@@ -14,9 +14,14 @@ set_action(pegR, rule.id, action)
   function accepting a list as input and a list as output
   \item a string of text to be interpreted as a function
   body with an input parameter consisting of a list named
-  v, and return value which is also a list.  \item NULL, in
-  which case the action associated with the given rule is
-  removed. }}
+  v, and return value which is also a list. If the list
+  which is the return value has NULL for names, (i.e. no
+  names have been assigned to the list members) then the
+  members of the list are assigned the names given by the
+  rule id)
+
+  \item NULL, in which case the action associated with the
+  given rule is removed. }}
 }
 \description{
 Attach an (optional) action to a specified rule

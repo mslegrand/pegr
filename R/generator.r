@@ -132,7 +132,10 @@ mk.Rule<-function(defName, def, action){
       # EXECUTE ACTION IF THERE IS ONE
       if(exe==TRUE  ){ #this is where we execute the user action         
         if(!is.null(pegE$.ACTION[[defName]])){ # refers to a memmber of action array in pegE
-          res$val<-pegE$.ACTION[[defName]](res$val)          
+          res$val<-pegE$.ACTION[[defName]](res$val)
+          if(is.null(names(res$val))){
+           names(res$val)<-rep(defName, length(res$val))
+          }
         }
       }
       # DEBUGGER: EXITING NODE (ALTERNATIVE PART 2)
