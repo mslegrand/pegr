@@ -20,12 +20,11 @@ new.ID.generator<-function(){
 #'  \item{rule.id} \emph{(mandatory)}, {The column containing the rule's id. \emph{(NA values not allowed)}} 
 #'  \item{rule.source} \emph{(mandatory)}, {The  column containing the rule's definition \emph{(NA values not allowed)}} 
 #'  \item{rule.description}, \emph{(optional)} {The column containing any rules description (may have NA values) }
-#'  \item{action.type}, \emph{(optional)} {Indicates type of action ("Inline" or "External"). Set to  NA if no action is associated with this rule
-#'  }
 #'  \item{action.specification}, \emph{(optional)} {The column containing the rule specifiation. May be either a valid inline action or 
 #'  the name of an existing rule (Set to NA if e no action is associated with this rule.)}
 #' }  
-#' @param record.mode, when set, will keep a record to display with \code{\link{tree}} or \code{\link{plot}}. (default is FALSE)
+#' @param record.mode, when set to TRUE, will keep a record to display with \code{\link{tree}} or \code{\link{plot}}. (default is FALSE)
+#' @param action.exe, when set to TRUE, all actions will be executed unless overridden by command line. (default is FALSE)
 #' @return Returns a new instance of a PEG parser
 #' @keywords PEG parser grammer
 #' @examples
@@ -46,7 +45,7 @@ new.ID.generator<-function(){
 #' peg<-new.parser(df)
 #' @seealso \code{\link{as.data.frame}}
 #' @export
-new.parser<-function(peg.data.frame=NULL, record.mode=FALSE){
+new.parser<-function(peg.data.frame=NULL, record.mode=FALSE, action.exe=FALSE){
   #internally we have two parsers, a genE a peg Generator which takes text and processes it
   #to create rules to construct the user defined parser, pegE. However, since the process
   #is to be dynamiclly interpetive (i.e. user can put in one rule at a time), the generator, genE
@@ -64,7 +63,7 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE){
   # CONTAINER FOR ACTUAL EXECUTABLE ACTIONS
   pegE$.ACTION<-list() #executable for the rule
   pegE$.AUTO_ACTION<-FALSE # MAY DEPRECATE AUTO ACTION: refers to action added inline from legacy text input
-  pegE$.ACTION_DEFAULT<-FALSE #DEFAULT FOR RUNNING ACTIONS (BY DEFAULT THIS IS OFF)
+  pegE$.ACTION_DEFAULT<-action.exe #DEFAULT FOR RUNNING ACTIONS (BY DEFAULT THIS IS OFF)
   
   #TODO!!!??? PUT SOURCE.RULES, RULE DESCRIPT AND ACTION INFO INTO A SINGLE .RULES DATA FRAME???
   #           GOOD OR BAD IDEA???

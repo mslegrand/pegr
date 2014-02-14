@@ -62,7 +62,7 @@ include.sComponents<-function(pegE, envS=parent.frame() ){
       return(list(ok=FALSE, pos=0, val=list("") ) )
     }
     val<-substring(input, p, p)
-    return( list(ok=TRUE, pos=1, val=list(val) ) )
+    return( list(ok=TRUE, pos=1, val=list(atom=val) ) )
   }
   
   #this is used by envS$mk.atom (and twice in test2.r ) 
