@@ -7,10 +7,8 @@ An Introduction to the **Pegr** Package
 =======================================
 
 
-```{r setup, include=FALSE}
-library(knitr)
-opts_chunk$set(out.extra='style="display:block; margin: auto"', fig.align="center")
-```
+
+
 
 
 Introduction
@@ -66,28 +64,39 @@ Usage Specifics
 ----------------------------
 ### Parser
 A pegr parser is created by a call to new.parser()
-```{r methods}
+
+```r
 library(pegr)
 parser <- new.parser()
 ```
 
+
 ### Rules
 * Rules may be added to a pegr parser by a call to **add_rule(parser, rule)**
-```{r add_rule}
+
+```r
 add_rule(parser, "Any<-.")
 add_rule(parser, "A<-'a'")
 add_rule(parser, "B<-'b'")
 add_rule(parser, "C<- A (B / C) ")
-add_rule(parser, "D<- D") #bad rule: will produce infinite recursion   
+add_rule(parser, "D<- D")  #bad rule: will produce infinite recursion   
 ```
 
+
 * The ids or names of all rules in a pegr parser may be retrieved by **rule_ids**
-```{r rule_ids}
+
+```r
 rule_ids(parser)
 ```
 
+```
+## [1] "A"   "Any" "B"   "C"   "D"
+```
+
+
 * Rules contained in a pegr parser may be annotated (commented) by a call to **set_description("ruleid", annotation)**
-```{r set_description}
+
+```r
 set_description(parser, "Any", "Accepts any character")
 set_description(parser, "A", "Accepts a")
 set_description(parser, "B", "Accepts b")
@@ -95,25 +104,40 @@ set_description(parser, "C", "Accepts string of a's terminated by a b")
 set_description(parser, "D", "A very bad rule")
 ```
 
+
 * Rules may be removed from a pegr parser by a call to **delete_rule(parse, ruleid)**
-```{r delete_rule}
+
+```r
 delete_rule(parser, "D")
 rule_ids(parser)
 ```
+
+```
+## [1] "A"   "Any" "B"   "C"
+```
+
 
 ### Actions
 Actions may be attached to an existing rule contained pegr parser by a call to **add_action(parse, action)**
 An action may be one of two forms:
 * **An r function**:
-```{r add_action_function}
+
+```r
 rule_ids(parser)
 ```
+
+```
+## [1] "A"   "Any" "B"   "C"
+```
+
 * **A character string**. This character string should contain code to be executed as the body of a function, where the
 input is a list v, and the return value is also a list.
-```{r add_action_char_string}
-set_action(parser, "A", "list('A')") #turn a lower case a to an upper case A
-set_action(parser, "C", "list(paste(v,collapse=''))") #paste all the characters together
+
+```r
+set_action(parser, "A", "list('A')")  #turn a lower case a to an upper case A
+set_action(parser, "C", "list(paste(v,collapse=''))")  #paste all the characters together
 ```
+
 
 ### Parsing
 Parsing is the act of applying a rule to a string to be parsed and returning a result. 
@@ -121,86 +145,160 @@ The rule is specified its ruleid, a character string giving the rules name. That
 root of the ensuing parse.
 * Parsing is accomplished by
 ** apply_rule(parser, ruleid, exe=FALSE,, record=FALSE)**. 
-```{r apply_rule}
-apply_rule(parser, "A", "a" )->res.A  
-apply_rule(parser, "C", "aab")->res.AAB
-apply_rule(parser, "C", "baab")->res.BAA
+
+```r
+res.A <- apply_rule(parser, "A", "a")
+res.AAB <- apply_rule(parser, "C", "aab")
+res.BAA <- apply_rule(parser, "C", "baab")
 ```
+
 * Status of a parsing attempt is either **TRUE** for success or **FALSE** for failure. 
 The status may be obtained by **status(res)**
-```{r status.ResA}
-c(status(res.A) ,status(res.AAB), status(res.BAA) )
+
+```r
+c(status(res.A), status(res.AAB), status(res.BAA))
 ```
+
+```
+## [1]  TRUE  TRUE FALSE
+```
+
 * The characters consumed by parsing attempt can be gotton from **consumed(res)**
-```{r consume}
-c(consumed(res.A),  consumed(res.AAB), consumed(res.BAA))
+
+```r
+c(consumed(res.A), consumed(res.AAB), consumed(res.BAA))
 ```
+
+```
+## [1] "a"   "aab" ""
+```
+
 
 * Return values of a parsing are lists, which can be gotton from **value(res)**
 By default, actions defined by **set_action** are not executed.
-```{r valueF}
+
+```r
 # here exe is false, so no action is taken
-apply_rule(parser, "C", "aab")->res.AAB 
+res.AAB <- apply_rule(parser, "C", "aab")
 # so the return is a list of the returns of the component atoms
 value(res.AAB)
 ```
+
+```
+## $atom
+## [1] "a"
+## 
+## $atom
+## [1] "a"
+## 
+## $atom
+## [1] "b"
+```
+
 To execute the actions, supply **exe=TRUE** as a parameter:
 * Return values of a parsing are lists, which can be gotton from **value(res)**
-```{r valueT}
-#here exe is true, so action is taken
-apply_rule(parser, "C", "aab", exe=TRUE)->res.AAB 
+
+```r
+# here exe is true, so action is taken
+res.AAB <- apply_rule(parser, "C", "aab", exe = TRUE)
 # action A capitalizes, action C pastes together
-value(res.AAB) 
+value(res.AAB)
 ```
+
+```
+## $C
+## [1] "AAb"
+```
+
 
 
 
 
 ### Debugging
-Debugging the logic of a grammar can be accomplished testing the component rules starting with the leaves and building up  Also, it's probably better, to start with actions disabled  to see if the general flow is correct first. To add in the anaylsis of a given parse there are two 
-visualizations tools:
+Debugging the logic of a grammar can be accomplished testing the component rules starting with the leaves and building up  Also, it's probably better, to start with actions disabled (exe=FALSE) to see first if the general flow is correct. To aid in the analysis of a given parse there are two visualizations tools:
 * **tree**: 
 * **plot**:
 Thesse  visualizaton tools are discussed in the next section
 
 In addition to the visualization tools, we have:
 * **a rule stack**, activated by setting the depth via **set_rule_stack_limit** and inspected using **get_rule_stack**
-* **a rule debugger**, activated by **debug.pegR**, which allows one to step through and inspect the rules as they are encountered in the parsing of text input. Additionally, set break points be set. The ***rule debugger*** is to debug the ***RULE LOGIC*** minimal R code involvement. 
+* **a rule debugger**, activated by **debug.pegR**, which allows one to step through and inspect the rules as they are encountered during parsing. Additionally, one may set break points at entry/exit of rules, and skip those rules with no breakpoints set. The ***rule debugger***  debugs  ***RULE LOGIC*** minimal involvement of the low level programming language. 
 
 ### Visualization
 Visualization consists of showing the nodes visited (and their values) during a parse of an input. This requires that the
 **record** flag be set to **TRUE** in the invocation of **apply_rule**. 
-```{r debugRuleT}
+
+```r
 # Here record is set to True
-peg<-new.parser()
+peg <- new.parser()
 add_rule(peg, "A<-'a'")
-add_rule(peg,"B<-'b' A")
+add_rule(peg, "B<-'b' A")
 add_rule(peg, "C<- A B")
-set_action(peg,"A","list('X')")
-apply_rule(peg, "C", "aba", exe=TRUE, record=TRUE)->res.ABA 
-# also, since exe isTrue, so action is taken
-# action A capitalizes, action C pastes together
-value(res.ABA) 
+set_action(peg, "A", "list('X')")
+res.ABA <- apply_rule(peg, "C", "aba", exe = TRUE, record = TRUE)
+# also, since exe isTrue, so action is taken action A capitalizes, action C
+# pastes together
+value(res.ABA)
 ```
+
+```
+## $A
+## [1] "X"
+## 
+## $atom
+## [1] "b"
+## 
+## $A
+## [1] "X"
+```
+
 
 #### Ways to Visualize
 There are two methods of visualization:
 * **Tree**: Prints the tree to console
-```{r debugRuleTree}
-tree(res.ABA) 
+
+```r
+tree(res.ABA)
 ```
 
-* **Plot**: Plots the tree to the graphics device
-```{r debugRulePlot}
-#plot only the ruleids (names)
-plot(res.ABA) 
-#plot only the ruleids (names and inputs)
-plot(res.ABA, show=c("names", "args")) 
-#plot only the values
-plot(res.ABA, show="vals")
-#plot all
-plot(res.ABA, show="all", cex=.8)
 ```
+## ____C(aba) = list(X, b, X )
+##     |____A(a) = list(X )
+##     |____B(ba) = list(b, X )
+##          |____A(a) = list(X )
+```
+
+
+* **Plot**: Plots the tree to the graphics device
+
+```r
+# plot only the ruleids (names)
+plot(res.ABA)
+```
+
+<img src="figure/debugRulePlot1.png" title="plot of chunk debugRulePlot" alt="plot of chunk debugRulePlot" style="display:block; margin: auto" style="display: block; margin: auto;" />
+
+```r
+# plot only the ruleids (names and inputs)
+plot(res.ABA, show = c("names", "args"))
+```
+
+<img src="figure/debugRulePlot2.png" title="plot of chunk debugRulePlot" alt="plot of chunk debugRulePlot" style="display:block; margin: auto" style="display: block; margin: auto;" />
+
+```r
+# plot only the values
+plot(res.ABA, show = "vals")
+```
+
+<img src="figure/debugRulePlot3.png" title="plot of chunk debugRulePlot" alt="plot of chunk debugRulePlot" style="display:block; margin: auto" style="display: block; margin: auto;" />
+
+```r
+# plot all
+plot(res.ABA, show = "all", cex = 0.8)
+```
+
+<img src="figure/debugRulePlot4.png" title="plot of chunk debugRulePlot" alt="plot of chunk debugRulePlot" style="display:block; margin: auto" style="display: block; margin: auto;" />
+
 
 
 

@@ -157,15 +157,14 @@ value(res.AAB)
 
 
 ### Debugging
-Debugging the logic of a grammar can be accomplished testing the component rules starting with the leaves and building up  Also, it's probably better, to start with actions disabled  to see if the general flow is correct first. To add in the anaylsis of a given parse there are two 
-visualizations tools:
+Debugging the logic of a grammar can be accomplished testing the component rules starting with the leaves and building up  Also, it's probably better, to start with actions disabled (exe=FALSE) to see first if the general flow is correct. To aid in the analysis of a given parse there are two visualizations tools:
 * **tree**: 
 * **plot**:
 Thesse  visualizaton tools are discussed in the next section
 
 In addition to the visualization tools, we have:
 * **a rule stack**, activated by setting the depth via **set_rule_stack_limit** and inspected using **get_rule_stack**
-* **a rule debugger**, activated by **debug.pegR**, which allows one to step through and inspect the rules as they are encountered in the parsing of text input. Additionally, set break points be set. The ***rule debugger*** is to debug the ***RULE LOGIC*** minimal R code involvement. 
+* **a rule debugger**, activated by **debug.pegR**, which allows one to step through and inspect the rules as they are encountered during parsing. Additionally, one may set break points at entry/exit of rules, and skip those rules with no breakpoints set. The ***rule debugger***  debugs  ***RULE LOGIC*** minimal involvement of the low level programming language. 
 
 ### Visualization
 Visualization consists of showing the nodes visited (and their values) during a parse of an input. This requires that the
