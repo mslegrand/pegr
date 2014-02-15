@@ -2,7 +2,7 @@
 \alias{new.parser}
 \title{Creates an instance of a new PEG parser.}
 \usage{
-new.parser(peg.data.frame = NULL, record.mode = FALSE)
+new.parser(peg.data.frame = NULL, record.mode = FALSE, action.exe = FALSE)
 }
 \arguments{
   \item{peg.data.frame,}{a data frame with rules to
@@ -14,17 +14,19 @@ new.parser(peg.data.frame = NULL, record.mode = FALSE)
   containing the rule's definition \emph{(NA values not
   allowed)}} \item{rule.description}, \emph{(optional)}
   {The column containing any rules description (may have NA
-  values) } \item{action.type}, \emph{(optional)}
-  {Indicates type of action ("Inline" or "External"). Set
-  to NA if no action is associated with this rule }
-  \item{action.specification}, \emph{(optional)} {The
-  column containing the rule specifiation. May be either a
-  valid inline action or the name of an existing rule (Set
-  to NA if e no action is associated with this rule.)} }}
+  values) } \item{action.specification}, \emph{(optional)}
+  {The column containing the rule specifiation. May be
+  either a valid inline action or the name of an existing
+  rule (Set to NA if e no action is associated with this
+  rule.)} }}
 
-  \item{record.mode,}{when set, will keep a record to
-  display with \code{\link{tree}} or \code{\link{plot}}.
+  \item{record.mode,}{when set to TRUE, will keep a record
+  to display with \code{\link{tree}} or \code{\link{plot}}.
   (default is FALSE)}
+
+  \item{action.exe,}{when set to TRUE, all actions will be
+  executed unless overridden by command line. (default is
+  FALSE)}
 }
 \value{
 Returns a new instance of a PEG parser

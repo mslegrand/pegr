@@ -53,14 +53,13 @@ apply_rule<-function(parser, rule.id, input.text, exe=NULL, record=NULL){
 #' 
 #' 
 #' @examples
-#' expect_equal(0,1)
 #' # The simplest example: a parser that only accepts a single character 'a'
 #' # First create a new pegR
 #' peg<-new.parser()
 #' # Next we add the rule to the peg
 #' peg + "A<-'a'"
 #' # Next apply the rule to the string "a"
-#' peg[[a]]("a")->res 
+#' peg[['A']]("a")->res 
 #' # to see the result  print(res)
 #' res  
 #' 
@@ -78,29 +77,16 @@ apply_rule<-function(parser, rule.id, input.text, exe=NULL, record=NULL){
   }
   if( rule.id %in% rule_ids(parser)){ #return an attached rule
     ar<-function(...){
-      task<-"apply"
+      #task<-"apply"
       applyRule<-function(...){
         dots<-list(...)
         input<-dots[[1]]
-        #print(input)
         input.text<-input[1]
-#         if(is.null(input$exe)){
-#           input$exe=NULL
-#         }
-#         if(is.null(input$exe)){
-#           input$exe=NULL
-#         }
         record=ifelse(is.null(input$record), FALSE, input$record==TRUE)  
         #print(record)
         return(apply_rule(parser, rule.id, input.text, exe=input$exe, record=record ))
       }
-      printRule<-function(){
-        return(inspect_rule(parser,rule.id))
-      }
-   switch(task,
-             apply = applyRule(list(...)),
-             prt   = printRule() #,
-      )
+      apply = applyRule(list(...))
     }
     class(ar)<-"AttachedRule"
     ar
@@ -118,7 +104,18 @@ apply_rule<-function(parser, rule.id, input.text, exe=NULL, record=NULL){
 #' print(peg[["R"]])
 #' @export 
 print.AttachedRule<-function(attached.rule){
-  prt<-function(){}
-  body(attached.rule)[2]<-call(task<-'prt')
-  attached.rule()
+  env<-environment(attached.rule)
+  pegR<-env$parser
+  #class(peg)<-pegR
+  id<-env$rule.id
+  rs<-inspect_rule(pegR, id)
+  print(rs)
+#   print(ls(envir=env))
+#   print(env$rule.id)
+#   print(env$parser)
+#   rs<-inspect_rule(env$parser, env$rule.id)
+# #   prt<-function(){}
+# #   body(attached.rule)[2]<-call(task<-"'prt'")
+# #   attached.rule()
+# rs
 }
