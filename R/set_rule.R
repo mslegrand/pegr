@@ -126,7 +126,12 @@ set_definition<-function(parser, rule.id, rule.definition){
   }
   if('des' %in% names(arg.L)){
     #parser$SET_DESCRIPTION(rule.id, arg.L$des)
-    pexSetDescription(parser, rule.id, arg.L$des)
+    if(arg.L$des!=""){
+      pexSetDescription(parser, rule.id, arg.L$des)
+    } else {
+      pexSetDescription(parser, rule.id, NULL)
+    }
+    
   }
   if('act' %in% names(arg.L)){
     action<-arg.L$act

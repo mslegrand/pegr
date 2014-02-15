@@ -109,7 +109,7 @@ txt.2.fldName<-function( txt, rule.id=NULL ){
   #try to match commnent
   str_match(txt, "^\\s*#\\s*(.*)$")->mat
   if(!is.na(mat[2])){
-    return(list(des=txt[[2]]))
+    return(list(des=mat[[2]]))
   }
   #give up
   return(list(unknown=txt))
