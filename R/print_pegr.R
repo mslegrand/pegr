@@ -29,7 +29,7 @@ print.pegR<-function(parser){
 print.ruleStructure<-function(rs){
   cat(paste("Rule:",rs$name,"\n") )
   cat(paste("Def:", rs$def ,"\n") )
-  cat(paste("Com:", ifelse(is.null(rs$com),"",rs$com),"\n") )
+  cat(paste("Des:", ifelse(is.null(rs$com),"",rs$com),"\n") )
   cat(paste("Act:", ifelse(is.null(rs$act),"",paste(rs$act, collapse=" ") ),"\n") )
   invisible()
 }

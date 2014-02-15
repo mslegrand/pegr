@@ -287,6 +287,9 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE, action.exe=FALSE){
                pegE$.SOURCE.RULES[[rule.id]]
              },
              SET_DESCRIPTION=function(rule.id, description){
+#                if(!is.null(description) & description==""){
+#                  description<-NULL
+#                }
                pegE$.RULE_DESCRIPT[[rule.id]]<-description
              }, 
              GET_DESCRIPTION=function(rule.id){
