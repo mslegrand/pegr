@@ -36,7 +36,7 @@ Features of this Tool
    * A listing of all rules that may either directly or indirectly call them selves (recursive)
    * A listing of all rules that can only play the role of a root (not called by any rule)
    * A listing of all rules that can only play the role of a leaf (does not call any rule)
-* A Users Guide is included to help getting started.
+* A Users Guide is included to help getting started. (The pdf resides under inst/doc)
 * Writing rules to a data.frame. The rules can then be read back in upon initialization. Thus by rbinding data frames rules sets can be saved to file or combined into a single peg. This allows for building base 'libraries' (in the form of data.frames) which can be loaded upon startup and then extended for customized solutions.
 
 Usage
