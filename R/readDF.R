@@ -208,7 +208,7 @@ env$add_data.frame<-function(genE, df){
     cat(mssg,"rule.definition has wrong class\n")
     return(FALSE)    
   }
-  if(!"character" %in% class(df$rule.description)){
+  if(!"character" %in% class(df$rule.description) & !("logical" %in% class(df$rule.description))){
     cat(mssg,"rule.description has wrong class\n")
     return(FALSE)    
   }
@@ -216,16 +216,26 @@ env$add_data.frame<-function(genE, df){
 #     cat(mssg,"action.type has wrong class\n")
 #     return(FALSE)    
 #   }
-  if(!"character" %in% class(df$action.specification)){
+  if(!"character" %in% class(df$action.specification) & !("logical" %in% class(df$action.specification))){
     cat(mssg,"action.specification has wrong class\n")
     return(FALSE)    
   }
+
+  process.DF2Escape<-function(txt){
+    txt<-str_replace_all(txt, "\\\\n", "\n")
+    txt<-str_replace_all(txt, "\\\\t", "\t")
+#    txt<-str_replace_all(txt, "\\\\s", "\s")
+ #   txt<-str_replace_all(txt, "\\\\", "\\")
+    txt
+  }
+
   #next process the rows one at a time
   for(i in 1:nrow(df) ){
     # we already checked rule.id matches rule.definition
     # and action is ok
     rule.id<-str_trim(df$rule.id[i]) #need to trim?
     ruleDef<-df$rule.definition[i]
+    ruleDef<-n<-process.DF2Escape(ruleDef)
     res<-genE$DEFINITION(ruleDef)
     if(res$ok==TRUE){
       #record source
@@ -234,6 +244,7 @@ env$add_data.frame<-function(genE, df){
       if("rule.description" %in% names(df)){
         description<-df$rule.description[i]
         if(! is.na(description) ){
+          description<-process.DF2Escape(description)
           genE$pegE$.RULE_DESCRIPT[[rule.id]]<-description
         }
       }

@@ -1,0 +1,8 @@
+"rule.id"	"rule.definition"	"rule.description"	"action.specification"
+"1"	"ALPHA"	"ALPHA<- [a-z]/[A-Z]"	"Any letter"	NA
+"2"	"DIGIT"	"DIGIT<-[0-9]"	"Digit"	NA
+"3"	"EOF"	"EOF<- !."	"End of Input"	"list()"
+"4"	"EOL"	"EOL<- '\n' / EOF"	"End of Line"	"list()"
+"5"	"NUM"	"NUM<-DIGIT+ ('.' DIGIT+)? WS"	"Number"	"v<-paste1(v); list(as.numeric(v[[1]]))"
+"6"	"WORD"	"WORD<-ALPHA+ WS"	"Any word"	"paste1(v)"
+"7"	"WS"	"WS<- ' '/'\t'/EOL/'.'"	"White space"	"list()"

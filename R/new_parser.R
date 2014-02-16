@@ -247,11 +247,20 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE, action.exe=FALSE){
                df<-data.frame(rule.id=NA, rule.definition=NA, 
                               rule.description=NA, action.type=NA, 
                               action.specification=NA, stringsAsFactors=FALSE, ...)[numeric(0),]
+               process.Escape2DF<-function(txt){
+                 txt<-str_replace_all(txt, "\n", "\\\\n")
+                 txt<-str_replace_all(txt, "\t", "\\\\t" )
+                 txt
+               }
+               
                #loop over rules and extract
                ids<-get_IDS()
                for(id in ids){
                  rule.id<-id
                  rule.definition<-pegE$.SOURCE.RULES[[id]]
+                 rule.definition<-process.Escape2DF(rule.definition)
+                 #process rule.def2txt
+                 
                  rule.description<-pegE$.RULE_DESCRIPT[[id]]
                  rule.description<-ifelse(is.null(pegE$.RULE_DESCRIPT[[id]] ), NA, pegE$.RULE_DESCRIPT[[id]])
                  if(is.null(pegE$.ACTION_INFO[[id]])){
