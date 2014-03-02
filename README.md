@@ -54,7 +54,7 @@ Note: An data.frame argument may be supplied, which will load a set of rules sto
 
 _**Step 2:**_ **Add** rules to the parser (The "{...}" are optional actions.)
 ```
-peg + c("A<- 'a' .", "{-}") + c("X<-.", "{}") + "R<- A / X"
+peg<-peg + c("A<- 'a' .", "{-}") + c("X<-.", "{}") + "R<- A / X"
 ```
 
 _**Step 3:**_ **Apply** a rule to an input string
@@ -64,10 +64,10 @@ example: peg[['R']]('abacda')
 We currently supply 2 approaches to usage:
 
 1. Traditional form: commands of the form 
-   * **add_rule(peg, rule, ...)** : *adds (attaches) a single rule to the peg*
+   * **peg<-add_rule(peg, rule, ...)** : *adds (attaches) a single rule to the peg*
    * **apply_rule(peg, rule.id, input.txt, ...)**  : *applys an attached rule to the input text*
 2. Operator form: commands of the form (also shown above)
-   * **peg + rule1 + rule 2 + ...** : *adds (attaches) one or more rules to the peg*
+   * **peg<-peg + rule1 + rule 2 + ...** : *adds (attaches) one or more rules to the peg*
    * **peg\[\[rule,id]](input.txt)** : *applys an attached rule to the input text*
 
 
