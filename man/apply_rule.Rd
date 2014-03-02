@@ -35,25 +35,25 @@ the specified rule as the root.
 \examples{
 # The simplest example: a parser that only accepts a single character 'a'
 peg<-new.parser()
-add_rule(peg, "A<-'a'")
+peg<-add_rule(peg, "A<-'a'")
 res<-apply_rule(peg, 'A', "a")
 res # the results
 
 # A more complex example:
 # A number parser: Extracts number
 peg<-new.parser()
-add_rule(peg, "NUM<-[0-9]+ ('.' [0-9]*)?)", act = "paste1(v)", des = "numbers")
+peg<-add_rule(peg, "NUM<-[0-9]+ ('.' [0-9]*)?)", act = "paste1(v)", des = "numbers")
 apply_rule(peg, "NUM", "12.3", exe=T)
 peg<-new.parser()
 # rule set to convert distances to meters
-add_rule(peg, "NUM<-[0-9]+ ('.' [0-9]*)?)", act = "list(  num=as.numeric(paste(v,collapse=''))  )", des = "numbers")
-add_rule(peg, "IN<- NUM ' '* 'in' ", act="list( num=0.0254*v$num)", des="inches; ins 2 meters")
-add_rule(peg, "FT<- NUM ' '* 'ft' ", act="list( num=0.3048*v$num)", des="feet; ft 2 meters")
-add_rule(peg, "CM<- NUM ' '* 'cm' ", act="list( num=.01*v$num)", des="centimeters; cm 2 meters")
-add_rule(peg, "M<- NUM ' '* 'm' ",  act="list(num=v$num)", des="meters; extract the num")
-add_rule(peg, "SP<-(' ')", act="list()", des="spaces; eats spaces")
-add_rule(peg, "GP<- (IN / FT / CM / M)", des="added for group t")
-add_rule(peg, "LEN<-(GP SP+ LEN) / GP ", act="list(sum(unlist(v)))",  des="length; sum all the units" )
+peg<-add_rule(peg, "NUM<-[0-9]+ ('.' [0-9]*)?)", act = "list(  num=as.numeric(paste(v,collapse=''))  )", des = "numbers")
+peg<-add_rule(peg, "IN<- NUM ' '* 'in' ", act="list( num=0.0254*v$num)", des="inches; ins 2 meters")
+peg<-add_rule(peg, "FT<- NUM ' '* 'ft' ", act="list( num=0.3048*v$num)", des="feet; ft 2 meters")
+peg<-add_rule(peg, "CM<- NUM ' '* 'cm' ", act="list( num=.01*v$num)", des="centimeters; cm 2 meters")
+peg<-add_rule(peg, "M<- NUM ' '* 'm' ",  act="list(num=v$num)", des="meters; extract the num")
+peg<-add_rule(peg, "SP<-(' ')", act="list()", des="spaces; eats spaces")
+peg<-add_rule(peg, "GP<- (IN / FT / CM / M)", des="added for group t")
+peg<-add_rule(peg, "LEN<-(GP SP+ LEN) / GP ", act="list(sum(unlist(v)))",  des="length; sum all the units" )
 
 #first test the components
 apply_rule(peg, "NUM", "3", exe=T)

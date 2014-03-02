@@ -8,8 +8,8 @@
 #' @return description, a character string describing the parser
 #' @examples
 #' pegR<-new.parser()
-#' add_rule(pegR, "A<-'a'")
-#' set_description(pegR, "A", "recognizes 'a'")
+#' peg<-add_rule(pegR, "A<-'a'")
+#' pegR<-set_description(pegR, "A", "recognizes 'a'")
 #' get_description(pegR, "A")
 #' @export
 get_description<-function(pegR, rule.id){

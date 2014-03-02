@@ -11,9 +11,9 @@
 #' @examples 
 #' peg<-new.parser()
 #' # Add rule A to recognize 'a' and return list('A') as it's value
-#' add_rule(peg, "A<-'a'", act="list('A')")
+#' peg<-add_rule(peg, "A<-'a'", act="list('A')")
 #' value(apply_rule(peg, 'A', 'a', exe=TRUE))
-#' set_definition(peg, "A<-'b'")
+#' peg<-set_definition(peg, "A<-'b'")
 #' # Now A will only recognize 'b', so it will now fail on input 'a'
 #' status(apply_rule(peg, 'A', 'a', exe=TRUE))
 #' # However, even though  Arecognizes b, but the return value is still  list('A').
@@ -24,8 +24,14 @@ set_definition<-function(parser, rule.id, rule.definition){
   if( !(rule.id) %in% pexGetIDs(parser) ){ stop("rule.id", rule.id, "not found\n")}
   if( !( "character" %in% class(rule.definition))){ stop("Third argument is not a rule\n", call. = FALSE)} 
   rule.definition<-validate.src(rule.definition)
-  res<-pexSetRule(parser, rule.definition)
-  invisible( list(ok=res$ok, parsed=substr(rule.definition,1,res$pos) ) )
+  nParser<-pexClonePegR(parser)
+  res<-pexSetRule(nParser, rule.definition)
+  if(!res$ok){stop("Rule id=",rule.id,"Cannot parse rule definition:", rule.definition,"\n")}
+  if(res$pos!=nchar(rule.definition)){
+    warning("Rule id=",rule.id,"rule definition only partially processed:", rule.definition,"\n")
+  }
+  nParser
+  #invisible( list(ok=res$ok, parsed=substr(rule.definition,1,res$pos) ) )
 }
 
 
@@ -135,9 +141,9 @@ set_definition<-function(parser, rule.id, rule.definition){
   }
   if('act' %in% names(arg.L)){
     action<-arg.L$act
-#     print(class(action))
-#     print(body(action))
-    set_action(parser, rule.id, action)
+    actionSetter(parser, rule.id, action, parent.frame()) 
+    #action<-arg.L$act
+    #set_action(parser, rule.id, action)
   }
   invisible(parser)
 }

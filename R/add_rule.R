@@ -13,7 +13,7 @@
 #' actions see \code{\link{set_action}} and \code{\link{appy_rule}} )
 #' @examples
 #' peg<-new.parser()
-#' add_rule(peg, "X<-x", des="A bad rule (I forgot quotes)")
+#' peg<-add_rule(peg, "X<-x", des="A bad rule (I forgot quotes)")
 #' 
 #' # Next we inspect the rule
 #' inspect_rule(peg, "X") 
@@ -24,7 +24,7 @@
 #' # Act: 
 #' 
 #' # Now we replace the rule by overwriting
-#' add_rule(peg, "X<-'x'", act="list('X')")
+#' peg<-add_rule(peg, "X<-'x'", act="list('X')")
 #' # When again inspect, we see 
 #' # the definition was fixed (x now is quoted), the description was removed, an action was added.
 #' inspect_rule(peg,"X")
@@ -39,13 +39,24 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
     msg<-paste("Unbalance quotes at:", substr(rule, 1, pos))
     stop(msg, call. = FALSE)
   }
-  res<-pexSetRule(parser, rule)
-  #res<-parser$SET_RULE( rule )
-  if(res$ok==TRUE){
-    pexSetDescription(parser, res$rule.id, des) # direct call, no id checking
-    set_action(parser, res$rule.id, act)
+  nParser<-pexClonePegR(parser)
+  rule.definition<-rule #same thing
+  res<-pexSetRule(nParser, rule.definition)
+  if(!res$ok){stop("Cannot parse rule definition:", rule.definition,"\n")}
+  if(res$pos!=nchar(rule.definition)){
+    warning("RULE DEFINITION ONLY PARTIALLY PROCESSED:\n", 
+            "Processed:",substr(rule.definition, 1, res$pos),"\n",
+            "Unprocessed:",substr(rule.definition, res$pos+1, nchar(rule.definition)),"\n", 
+            "")
   }
-  invisible( list(ok=res$ok, rule.id=res$rule.id, parsed=substr(rule,1,res$pos) ) )
+  #res<-parser$SET_RULE( rule )
+#  if(res$ok==TRUE){
+    pexSetDescription(nParser, res$rule.id, des) # direct call, no id checking
+    #set_action(parser, res$rule.id, act)
+    actionSetter(nParser, res$rule.id, act, parent.frame() )
+#  }
+  #invisible( list(ok=res$ok, rule.id=res$rule.id, parsed=substr(rule,1,res$pos) ) )
+nParser
 }
 
 
@@ -93,13 +104,13 @@ add_rule<-function(parser, rule, des=NULL, act=NULL){
     if(is.null(cmd$rule)){
       stop("Missing Rule Definition")
     }
-    res<-add_rule(parser, cmd$rule, des=cmd$des, act=cmd$act)
-    if(res$parsed!=cmd$rule){
-      delete_rule(parser, res$rule.id )
-      stop(paste("Only Partially Processed! Stopped after:", res$rule.id ), call. = FALSE)
-    }
+    nParser<-add_rule(parser, cmd$rule, des=cmd$des, act=cmd$act)
+#     if(res$parsed!=cmd$rule){
+#       delete_rule(parser, res$rule.id )
+#       stop(paste("Only Partially Processed! Stopped after:", res$rule.id ), call. = FALSE)
+#     }
   }
-  invisible(parser)
+  nParser
 }
 
 arg2list<-function(arg){

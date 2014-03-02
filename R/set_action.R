@@ -13,13 +13,14 @@
 #'  
 #'  \item  NULL, in which case the action associated with the given rule is removed.
 #' }
+#' @return a peg parser with the action attached
 #' @examples
 #' #Capitalize all occurances of 'a' using inline actions
 #' peg<-new.parser()
-#' add_rule(peg, "A<-'a'")
-#' add_rule(peg, "R<-(A / .)+")
-#' set_action(peg, "A", "list('A')")
-#' set_action(peg, "R", "list(paste(v, collapse=''))" )
+#' peg<-add_rule(peg, "A<-'a'")
+#' peg<-add_rule(peg, "R<-(A / .)+")
+#' peg<-set_action(peg, "A", "list('A')")
+#' peg<-set_action(peg, "R", "list(paste(v, collapse=''))" )
 #' value(apply_rule(peg, "R", "cat in the hat", exe=T))
 #' 
 #' @export
@@ -28,6 +29,16 @@ set_action<-function(pegR, rule.id, action){
   #TODO: refactor using switch?
   if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser", call. = FALSE)}  
   if( rule.id %in% rule_ids(pegR)){
+    rtnPeg<-pexClonePegR(pegR)
+    actionSetter(rtnPeg, rule.id, action, parent.frame())
+  } else {
+    stop("cannot set action: invalid rule identifier", call. = FALSE)
+  }
+  #invisible(TRUE)
+  rtnPeg
+}
+
+actionSetter<-function(pegR, rule.id, action, callingEnv){
     if(class(action)=="character"){
       #check if action has valid syntax
       if(!check.action.syntax.ok(action)==TRUE){
@@ -39,27 +50,26 @@ set_action<-function(pegR, rule.id, action){
       #pegR$pegE$.ACTION[[rule.id]]<-eval(parse(text=action))  
       #tmp<-parse(text=actionFn)
       tmpf<-eval(parse(text=actionFn))
-      environment(tmpf)<-parent.frame()
+      environment(tmpf)<-callingEnv #parent.frame()
       pexSetAction(pegR, rule.id, tmpf)
       #pexSetAction(pegR, rule.id, eval(parse(text=actionFn)))
       #pegR$pegE$.ACTION_NAMES[[rule.id]]<-c("Inline",action)
       actionInfo<-c(action)
       pexSetActionInfo(pegR, rule.id, actionInfo)
     } else 
-    if (is.null(action)){
-      #pegR$pegE$.ACTION[[rule.id]]<-NULL
-      #pegR$pegE$.ACTION_NAMES[[rule.id]]<-NULL
-      pexSetAction(pegR, rule.id, action)
-      pexSetActionInfo(pegR, rule.id, NULL)
-    }
+      if (is.null(action)){
+        #pegR$pegE$.ACTION[[rule.id]]<-NULL
+        #pegR$pegE$.ACTION_NAMES[[rule.id]]<-NULL
+        pexSetAction(pegR, rule.id, action)
+        pexSetActionInfo(pegR, rule.id, NULL)
+      }
     else {
       stop("cannot set action: invalid action", call. = FALSE)
     }   
-  } else {
-    stop("cannot set action: invalid rule identifier", call. = FALSE)
-  }
-  invisible(TRUE)
 }
+
+
+
 
 check.action.syntax.ok<-function(action){
   tryCatch( parse(text=action), error=function(e) cat("Bad action syntax", action, "\n") )->x

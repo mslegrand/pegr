@@ -30,7 +30,7 @@ new.ID.generator<-function(){
 #' @examples
 #' #Create an empty parser
 #' parser<-new.parser() 
-#' add_rule(parser, "Any<-.")  
+#' peg<-add_rule(parser, "Any<-.")  
 #' rule_ids(parser)  # returns "Any"
 #' 
 #' #Create a parser from a data.frame
@@ -54,7 +54,8 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE, action.exe=FALSE){
  # NEW ENV FOR TO CONTAIN THE USER DEFINED PARSER
   pegE<-new.env()
   class(pegE)<-c("pegE",class(pegE))
-  
+
+ 
   # RECORD FLAGS FOR TREE AND PLOTTING
   pegE$.new.ID<-new.ID.generator() #Used only by  mk.rule!!!! (may want to restart when setting RECORD.NODE on)
   pegE$.RECORD.NODE.DEFAULT<-record.mode
@@ -226,6 +227,7 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE, action.exe=FALSE){
       return(NULL)
     } 
   }
+ 
   #
   #??? Shall we do this differently
   get_IDS<-function(){
@@ -370,9 +372,48 @@ new.parser<-function(peg.data.frame=NULL, record.mode=FALSE, action.exe=FALSE){
                pegE$.ACTION_NAMES[[rule.id]]<-NULL
                rm(list=rule.id, envir=pegE)                  
              },
+             CLONE=function(){
+               #   clone_env <- function(env, parent = parent.env(env)) {
+               #     list2env(as.list(env), parent = parent)
+               #   }
+               # genenrator::mk.Rule uses the pegE directly, so it requires
+               #  that we recreate the pegE from scratch and add the rules.
+               # then we need to add debug, 
+               # clone list
+               # clone env
+               #create new peg
+               newPeg<-new.parser()
+               new.pegE<-newPeg$pegE
+               new.genE<-create(new.pegE)
+               #iterate thru rule and add (w.o actions)
+               #loop over rules and extract
+               ids<-get_IDS()
+               for(id in ids){
+                 rule.id<-id
+                 rule.definition<-pegE$.SOURCE.RULES[[id]]
+                 res<-new.genE$DEFINITION(rule.definition)
+               }
+               new.pegE$.ACTION_INFO<-pegE$.ACTION_INFO
+               new.pegE$.ACTION<-pegE$.ACTION
+               new.pegE$.RULE_DESCRIPT<-pegE$.RULE_DESCRIPT
+               new.pegE$.SOURCE.RULES<-pegE$.SOURCE.RULES              
+               new.pegE$.RECORD.NODE.DEFAULT<-pegE$.RECORD.NODE.DEFAULT
+               new.pegE$.RECORD.NODE<-pegE$.RECORD.NODE            
+               new.pegE$.AUTO_ACTION <-pegE$.AUTO_ACTION 
+               new.pegE$.ACTION_DEFAULT<-pegE$.ACTION_DEFAULT
+               #STACK 
+               new.pegE$.STOP_LEVEL<-pegE$.STOP_LEVEL
+               new.pegE$.STACK<-pegE$.STACK               
+               #BEGIN DEBUGGER  
+               new.pegE$.DEBUG_ON<-pegE$.DEBUG_ON
+               new.pegE$.DEBUG<-pegE$.DEBUG
+               #return the newPeg
+               newPeg 
+             },               
              GET_DEBUG_ON=function(){
                pegE$.DEBUG_ON
              } 
+
   )
   #class(pegR)<-c("pegR",class(pegR))
   class(pegR)<-c("pegR")

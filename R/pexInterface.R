@@ -97,5 +97,23 @@ pexGetRulesAsDataFrame<-function(pegR, ...){
   pegR$GET_DATA_FRAME(...)
 }
 
+pexClonePegR <-function(pegR){
+#   clone_env <- function(env, parent = parent.env(env)) {
+#     list2env(as.list(env), parent = parent)
+#   }
+  # genenrator::mk.Rule uses the pegE directly, so it requires
+  #  that we recreate the pegE from scratch and add the rules.
+  # then we need to add debug, 
+  # clone list
+  # clone env
+  #create new peg
+  pegR$CLONE()
+  #iterate thru rule and add (w.o actions)
+  
+  #iterate thru actions and add (directly)
+  #iterate thru debug/record/... and add(drectly)
+  #return new peg  
+}
+  
 
 #END PEX INTERFACE

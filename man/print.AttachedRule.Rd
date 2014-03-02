@@ -9,7 +9,7 @@ Prints an attached rule
 }
 \examples{
 peg<-new.parser()
-add_rule(peg, "R<-'ab'")
+peg<-add_rule(peg, "R<-'ab'")
 print(peg[["R"]])
 }
 

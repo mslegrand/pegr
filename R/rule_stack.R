@@ -11,7 +11,7 @@
 #' \dontrun{
 #' peg<-new.parser()
 #' set_rule_stack_limit(peg, 10)
-#' add_rule(peg, "A<-A" ) #an infinite recursive call
+#' peg<-add_rule(peg, "A<-A" ) #an infinite recursive call
 #' apply_rule(peg, "A", "x") #the input is irrevelant, throws error
 #' }
 #' @seealso \code{\link{get_rule_stack}}, \code{\link{unset_rule_stack_limit}}
@@ -30,7 +30,7 @@ set_rule_stack_limit<-function(pegR, stop.level.limit){
 #' \dontrun{
 #' peg<-new.parser()
 #' set_rule_stack_limit(peg, 10)
-#' add_rule(peg, "A<-'a' A / ''" ) #consumes all a's at the beginning of a string
+#' peg<-add_rule(peg, "A<-'a' A / ''" ) #consumes all a's at the beginning of a string
 #' apply_rule(peg, "A", "aaaaaaaaaaaax") #there are 12 a's but will stop at 10
 #' #error, rule stack depth limit exceeded
 #' unset_rule_stack_limit(peg)
@@ -53,9 +53,9 @@ unset_rule_stack_limit<-function(pegR){
 #' \dontrun{
 #' peg<-new.parser()
 #' set_rule_stack_limit(peg, 20)
-#' add_rule(peg, "A<-B" ) 
-#' add_rule(peg, "B<-C")
-#' add_rule(peg, "C<-A") # A vicious circle of calls resulting in infinite recursion
+#' peg<-add_rule(peg, "A<-B" ) 
+#' peg<-add_rule(peg, "B<-C")
+#' peg<-add_rule(peg, "C<-A") # A vicious circle of calls resulting in infinite recursion
 #' apply_rule(peg, "A", "x") # will stop at 20
 #' get_rule_stack(peg)
 #' }

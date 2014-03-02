@@ -26,7 +26,7 @@ rules when the max depth of the rule stack is exceed, use
 \dontrun{
 peg<-new.parser()
 set_rule_stack_limit(peg, 10)
-add_rule(peg, "A<-A" ) #an infinite recursive call
+peg<-add_rule(peg, "A<-A" ) #an infinite recursive call
 apply_rule(peg, "A", "x") #the input is irrevelant, throws error
 }
 }

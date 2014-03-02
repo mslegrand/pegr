@@ -13,9 +13,9 @@ contained in the parser.
 }
 \examples{
 peg<-new.parser()
-add_rule(peg, "I<-'Ice'")
-add_rule(peg, "A<-'Age'")
-add_rule(peg, "S<-'Scrat'")
+peg<-add_rule(peg, "I<-'Ice'")
+peg<-add_rule(peg, "A<-'Age'")
+peg<-add_rule(peg, "S<-'Scrat'")
 rule_ids(peg) #c("I", "A", "S")
 }
 

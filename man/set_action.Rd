@@ -23,16 +23,19 @@ set_action(pegR, rule.id, action)
   \item NULL, in which case the action associated with the
   given rule is removed. }}
 }
+\value{
+a peg parser with the action attached
+}
 \description{
 Attach an (optional) action to a specified rule
 }
 \examples{
 #Capitalize all occurances of 'a' using inline actions
 peg<-new.parser()
-add_rule(peg, "A<-'a'")
-add_rule(peg, "R<-(A / .)+")
-set_action(peg, "A", "list('A')")
-set_action(peg, "R", "list(paste(v, collapse=''))" )
+peg<-add_rule(peg, "A<-'a'")
+peg<-add_rule(peg, "R<-(A / .)+")
+peg<-set_action(peg, "A", "list('A')")
+peg<-set_action(peg, "R", "list(paste(v, collapse=''))" )
 value(apply_rule(peg, "R", "cat in the hat", exe=T))
 }
 

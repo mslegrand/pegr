@@ -88,11 +88,11 @@ rule_ids(parser)
 
 * Rules contained in a pegr parser may be annotated (commented) by a call to **set_description("ruleid", annotation)**
 ```{r set_description}
-set_description(parser, "Any", "Accepts any character")
-set_description(parser, "A", "Accepts a")
-set_description(parser, "B", "Accepts b")
-set_description(parser, "C", "Accepts string of a's terminated by a b")
-set_description(parser, "D", "A very bad rule")
+parser<-set_description(parser, "Any", "Accepts any character")
+parser<-set_description(parser, "A", "Accepts a")
+parser<-set_description(parser, "B", "Accepts b")
+parser<-set_description(parser, "C", "Accepts string of a's terminated by a b")
+parser<-set_description(parser, "D", "A very bad rule")
 ```
 
 * Rules may be removed from a pegr parser by a call to **delete_rule(parse, ruleid)**

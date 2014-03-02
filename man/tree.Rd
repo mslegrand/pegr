@@ -15,11 +15,11 @@ parameter set to TRUE
 }
 \examples{
 peg<-new.parser()
-  add_rule(peg, "A<-'a'")
-  add_rule(peg, "B<-'b'")
-  add_rule(peg, "D<-'d'")
-  add_rule(peg, "C<-'c'")
-  add_rule(peg,"ROOT<-A B C D")
+  peg<-add_rule(peg, "A<-'a'")
+  peg<-add_rule(peg, "B<-'b'")
+  peg<-add_rule(peg, "D<-'d'")
+  peg<-add_rule(peg, "C<-'c'")
+  peg<-add_rule(peg,"ROOT<-A B C D")
   apply_rule(peg,"ROOT","abcd", record=TRUE)->res
   tree(res)
 }

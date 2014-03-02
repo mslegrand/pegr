@@ -18,9 +18,9 @@ This is used to see what a comprises a given rule.
 }
 \examples{
 peg<-new.parser()
-add_rule(peg, "DOG<-'fido' / 'spot' / 'rover'/ 'buddy'")
-set_action(peg, "DOG", "list('bark')")
-set_description(peg, "DOG", "sound of dog")
+peg<-add_rule(peg, "DOG<-'fido' / 'spot' / 'rover'/ 'buddy'")
+peg<-set_action(peg, "DOG", "list('bark')")
+peg<-set_description(peg, "DOG", "sound of dog")
 inspect_rule(peg, "DOG")
 }
 

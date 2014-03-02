@@ -37,7 +37,7 @@ Creates an instance of a new PEG parser.
 \examples{
 #Create an empty parser
 parser<-new.parser()
-add_rule(parser, "Any<-.")
+peg<-add_rule(parser, "Any<-.")
 rule_ids(parser)  # returns "Any"
 
 #Create a parser from a data.frame

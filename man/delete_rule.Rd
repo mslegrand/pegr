@@ -16,10 +16,10 @@ Deletes the given rule form the parser.
 }
 \examples{
 peg<-new.parser()
-add_rule(peg,  "A<-'a'")
-add_rule(peg,  "B<-'b'")
+peg<-add_rule(peg,  "A<-'a'")
+peg<-add_rule(peg,  "B<-'b'")
 peg
-delete_rule(peg, "A")
+peg<-delete_rule(peg, "A")
 peg
 }
 

@@ -22,9 +22,9 @@ descriptions unaffected. To add rules see
 \examples{
 peg<-new.parser()
 # Add rule A to recognize 'a' and return list('A') as it's value
-add_rule(peg, "A<-'a'", act="list('A')")
+peg<-add_rule(peg, "A<-'a'", act="list('A')")
 value(apply_rule(peg, 'A', 'a', exe=TRUE))
-set_definition(peg, "A<-'b'")
+peg<-set_definition(peg, "A<-'b'")
 # Now A will only recognize 'b', so it will now fail on input 'a'
 status(apply_rule(peg, 'A', 'a', exe=TRUE))
 # However, even though  Arecognizes b, but the return value is still  list('A').

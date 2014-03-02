@@ -19,14 +19,14 @@
 #' @examples
 #' # The simplest example: a parser that only accepts a single character 'a'
 #' peg<-new.parser()
-#' add_rule(peg, "A<-'a'")
+#' peg<-add_rule(peg, "A<-'a'")
 #' res<-apply_rule(peg, 'A', "a")
 #' res # the results
 #' 
 #' # A more complex example: 
 #' # A number parser: Extracts number
 #' peg<-new.parser()
-#' add_rule(peg, "NUM<-[0-9]+ ('.' [0-9]*)?)", act = "paste1(v)", des = "numbers")
+#' peg<-add_rule(peg, "NUM<-[0-9]+ ('.' [0-9]*)?)", act = "paste1(v)", des = "numbers")
 #' apply_rule(peg, "NUM", "12.3", exe=T)
 #' 
 #' @example
@@ -100,7 +100,7 @@ apply_rule<-function(parser, rule.id, input.text, exe=NULL, record=NULL){
 #' 
 #' @examples
 #' peg<-new.parser()
-#' add_rule(peg, "R<-'ab'")
+#' peg<-add_rule(peg, "R<-'ab'")
 #' print(peg[["R"]])
 #' @export 
 print.AttachedRule<-function(attached.rule){

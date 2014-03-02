@@ -22,11 +22,11 @@ Retrieve an action to the rule specified by rule.id
 \examples{
 # Delete all vowels
 peg<-new.parser()
-add_rule(peg, "V<-'a' / 'e' / 'i' / 'o' / 'u' ")
-add_rule(peg, "R<-(V / .)+")
-set_action(peg, "V", "list()" )
+peg<-add_rule(peg, "V<-'a' / 'e' / 'i' / 'o' / 'u' ")
+peg<-add_rule(peg, "R<-(V / .)+")
+peg<-set_action(peg, "V", "list()" )
 g<-function(v){ list(paste(v,collapse='')) }
-set_action(peg, "R", g )
+peg<-set_action(peg, "R", g )
 #see the result
 value(apply_rule(peg, "R", "cat in the hat", exe=T))
 # inspect the action for rule "V"

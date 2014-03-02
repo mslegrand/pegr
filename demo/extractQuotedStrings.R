@@ -2,15 +2,15 @@
 # This example to extracts all strings enclosed by quotes 
 # from the input text and returns those strings as a list
 peg<-new.parser()
-add_rule(peg, "sq<- \"'\"" )
-add_rule(peg, "dq<- '\"'" )
-add_rule(peg, "nqp<-  (!(sq / dq) .)+ ")                              
-add_rule(peg, "sqp<-sq (!sq .)* sq") #"sqp<-sq (!sq (\\ sq / .)*) sq" 
-add_rule(peg, "dqp<-dq (!dq .)* dq")                                  
-add_rule(peg, "extract<- ( nqp /  sqp / dqp )+ ")
-set_action(peg, "nqp", "list()")
-set_action(peg, "dqp", "list(paste(v[2:(length(v)-1)], collapse=''))")
-set_action(peg, "sqp", "list(paste(v[2:(length(v)-1)], collapse=''))")
+peg<-add_rule(peg, "sq<- \"'\"" )
+peg<-add_rule(peg, "dq<- '\"'" )
+peg<-add_rule(peg, "nqp<-  (!(sq / dq) .)+ ")                              
+peg<-add_rule(peg, "sqp<-sq (!sq .)* sq") #"sqp<-sq (!sq (\\ sq / .)*) sq" 
+peg<-add_rule(peg, "dqp<-dq (!dq .)* dq")                                  
+peg<-add_rule(peg, "extract<- ( nqp /  sqp / dqp )+ ")
+peg<-set_action(peg, "nqp", "list()")
+peg<-set_action(peg, "dqp", "list(paste(v[2:(length(v)-1)], collapse=''))")
+peg<-set_action(peg, "sqp", "list(paste(v[2:(length(v)-1)], collapse=''))")
 
 # Our input text contains a single quoted string (with double quotes inside)
 # and a double quoted string (with a single quote inside)

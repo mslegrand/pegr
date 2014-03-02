@@ -12,17 +12,17 @@
 #' 
 #' @examples
 #' peg<-new.parser()
-#' add_rule(pe)
+#' peg<-add_rule(pe)
 #' 
 #' #A returns TRUEfor "aab" but consumes on the first 2 charactes
 #' peg<-new.parser()
-#' add_rule(peg, "A <- ('a' A) / 'a' ")
+#' peg<-add_rule(peg, "A <- ('a' A) / 'a' ")
 #' apply_rule(peg, "A", "aab")->res
 #' status(res
 #' consumed(res)
 #' 
 #' #All returns FALSE on "aab"
-#' add_rule(peg, "All <- A !. ")
+#' peg<-add_rule(peg, "All <- A !. ")
 #' apply_rule(peg, "All", "aab")->res
 #' status(res)
 #' consumed(res)
@@ -33,7 +33,7 @@
 #' 
 #' #Another approach: change A to
 #' #This now returns FALSE on "aab
-#' add_rule(peg, "A<- ('a' A ) / ('a' !.)")
+#' peg<-add_rule(peg, "A<- ('a' A ) / ('a' !.)")
 #' apply_rule(peg, "A", "aab")->res
 #' status(res)
 #' consumed(res)

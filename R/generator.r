@@ -131,7 +131,7 @@ mk.Rule<-function(defName, def, action){
     else { # ELSE THE NODE HAS SUCCEEDED: # res$ok=TRUE
       # EXECUTE ACTION IF THERE IS ONE
       if(exe==TRUE  ){ #this is where we execute the user action         
-        if(!is.null(pegE$.ACTION[[defName]])){ # refers to a memmber of action array in pegE
+        if(!is.null(pegE$.ACTION[[defName]])){ # refers to a member of action array in pegE
           res$val<-pegE$.ACTION[[defName]](res$val)
           if(is.null(names(res$val))){
            names(res$val)<-rep(defName, length(res$val))
@@ -144,7 +144,6 @@ mk.Rule<-function(defName, def, action){
           cat("<==Exiting Rule:", defName, "\n")
           cat("   Rule Definiton:", pegE$.SOURCE.RULES[[defName]], "\n")
           cat("   Status: ",res$ok," ; Rule ", defName," accepted the input '", substr(input,p, nchar(input)),"'\n", sep="")
-          #cat("   Status:",res$ok,"\n")
           cat("   Consumed: '", substr(input, p, res$pos), "'\n", sep="")
           pegE$.debug.loop(res)          
         } 
@@ -228,7 +227,8 @@ s.ID<-function(fn){ # Used only for P2 of new.generator::create
   QUOTE2<-literal("\"")
   BACKSLASH<-literal("\\")
   
-  CHAR <- s.not(BACKSLASH) + s.dot
+  #CHAR <- s.not(BACKSLASH) + s.dot
+  CHAR <-  s.dot
   RANGE <- (CHAR + literal('-') + CHAR) / CHAR
   CLASS <-  s.sequence(literal('[') ,  opt.0x( s.not( literal(']') )  + RANGE) , literal(']') , SPACING) < list("range", function(v){a<-mk.rng.a(v); list(leaf=a)})
   LITERAL <- (s.sequence(QUOTE1 , opt.0x(s.not(QUOTE1) + CHAR) ,  QUOTE1 , SPACING)  /
@@ -271,7 +271,7 @@ s.ID<-function(fn){ # Used only for P2 of new.generator::create
     } 
   )
   GRAMMAR <- SPACING + opt.1x(DEFINITION) 
-  environment() #return  of the generator, which will contain a peg object   
+  environment() #return  of the generator, which will contain a pegE object   
 }
 # END CREATE
 

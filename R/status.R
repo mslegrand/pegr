@@ -6,7 +6,7 @@
 #' @examples 
 #' parser<-new.parser()
 #' #This rule to tests for string of a's followed by an equal number of b's
-#' add_rule(parser, "S<-'a' S 'b'") 
+#' peg<-add_rule(parser, "S<-'a' S 'b'") 
 #' 
 #' #test against 3 a's followed b 3 b's returns TRUE
 #' apply_rule(parser, 'S', 'aaaabbbb')

@@ -26,7 +26,7 @@ empty) description, and a new (possibly empty) action.
 }
 \examples{
 peg<-new.parser()
-add_rule(peg, "X<-x", des="A bad rule (I forgot quotes)")
+peg<-add_rule(peg, "X<-x", des="A bad rule (I forgot quotes)")
 
 # Next we inspect the rule
 inspect_rule(peg, "X")
@@ -37,7 +37,7 @@ inspect_rule(peg, "X")
 # Act:
 
 # Now we replace the rule by overwriting
-add_rule(peg, "X<-'x'", act="list('X')")
+peg<-add_rule(peg, "X<-'x'", act="list('X')")
 # When again inspect, we see
 # the definition was fixed (x now is quoted), the description was removed, an action was added.
 inspect_rule(peg,"X")

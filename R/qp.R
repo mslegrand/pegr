@@ -31,7 +31,7 @@ qp<-function(p.expression, record=TRUE){
       stop("qp is the missing text.input", call.=FALSE)
     }
     peg<-new.parser()
-    add_rule(peg, paste("R<-", p.expression))->res
+    add_rule(peg, paste("R<-", p.expression))->peg
     apply_rule(peg, 'R', text.input, record)->res
     res$Call$rule.id<-"Anonomous"
     return(res)    

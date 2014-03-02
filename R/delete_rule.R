@@ -6,14 +6,16 @@
 #' #' # Deleteing a rule
 #' @examples
 #' peg<-new.parser()
-#' add_rule(peg,  "A<-'a'")
-#' add_rule(peg,  "B<-'b'")
+#' peg<-add_rule(peg,  "A<-'a'")
+#' peg<-add_rule(peg,  "B<-'b'")
 #' peg
-#' delete_rule(peg, "A")
+#' peg<-delete_rule(peg, "A")
 #' peg
 #' @export
 delete_rule<-function(pegR, rule.id){
   #delete rule 
-  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser", call. = FALSE)}  
-  pexDeleteRule(pegR, rule.id)
+  if(!("pegR" %in% class(pegR))){ stop("first argument not a peg parser", call. = FALSE)}
+  peg<-pexClonePegR(pegR) #to make it look like R
+  pexDeleteRule(peg, rule.id)
+  peg
 }

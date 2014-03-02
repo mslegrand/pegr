@@ -39,8 +39,8 @@ rule_ids(parser)
 
 
 ## ----add_action_char_string----------------------------------------------
-set_action(parser, "A", "list('A')") #turn a lower case a to an upper case A
-set_action(parser, "C", "list(paste(v,collapse=''))") #paste all the characters together
+parser<-set_action(parser, "A", "list('A')") #turn a lower case a to an upper case A
+parser<-set_action(parser, "C", "list(paste(v,collapse=''))") #paste all the characters together
 
 
 ## ----apply_rule----------------------------------------------------------

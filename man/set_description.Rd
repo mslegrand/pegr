@@ -16,7 +16,7 @@ A description should be used to comment a given rule
 }
 \examples{
 pegR<-new.parser()
-add_rule(pegR, "A<-'a'")
-set_description(pegR, "A", "recognizes 'a'")
+peg<-add_rule(pegR, "A<-'a'")
+pegR<-set_description(pegR, "A", "recognizes 'a'")
 }
 
