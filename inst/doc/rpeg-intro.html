@@ -221,8 +221,8 @@ Ordered choice returns the value of the first match (if any). If there is no mat
 $$&#39;a&#39; \ \ &#39;b&#39; \ / \ &#39;c&#39;$$
 will match &quot;ab&rdquo; and &ldquo;ac&rdquo;.</li>
 <li><strong>Zero or More operator</strong> The zero or more operator will match if zero or more of occurances of the preceding expression are present. The zero or more operator representation is of the form 
-$$e<em>$$
-For example $$&#39;a&#39;</em>$$ will match &ldquo;aaa&rdquo; and &ldquo;&rdquo;.</li>
+$$e*$$
+For example $$&#39;a&#39;*$$ will match &ldquo;aaa&rdquo; and &ldquo;&rdquo;.</li>
 <li><strong>One or More operator</strong> The <em>one or more operator</em> will match if zero or more of occurances of the preceding expression are present. The <em>one or more operator</em> representation is of the form 
 $$e+$$
 For example $$&#39;a&#39;+$$ will match &ldquo;aaa&rdquo; but not &ldquo;&rdquo;.</li>
@@ -230,8 +230,8 @@ For example $$&#39;a&#39;+$$ will match &ldquo;aaa&rdquo; but not &ldquo;&rdquo;
 $$e?$$
 For example $$&#39;a&#39;?$$ will match &ldquo;a&rdquo; and &ldquo;&rdquo;, but not &ldquo;aaa&rdquo;.</p></li>
 <li><p><strong>And Predicate</strong> The <em>And Predicate</em> is a look-ahead operator which will match if the next element is a match. It is look ahead in the sense that it does not consume the next expression, it only rejects the current expression if the next expression does not follow. The <em>And Predicate</em> is of the form 
-$$e&amp;$$
-For example $$&#39;a&#39;\ &amp; \ &#39;b&#39;$$ will match &ldquo;ab&rdquo; but will return only list(atom=&ldquo;a&rdquo;)</p></li>
+$$ \text{e &amp;} $$
+For example $$\text{ &#39;a&#39; &amp;  &#39;b&#39;} $$ will match &ldquo;ab&rdquo; but will return only list(atom=&ldquo;a&rdquo;)</p></li>
 <li><p><strong>Not predicate</strong> The <em>Not Predicate</em> is also a look-ahead operator but unlike the <em>And Predicate</em>, the <em>Not Predicate</em> will fail to match if the next element is a match.  The <em>Not Predicate</em> is of the form 
 $$!e$$
 For example $$&#39;a&#39;\ ! \ &#39;b&#39;$$ will match &ldquo;ax&rdquo; but will return only list(atom=&ldquo;a&rdquo;)</p></li>
@@ -253,11 +253,11 @@ parser &lt;- new.parser()
 <li>Rules may be added to a pegr parser by a call to <strong>add_rule(parser, rule)</strong></li>
 </ul>
 
-<pre><code class="r">add_rule(parser, &quot;Any&lt;-.&quot;)
-add_rule(parser, &quot;A&lt;-&#39;a&#39;&quot;)
-add_rule(parser, &quot;B&lt;-&#39;b&#39;&quot;)
-add_rule(parser, &quot;C&lt;- A (B / C) &quot;)
-add_rule(parser, &quot;D&lt;- D&quot;)  #bad rule: will produce infinite recursion   
+<pre><code class="r">parser &lt;- add_rule(parser, &quot;Any&lt;-.&quot;)
+parser &lt;- add_rule(parser, &quot;A&lt;-&#39;a&#39;&quot;)
+parser &lt;- add_rule(parser, &quot;B&lt;-&#39;b&#39;&quot;)
+parser &lt;- add_rule(parser, &quot;C&lt;- A (B / C) &quot;)
+parser &lt;- add_rule(parser, &quot;D&lt;- D&quot;)  #bad rule: will produce infinite recursion   
 </code></pre>
 
 <ul>
@@ -274,18 +274,18 @@ add_rule(parser, &quot;D&lt;- D&quot;)  #bad rule: will produce infinite recursi
 <li>Rules contained in a pegr parser may be annotated (commented) by a call to <strong>set_description(&ldquo;ruleid&rdquo;, annotation)</strong></li>
 </ul>
 
-<pre><code class="r">set_description(parser, &quot;Any&quot;, &quot;Accepts any character&quot;)
-set_description(parser, &quot;A&quot;, &quot;Accepts a&quot;)
-set_description(parser, &quot;B&quot;, &quot;Accepts b&quot;)
-set_description(parser, &quot;C&quot;, &quot;Accepts string of a&#39;s terminated by a b&quot;)
-set_description(parser, &quot;D&quot;, &quot;A very bad rule&quot;)
+<pre><code class="r">parser &lt;- set_description(parser, &quot;Any&quot;, &quot;Accepts any character&quot;)
+parser &lt;- set_description(parser, &quot;A&quot;, &quot;Accepts a&quot;)
+parser &lt;- set_description(parser, &quot;B&quot;, &quot;Accepts b&quot;)
+parser &lt;- set_description(parser, &quot;C&quot;, &quot;Accepts string of a&#39;s terminated by a b&quot;)
+parser &lt;- set_description(parser, &quot;D&quot;, &quot;A very bad rule&quot;)
 </code></pre>
 
 <ul>
 <li>Rules may be removed from a pegr parser by a call to <strong>delete_rule(parse, ruleid)</strong></li>
 </ul>
 
-<pre><code class="r">delete_rule(parser, &quot;D&quot;)
+<pre><code class="r">parser &lt;- delete_rule(parser, &quot;D&quot;)
 rule_ids(parser)
 </code></pre>
 
@@ -312,8 +312,8 @@ An action may be one of two forms:</p>
 input is a list v, and the return value is also a list.</li>
 </ul>
 
-<pre><code class="r">set_action(parser, &quot;A&quot;, &quot;list(&#39;A&#39;)&quot;)  #turn a lower case a to an upper case A
-set_action(parser, &quot;C&quot;, &quot;list(paste(v,collapse=&#39;&#39;))&quot;)  #paste all the characters together
+<pre><code class="r">parser &lt;- set_action(parser, &quot;A&quot;, &quot;list(&#39;A&#39;)&quot;)  #turn a lower case a to an upper case A
+parser &lt;- set_action(parser, &quot;C&quot;, &quot;list(paste(v,collapse=&#39;&#39;))&quot;)  #paste all the characters together
 </code></pre>
 
 <h3>Parsing</h3>
@@ -414,10 +414,10 @@ Thesse  visualizaton tools are discussed in the next section</li>
 
 <pre><code class="r"># Here record is set to True
 peg &lt;- new.parser()
-add_rule(peg, &quot;A&lt;-&#39;a&#39;&quot;)
-add_rule(peg, &quot;B&lt;-&#39;b&#39; A&quot;)
-add_rule(peg, &quot;C&lt;- A B&quot;)
-set_action(peg, &quot;A&quot;, &quot;list(&#39;X&#39;)&quot;)
+peg &lt;- add_rule(peg, &quot;A&lt;-&#39;a&#39;&quot;)
+peg &lt;- add_rule(peg, &quot;B&lt;-&#39;b&#39; A&quot;)
+peg &lt;- add_rule(peg, &quot;C&lt;- A B&quot;)
+peg &lt;- set_action(peg, &quot;A&quot;, &quot;list(&#39;X&#39;)&quot;)
 res.ABA &lt;- apply_rule(peg, &quot;C&quot;, &quot;aba&quot;, exe = TRUE, record = TRUE)
 # also, since exe isTrue, so action is taken action A capitalizes, action C
 # pastes together

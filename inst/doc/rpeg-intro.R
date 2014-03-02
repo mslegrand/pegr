@@ -10,11 +10,11 @@ parser <- new.parser()
 
 
 ## ----add_rule------------------------------------------------------------
-add_rule(parser, "Any<-.")
-add_rule(parser, "A<-'a'")
-add_rule(parser, "B<-'b'")
-add_rule(parser, "C<- A (B / C) ")
-add_rule(parser, "D<- D") #bad rule: will produce infinite recursion   
+parser <- add_rule(parser, "Any<-.")
+parser <- add_rule(parser, "A<-'a'")
+parser <- add_rule(parser, "B<-'b'")
+parser <- add_rule(parser, "C<- A (B / C) ")
+parser <- add_rule(parser, "D<- D") #bad rule: will produce infinite recursion   
 
 
 ## ----rule_ids------------------------------------------------------------
@@ -22,15 +22,15 @@ rule_ids(parser)
 
 
 ## ----set_description-----------------------------------------------------
-set_description(parser, "Any", "Accepts any character")
-set_description(parser, "A", "Accepts a")
-set_description(parser, "B", "Accepts b")
-set_description(parser, "C", "Accepts string of a's terminated by a b")
-set_description(parser, "D", "A very bad rule")
+parser <- set_description(parser, "Any", "Accepts any character")
+parser <- set_description(parser, "A", "Accepts a")
+parser <- set_description(parser, "B", "Accepts b")
+parser <- set_description(parser, "C", "Accepts string of a's terminated by a b")
+parser <- set_description(parser, "D", "A very bad rule")
 
 
 ## ----delete_rule---------------------------------------------------------
-delete_rule(parser, "D")
+parser <- delete_rule(parser, "D")
 rule_ids(parser)
 
 

@@ -42,8 +42,8 @@ For a sequence to match, each component must match successively. For example $$.
    $$'a' \ \ 'b' \ / \ 'c'$$
 will match "ab" and "ac".
 * **Zero or More operator** The zero or more operator will match if zero or more of occurances of the preceding expression are present. The zero or more operator representation is of the form 
-  $$e*$$
-  For example $$'a'*$$ will match "aaa" and "".
+  $$e\*$$
+  For example $$'a'\*$$ will match "aaa" and "".
 * **One or More operator** The *one or more operator* will match if zero or more of occurances of the preceding expression are present. The *one or more operator* representation is of the form 
   $$e+$$
   For example $$'a'+$$ will match "aaa" but not "".
@@ -52,8 +52,8 @@ will match "ab" and "ac".
   For example $$'a'?$$ will match "a" and "", but not "aaa".
 
 * **And Predicate** The *And Predicate* is a look-ahead operator which will match if the next element is a match. It is look ahead in the sense that it does not consume the next expression, it only rejects the current expression if the next expression does not follow. The *And Predicate* is of the form 
-  $$e\&$$
-  For example $$'a'\ \& \ 'b'$$ will match "ab" but will return only list(atom="a")
+  $$ \text{e \&} $$
+  For example $$\text{ 'a' \&  'b'} $$ will match "ab" but will return only list(atom="a")
 
 * **Not predicate** The *Not Predicate* is also a look-ahead operator but unlike the *And Predicate*, the *Not Predicate* will fail to match if the next element is a match.  The *Not Predicate* is of the form 
   $$!e$$
@@ -75,11 +75,11 @@ parser <- new.parser()
 * Rules may be added to a pegr parser by a call to **add_rule(parser, rule)**
 
 ```r
-add_rule(parser, "Any<-.")
-add_rule(parser, "A<-'a'")
-add_rule(parser, "B<-'b'")
-add_rule(parser, "C<- A (B / C) ")
-add_rule(parser, "D<- D")  #bad rule: will produce infinite recursion   
+parser <- add_rule(parser, "Any<-.")
+parser <- add_rule(parser, "A<-'a'")
+parser <- add_rule(parser, "B<-'b'")
+parser <- add_rule(parser, "C<- A (B / C) ")
+parser <- add_rule(parser, "D<- D")  #bad rule: will produce infinite recursion   
 ```
 
 
@@ -97,18 +97,18 @@ rule_ids(parser)
 * Rules contained in a pegr parser may be annotated (commented) by a call to **set_description("ruleid", annotation)**
 
 ```r
-set_description(parser, "Any", "Accepts any character")
-set_description(parser, "A", "Accepts a")
-set_description(parser, "B", "Accepts b")
-set_description(parser, "C", "Accepts string of a's terminated by a b")
-set_description(parser, "D", "A very bad rule")
+parser <- set_description(parser, "Any", "Accepts any character")
+parser <- set_description(parser, "A", "Accepts a")
+parser <- set_description(parser, "B", "Accepts b")
+parser <- set_description(parser, "C", "Accepts string of a's terminated by a b")
+parser <- set_description(parser, "D", "A very bad rule")
 ```
 
 
 * Rules may be removed from a pegr parser by a call to **delete_rule(parse, ruleid)**
 
 ```r
-delete_rule(parser, "D")
+parser <- delete_rule(parser, "D")
 rule_ids(parser)
 ```
 
@@ -134,8 +134,8 @@ rule_ids(parser)
 input is a list v, and the return value is also a list.
 
 ```r
-set_action(parser, "A", "list('A')")  #turn a lower case a to an upper case A
-set_action(parser, "C", "list(paste(v,collapse=''))")  #paste all the characters together
+parser <- set_action(parser, "A", "list('A')")  #turn a lower case a to an upper case A
+parser <- set_action(parser, "C", "list(paste(v,collapse=''))")  #paste all the characters together
 ```
 
 
@@ -231,10 +231,10 @@ Visualization consists of showing the nodes visited (and their values) during a 
 ```r
 # Here record is set to True
 peg <- new.parser()
-add_rule(peg, "A<-'a'")
-add_rule(peg, "B<-'b' A")
-add_rule(peg, "C<- A B")
-set_action(peg, "A", "list('X')")
+peg <- add_rule(peg, "A<-'a'")
+peg <- add_rule(peg, "B<-'b' A")
+peg <- add_rule(peg, "C<- A B")
+peg <- set_action(peg, "A", "list('X')")
 res.ABA <- apply_rule(peg, "C", "aba", exe = TRUE, record = TRUE)
 # also, since exe isTrue, so action is taken action A capitalizes, action C
 # pastes together
