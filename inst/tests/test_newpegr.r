@@ -2,6 +2,15 @@ library(testthat)
 
 context("test_new_parser")
 
+
+test_that("NEW_GENERATOR_ID",
+{
+  get.new.id<-new.ID.generator()
+  expect_equal(get.new.id(),"ID-2")
+  expect_equal(get.new.id(),"ID-3")
+})
+
+
 test_that("NEW_PARSER_NO_ARG",
 {
   #Create an empty parser
